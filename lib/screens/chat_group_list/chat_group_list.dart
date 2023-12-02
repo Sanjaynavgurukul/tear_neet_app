@@ -8,6 +8,8 @@ import 'package:tyarineetki/helper/date_formater.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:tyarineetki/helper/navigation_helper.dart';
 import 'package:tyarineetki/model/chat_group_model.dart';
+import 'package:tyarineetki/screens/chat/chat_screen.dart';
+import 'package:tyarineetki/screens/chat/view_model/chat_view_model.dart';
 import 'package:tyarineetki/screens/chat_group_list/chat_room.dart';
 import 'package:tyarineetki/screens/chat_group_list/view_model/chat_group_view_model.dart';
 import 'package:tyarineetki/theme/app_color.dart';
@@ -146,103 +148,113 @@ class _ChatGroupListState extends State<ChatGroupList> {
                     children: List.generate(snapshot.data!.size, (index) {
                       Map<String, dynamic> jso = snapshot.data!.docs[index]
                           .data() as Map<String, dynamic>;
-                      ChatGroupModel item = ChatGroupModel.fromJson(jso);
+                      ChatGroupModel item = ChatGroupModel.fromJson(jso,snapshot.data!.docs[index].id);
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 12),
-                        child: Container(
-                          padding: const EdgeInsets.only(
-                              left: 4, right: 4, top: 4, bottom: 4),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              CustomCacheImage(
-                                imageUrl: item.groupLogo,
-                                borderRadius: BorderRadius.circular(100),
-                                width: 50,
-                                height: 50,
-                                border: Border.all(
-                                    width: 1, color: Colors.grey.shade300),
-                                showBorder: true,
-                              ),
-                              const SizedBox(
-                                width: 12,
-                              ),
-                              Expanded(
-                                  child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          '${item.groupName}',
-                                          style: const TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.normal),
+                        child: InkWell(
+                          onTap: () {
+                            NavigationHelper().navigatePush(
+                                context: context,
+                                viewModel:
+                                    ChatViewModel.argument(groupModel: item),
+                                screen: const ChatScreen());
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.only(
+                                left: 4, right: 4, top: 4, bottom: 4),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                CustomCacheImage(
+                                  imageUrl: item.groupLogo,
+                                  borderRadius: BorderRadius.circular(100),
+                                  width: 50,
+                                  height: 50,
+                                  border: Border.all(
+                                      width: 1, color: Colors.grey.shade300),
+                                  showBorder: true,
+                                ),
+                                const SizedBox(
+                                  width: 12,
+                                ),
+                                Expanded(
+                                    child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            '${item.groupName}',
+                                            style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.normal),
+                                          ),
                                         ),
-                                      ),
-                                      if(item.lastChatTime != null) Text(
-                                        DateFormat("hh:mm a")
-                                            .format(item.lastChatTime!.toDate()),
-                                        style: const TextStyle(
-                                            color: Colors.black54,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 4,
-                                  ),
-                                  Text(
-                                    '${item.lastChatUserName} : ${item.lastMessage}',
-                                    style: const TextStyle(
-                                        color: Colors.black54,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal),
-                                  ),
-                                  const SizedBox(
-                                    height: 6,
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.group,
-                                        size: 12,
-                                        color: Colors.green,
-                                      ),
-                                      const SizedBox(
-                                        width: 4,
-                                      ),
-                                      Text(
-                                        '${item.totalMemberJoined}',
-                                        style: const TextStyle(
+                                        if (item.lastChatTime != null)
+                                          Text(
+                                            DateFormat("hh:mm a").format(
+                                                item.lastChatTime!.toDate()),
+                                            style: const TextStyle(
+                                                color: Colors.black54,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w400),
+                                          ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 4,
+                                    ),
+                                    Text(
+                                      '${item.lastChatUserName} : ${item.lastMessage}',
+                                      style: const TextStyle(
+                                          color: Colors.black54,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.normal),
+                                    ),
+                                    const SizedBox(
+                                      height: 6,
+                                    ),
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.group,
+                                          size: 12,
                                           color: Colors.green,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
                                         ),
-                                      ),
-                                      const Spacer(),
-                                      const Icon(
-                                        Icons.info_outline,
-                                        size: 12,
-                                        color: Colors.black54,
-                                      )
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  const Divider(
-                                    height: 1,
-                                    color: Colors.black26,
-                                  )
-                                ],
-                              ))
-                            ],
+                                        const SizedBox(
+                                          width: 4,
+                                        ),
+                                        Text(
+                                          '${item.totalMemberJoined}',
+                                          style: const TextStyle(
+                                            color: Colors.green,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const Spacer(),
+                                        const Icon(
+                                          Icons.info_outline,
+                                          size: 12,
+                                          color: Colors.black54,
+                                        )
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    const Divider(
+                                      height: 1,
+                                      color: Colors.black26,
+                                    )
+                                  ],
+                                ))
+                              ],
+                            ),
                           ),
                         ),
                       );

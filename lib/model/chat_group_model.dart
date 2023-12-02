@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tyarineetki/model/variable_converter.dart';
 
 class ChatGroupModel {
+  String? groupId;
   String? groupName;
   String? groupLogo;
   String? groupType;
@@ -14,6 +15,7 @@ class ChatGroupModel {
   //default Consructor :D
   ChatGroupModel({
     this.groupBio,
+    this.groupId,
     this.groupLogo,
     this.groupName,
     this.groupType,
@@ -23,7 +25,9 @@ class ChatGroupModel {
     this.totalMemberJoined,
   });
 
-  factory ChatGroupModel.fromJson(Map<String, dynamic> json) => ChatGroupModel(
+  factory ChatGroupModel.fromJson(Map<String, dynamic> json, String id) =>
+      ChatGroupModel(
+        groupId: id,
         groupBio: VariableConverter.convertVariable(
             data: json['groupBio'], variableType: 'String'),
         groupLogo: VariableConverter.convertVariable(
@@ -41,16 +45,17 @@ class ChatGroupModel {
             data: json['totalMemberJoined'], variableType: 'num'),
       );
 
-  Map<String,dynamic> getData(){
+  Map<String, dynamic> getData() {
     return {
-      "groupBio":"3rd December kha likha h agreement mein",
-      "groupLogo":"https://cdn3.iconfinder.com/data/icons/online-learning-vol-1-2/64/Exam-512.png",
-      "groupName":"Exam Discussio",
-      "groupType":"EXAM_DISCUSSION",
-      "lastChatTime":FieldValue.serverTimestamp(),
-      "lastChatUserName":"873_UHGSss",
-      "lastMessage":"Hi here",
-      "totalMemberJoined":232,
+      "groupBio": "3rd December kha likha h agreement mein",
+      "groupLogo":
+          "https://cdn3.iconfinder.com/data/icons/online-learning-vol-1-2/64/Exam-512.png",
+      "groupName": "Exam Discussio",
+      "groupType": "exam_discussion",
+      "lastChatTime": FieldValue.serverTimestamp(),
+      "lastChatUserName": "873_UHGSss",
+      "lastMessage": "Hi here",
+      "totalMemberJoined": 232,
     };
   }
 }

@@ -76,13 +76,6 @@ class _LandingScreenState extends State<LandingScreen> {
                     selectedIndex = 2;
                   });
                 }),
-            IconButton(
-                onPressed: () {
-                  setState(() {
-                    selectedIndex = 3;
-                  });
-                },
-                icon: const Icon(FluentIcons.comment_note_24_regular)),
             const Spacer(),
             IconButton(
                 icon: const Icon(CupertinoIcons.profile_circled),
