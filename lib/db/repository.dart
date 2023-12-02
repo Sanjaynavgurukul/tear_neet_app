@@ -9,6 +9,7 @@ class Repository {
   Stream<QuerySnapshot> fetchNoteList() => _provider.fetchNoteList();
 
   Stream<QuerySnapshot> fetchGroupList() => _provider.fetchGroupList();
+  Stream<QuerySnapshot> fetchList({required String colId}) => _provider.fetchList(colId: colId);
 
   void updateMainGroup(
           {required Map<String, dynamic> body, required groupType}) =>

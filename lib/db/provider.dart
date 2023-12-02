@@ -16,13 +16,21 @@ class Provider {
     return _db.collection('conversation').snapshots();
   }
 
+  Stream<QuerySnapshot> fetchList({required String colId}) {
+    return _db
+        .collection(colId)
+        .orderBy('createdAt', descending: true)
+        .orderBy('timeStamp', descending: true)
+        .snapshots();
+  }
+
   void updateMainGroup(
       {required Map<String, dynamic> body, required groupType}) {
     _db.collection('conversation').doc(groupType).update(body);
   }
 
   void addNewMessage({required Map<String, dynamic> body, required groupType}) {
-    _db.collection('conversation').doc(groupType).collection('chats').add(body);
+    _db.collection(groupType).add(body);
   }
 
   void addGroup() {
