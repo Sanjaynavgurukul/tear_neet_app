@@ -37,8 +37,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
       //   ],
       // ),
       body: ListView(
-        padding: EdgeInsets.symmetric(horizontal: 32),
-        physics: BouncingScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: 32),
+        physics: const BouncingScrollPhysics(),
         children: [
           ProfileWidget(
             imagePath:

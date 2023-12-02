@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:tyarineetki/screens/home/view_model/home_view_model.dart';
 import 'package:tyarineetki/screens/landing_screen/landing_screen.dart';
 import 'package:tyarineetki/screens/profile/profile.dart';
 import 'package:tyarineetki/screens/profile/profile_page.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
       child: MultiProvider(
         providers: [
           ChangeNotifierProvider<SplashViewModel>(create: (context) => SplashViewModel()),
+          ChangeNotifierProvider<HomeViewModel>(create: (context) => HomeViewModel()),
         ],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
