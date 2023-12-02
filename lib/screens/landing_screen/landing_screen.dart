@@ -1,3 +1,4 @@
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tyarineetki/helper/navigation_helper.dart';
@@ -8,9 +9,8 @@ import 'package:tyarineetki/screens/paper_stats_screen/paper_stats_screen.dart';
 import 'package:tyarineetki/screens/paper_stats_screen/view_model/paper_stats_view_model.dart';
 import 'package:tyarineetki/screens/profile/profile_page.dart';
 import 'package:tyarineetki/screens/stats_screen/stats_screen.dart';
+import 'package:tyarineetki/screens/test/test_screen.dart';
 import 'package:tyarineetki/theme/app_color.dart';
-import 'package:tyarineetki/widget/appbar_widget.dart';
-import 'package:tyarineetki/widget/custom_cashe_image.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
@@ -24,11 +24,12 @@ class _LandingScreenState extends State<LandingScreen> {
   List<Widget> pages = [
     const Home(),
     const ChatGroupList(),
-    const StatsScreen()
+    const StatsScreen(),
+    const TestScreen()
   ];
 
-  Color getColor(int index){
-    if(index == selectedIndex){
+  Color getColor(int index) {
+    if (index == selectedIndex) {
       return AppColor.primaryOrangeColor;
     }
     return Colors.black;
@@ -38,8 +39,11 @@ class _LandingScreenState extends State<LandingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          NavigationHelper().navigatePush(context: context, viewModel: PaperStatsViewModel(), screen: const PaperStatsScreen());
+        onPressed: () {
+          NavigationHelper().navigatePush(
+              context: context,
+              viewModel: PaperStatsViewModel(),
+              screen: const PaperStatsScreen());
         },
         child: Icon(Icons.add),
       ),
@@ -47,25 +51,36 @@ class _LandingScreenState extends State<LandingScreen> {
         child: Row(
           children: [
             IconButton(
-                icon:  Icon(CupertinoIcons.house,color: getColor(0),), onPressed: () {
+                icon: Icon(
+                  CupertinoIcons.house,
+                  color: getColor(0),
+                ),
+                onPressed: () {
                   setState(() {
                     selectedIndex = 0;
                   });
-            }),
+                }),
             IconButton(
-                icon:  Icon(CupertinoIcons.chat_bubble_2,color: getColor(1)),
+                icon: Icon(CupertinoIcons.chat_bubble_2, color: getColor(1)),
                 onPressed: () {
                   setState(() {
                     selectedIndex = 1;
                   });
                 }),
             IconButton(
-                icon:  Icon(CupertinoIcons.graph_circle,color: getColor(2)),
+                icon: Icon(CupertinoIcons.graph_circle, color: getColor(2)),
                 onPressed: () {
                   setState(() {
                     selectedIndex = 2;
                   });
                 }),
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    selectedIndex = 3;
+                  });
+                },
+                icon: const Icon(FluentIcons.comment_note_24_regular)),
             const Spacer(),
             IconButton(
                 icon: const Icon(CupertinoIcons.profile_circled),
