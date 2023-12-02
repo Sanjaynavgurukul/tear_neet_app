@@ -27,8 +27,8 @@ class _LandingScreenState extends State<LandingScreen> {
     const StatsScreen()
   ];
 
-  Color getColor(int index){
-    if(index == selectedIndex){
+  Color getColor(int index) {
+    if (index == selectedIndex) {
       return AppColor.primaryOrangeColor;
     }
     return Colors.black;
@@ -38,29 +38,36 @@ class _LandingScreenState extends State<LandingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          NavigationHelper().navigatePush(context: context, viewModel: PaperStatsViewModel(), screen: const PaperStatsScreen());
+        onPressed: () {
+          NavigationHelper().navigatePush(
+              context: context,
+              viewModel: PaperStatsViewModel(),
+              screen: const PaperStatsScreen());
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
       bottomNavigationBar: BottomAppBar(
         child: Row(
           children: [
             IconButton(
-                icon:  Icon(CupertinoIcons.house,color: getColor(0),), onPressed: () {
+                icon: Icon(
+                  CupertinoIcons.house,
+                  color: getColor(0),
+                ),
+                onPressed: () {
                   setState(() {
                     selectedIndex = 0;
                   });
-            }),
+                }),
             IconButton(
-                icon:  Icon(CupertinoIcons.chat_bubble_2,color: getColor(1)),
+                icon: Icon(CupertinoIcons.chat_bubble_2, color: getColor(1)),
                 onPressed: () {
                   setState(() {
                     selectedIndex = 1;
                   });
                 }),
             IconButton(
-                icon:  Icon(CupertinoIcons.graph_circle,color: getColor(2)),
+                icon: Icon(CupertinoIcons.graph_circle, color: getColor(2)),
                 onPressed: () {
                   setState(() {
                     selectedIndex = 2;
