@@ -53,6 +53,7 @@ dependencies:
   firebase_ui_firestore: ^1.5.14
   fluentui_system_icons: ^1.1.222
   auto_size_text: ^3.0.0
+  stop_watch_timer: ^3.0.2
 
 
 dev_dependencies:

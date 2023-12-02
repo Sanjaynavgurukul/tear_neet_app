@@ -6,4 +6,5 @@ class Repository {
 
   Stream<QuerySnapshot> getPaperList() => _provider.gePaperList();
   Stream<QuerySnapshot> fetchNoteList() => _provider.fetchNoteList();
+  Stream<QuerySnapshot> fetchGroupList() => _provider.fetchGroupList();
 }

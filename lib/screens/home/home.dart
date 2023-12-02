@@ -18,26 +18,18 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late StreamSubscription _paperListSubscription;
   late HomeViewModel viewModel;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    fetchPaperList();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     viewModel = context.watch<HomeViewModel>();
-  }
-
-  void fetchPaperList() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      viewModel.fetchPaperList();
-    });
   }
 
   @override

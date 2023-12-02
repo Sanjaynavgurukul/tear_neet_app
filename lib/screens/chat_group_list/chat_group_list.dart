@@ -1,9 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:tyarineetki/helper/date_formater.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:tyarineetki/helper/navigation_helper.dart';
+import 'package:tyarineetki/model/chat_group_model.dart';
 import 'package:tyarineetki/screens/chat_group_list/chat_room.dart';
+import 'package:tyarineetki/screens/chat_group_list/view_model/chat_group_view_model.dart';
+import 'package:tyarineetki/theme/app_color.dart';
 import 'package:tyarineetki/widget/custom_cashe_image.dart';
 
 class ChatGroupList extends StatefulWidget {
@@ -14,207 +21,237 @@ class ChatGroupList extends StatefulWidget {
 }
 
 class _ChatGroupListState extends State<ChatGroupList> {
-  final bool isSearchShow = true;
-  List<String> filteredItems = [];
-  TextEditingController searchController = TextEditingController();
-  List<String> items = [
-    'Daniel Richard',
-    'Subham',
-    'Alice',
-    'Bob',
-    'sanjay',
-    'rajat',
-    'pankaj',
-    'nikhil',
-    'subh',
-    'pradeep',
-    'sagar'
-  ];
+  late ChatGroupViewModel viewModel;
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    filteredItems.addAll(items);
   }
 
-  void filterItems(String query) {
-    setState(() {
-      filteredItems = items
-          .where((item) => item.toLowerCase().contains(query.toLowerCase()))
-          .toList();
-    });
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    viewModel = context.watch<ChatGroupViewModel>();
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-          body: NestedScrollView(
-              headerSliverBuilder: (_, bool v) => [
-                    SliverAppBar(
-                      elevation: 0,
-                      backgroundColor: const Color(0xfffcfcfc),
-                      automaticallyImplyLeading: false,
-                      shadowColor: Colors.red,
-                      title: const Text("Chat",
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600)),
-                      centerTitle: false,
-                      flexibleSpace: FlexibleSpaceBar(
-                        background: Stack(
-                          fit: StackFit.expand,
-                          children: [
-                            Positioned(
-                              left: 10,
-                              right: 10,
-                              bottom: 8,
-                              child: isSearchShow
-                                  ? InkWell(
-                                      onTap: () {},
-                                      child: Container(
-                                        height: 40,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: const Color(0xFFE0E0E0)
-                                                  .withOpacity(0.6)),
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            const SizedBox(
-                                              width: 12,
-                                            ),
-                                            IconButton(
-                                                splashRadius: 20,
-                                                padding: EdgeInsets.zero,
-                                                onPressed: () {},
-                                                icon: const Icon(
-                                                  FluentIcons.search_24_regular,
-                                                )),
-                                            Expanded(
-                                              child: TextField(
-                                                controller: searchController,
-                                                selectionControls:
-                                                    MaterialTextSelectionControls(),
-                                                maxLength: 50,
-                                                decoration:
-                                                    const InputDecoration(
-                                                        hintText: "Search",
-                                                        border:
-                                                            InputBorder.none,
-                                                        counterText: ''),
-                                                onChanged: (val) {
-                                                  filterItems(val);
-                                                },
-                                                onSubmitted: (val) {
-                                                  filterItems(val);
-                                                },
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                            ),
-                          ],
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [appBar(), const Gap(20), chatList()],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget appBar() {
+    return const Padding(
+      padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Chats',
+                  style: TextStyle(
+                      color: AppColor.primaryOrangeColor,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 24),
+                ),
+                SizedBox(
+                  height: 6,
+                ),
+                Text(
+                  'Group Discussion',
+                  style: TextStyle(
+                      color: Colors.black45,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget chatList() {
+    return StreamBuilder(
+        stream: viewModel.fetchGroupList(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.none ||
+              snapshot.connectionState == ConnectionState.waiting) {
+            return SizedBox(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                ),
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: List.generate(4, (index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: Container(
+                        height: 200,
+                        width: 140,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.grey.shade400),
+                        child: const Center(
+                          child: CupertinoActivityIndicator(),
                         ),
                       ),
-                      pinned: true,
-                      floating: true,
-                      expandedHeight: isSearchShow ? kToolbarHeight * 2 : null,
-                    ),
-                  ],
-              body: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Expanded(
-                      child: ListView.separated(
-                          padding: EdgeInsets.zero,
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () {
-                                NavigationHelper().normalNavigatePush(
-                                    context: context,
-                                    screen: ChatRoom(
-                                      titleText: filteredItems[index],
-                                    ));
-                              },
-                              child: ListTile(
-                                contentPadding:
-                                    const EdgeInsets.only(left: 24, right: 16),
-                                minVerticalPadding: 10,
-                                leading: CustomCacheImage(
-                                  width: 50,
-                                  height: 50,
-                                  borderRadius: BorderRadius.circular(50),
-                                  fit: BoxFit.cover,
-                                  imageUrl:
-                                      'https://thumbs.dreamstime.com/z/happy-person-portrait-smiling-woman-tanned-skin-curly-hair-happy-person-portrait-smiling-young-friendly-woman-197501184.jpg?w=992',
-                                ),
-                                title: Padding(
-                                  padding: const EdgeInsets.only(bottom: 4),
-                                  child: Text(filteredItems[index],
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
-                                          color: Color(0xff121212))),
-                                ),
-                                subtitle: const Padding(
-                                  padding: EdgeInsets.only(bottom: 4),
-                                  child: Text("Hanging out will a lll",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w400,
-                                          color: Color(0xff121212))),
-                                ),
-                                trailing: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  mainAxisSize: MainAxisSize.max,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 5.0),
-                                        child: FittedBox(
-                                          fit: BoxFit.fitHeight,
-                                          child: AutoSizeText(
-                                              DateFormatter(context)
-                                                  .getContactListDateTimeString(
-                                                      localDateTime:
-                                                          DateTime.now()),
-                                              minFontSize: 10,
-                                              maxFontSize: 16,
-                                              style: const TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.normal,
-                                                  color: Color(0xff808080))),
-                                        )),
-                                    const Icon(Icons.offline_pin)
-                                  ],
-                                ),
+                    );
+                  }),
+                ),
+              ),
+            );
+          }
+
+          if (snapshot.hasError) {
+            return const SizedBox();
+          }
+
+          if (!snapshot.hasData) {
+            return const SizedBox();
+          }
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 12,
+              ),
+              SizedBox(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.only(
+                    left: 16,
+                    right: 16,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: List.generate(snapshot.data!.size, (index) {
+                      Map<String, dynamic> jso = snapshot.data!.docs[index]
+                          .data() as Map<String, dynamic>;
+                      ChatGroupModel item = ChatGroupModel.fromJson(jso);
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: Container(
+                          padding: const EdgeInsets.only(
+                              left: 4, right: 4, top: 4, bottom: 4),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              CustomCacheImage(
+                                imageUrl: item.groupLogo,
+                                borderRadius: BorderRadius.circular(100),
+                                width: 50,
+                                height: 50,
+                                border: Border.all(
+                                    width: 1, color: Colors.grey.shade300),
+                                showBorder: true,
                               ),
-                            );
-                          },
-                          separatorBuilder: (context, index) => const Divider(
-                              height: 0,
-                              indent: 75,
-                              thickness: 1,
-                              color: Color(0xffbdbdbd)),
-                          itemCount: filteredItems.length))
-                ],
-              ))),
-    );
+                              const SizedBox(
+                                width: 12,
+                              ),
+                              Expanded(
+                                  child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          '${item.groupName}',
+                                          style: const TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.normal),
+                                        ),
+                                      ),
+                                      if(item.lastChatTime != null) Text(
+                                        DateFormat("hh:mm a")
+                                            .format(item.lastChatTime!.toDate()),
+                                        style: const TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 4,
+                                  ),
+                                  Text(
+                                    '${item.lastChatUserName} : ${item.lastMessage}',
+                                    style: const TextStyle(
+                                        color: Colors.black54,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.normal),
+                                  ),
+                                  const SizedBox(
+                                    height: 6,
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.group,
+                                        size: 12,
+                                        color: Colors.green,
+                                      ),
+                                      const SizedBox(
+                                        width: 4,
+                                      ),
+                                      Text(
+                                        '${item.totalMemberJoined}',
+                                        style: const TextStyle(
+                                          color: Colors.green,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const Spacer(),
+                                      const Icon(
+                                        Icons.info_outline,
+                                        size: 12,
+                                        color: Colors.black54,
+                                      )
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  const Divider(
+                                    height: 1,
+                                    color: Colors.black26,
+                                  )
+                                ],
+                              ))
+                            ],
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+                ),
+              )
+            ],
+          );
+        });
   }
 }

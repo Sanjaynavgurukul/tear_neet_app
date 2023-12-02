@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:tyarineetki/screens/chat_group_list/view_model/chat_group_view_model.dart';
 import 'package:tyarineetki/screens/home/view_model/home_view_model.dart';
 import 'package:tyarineetki/screens/landing_screen/landing_screen.dart';
 import 'package:tyarineetki/screens/profile/profile.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
         providers: [
           ChangeNotifierProvider<SplashViewModel>(create: (context) => SplashViewModel()),
           ChangeNotifierProvider<HomeViewModel>(create: (context) => HomeViewModel()),
+          ChangeNotifierProvider<ChatGroupViewModel>(create: (context) => ChatGroupViewModel()),
         ],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
