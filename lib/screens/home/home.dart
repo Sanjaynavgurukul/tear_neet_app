@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
+import 'package:tyarineetki/main.dart';
 import 'package:tyarineetki/model/notes_model.dart';
 import 'package:tyarineetki/model/paper_model.dart';
 import 'package:tyarineetki/screens/home/view_model/home_view_model.dart';
@@ -61,12 +62,12 @@ class _HomeState extends State<Home> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Expanded(
+           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Temukan Berbagai\nMacam Sayuran',
+                  '${auth.currentUser!.displayName}',
                   style: TextStyle(
                       color: AppColor.primaryOrangeColor,
                       fontWeight: FontWeight.w500,
@@ -75,8 +76,8 @@ class _HomeState extends State<Home> {
                 SizedBox(
                   height: 6,
                 ),
-                Text(
-                  'Cari Sayuran Cari Sayuran',
+                const Text(
+                  'Welcome to Tyari Jeet KI',
                   style: TextStyle(
                       color: Colors.black45,
                       fontWeight: FontWeight.w400,
@@ -89,8 +90,7 @@ class _HomeState extends State<Home> {
               width: 50,
               height: 50,
               borderRadius: BorderRadius.circular(100),
-              imageUrl:
-                  'https://image.lexica.art/full_jpg/7515495b-982d-44d2-9931-5a8bbbf27532')
+              imageUrl: auth!.currentUser!.photoURL)
         ],
       ),
     );
