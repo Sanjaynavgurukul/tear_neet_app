@@ -11,6 +11,7 @@ import 'package:tyarineetki/screens/profile/profile_page.dart';
 import 'package:tyarineetki/screens/splash_screen/initial_splash.dart';
 import 'package:tyarineetki/screens/splash_screen/splash_screen.dart';
 import 'package:tyarineetki/screens/splash_screen/view_model/splash_screen.dart';
+import 'package:tyarineetki/screens/stats_screen/view_model/leaderboard_view_model.dart';
 
 late final FirebaseApp app;
 late final FirebaseAuth auth;
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider<SplashViewModel>(create: (context) => SplashViewModel()),
           ChangeNotifierProvider<HomeViewModel>(create: (context) => HomeViewModel()),
           ChangeNotifierProvider<ChatGroupViewModel>(create: (context) => ChatGroupViewModel()),
+          ChangeNotifierProvider<LeaderBoardViewModel>(create: (context) => LeaderBoardViewModel()),
         ],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,

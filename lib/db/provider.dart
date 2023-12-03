@@ -16,6 +16,10 @@ class Provider {
     return _db.collection('conversation').snapshots();
   }
 
+  Stream<QuerySnapshot> fetchLeaderBoardList() {
+    return _db.collection('leaderboard').snapshots();
+  }
+
   Stream<QuerySnapshot> fetchList({required String colId}) {
     return _db
         .collection(colId)
