@@ -152,60 +152,72 @@ class _StatsScreenState extends State<StatsScreen> {
                         fontSize: 12),
                   ),
                   const Spacer(),
-                  Stack(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 0),
-                        child: Container(
-                          height: 30,
-                          width: 30,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              color: Colors.purple),
-                            child: const Center(
-                              child: Text('R',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white
-                                ),),
-                            )
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: Container(
-                          height: 30,
-                          width: 30,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              color: Colors.orange),
-                          child: const Center(
-                            child: Text('A',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              color: Colors.white
-                            ),),
+                  if(item.userList != null && item.userList!.isNotEmpty)
+                    Stack(
+                    children: List.generate(item.userList!.length, (index){
+                      String i = item.userList![index].substring(0,2).toUpperCase();
+                      if(index == 0){
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 0),
+                          child: Container(
+                              height: 30,
+                              width: 30,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(100),
+                                  color: Colors.purple),
+                              child:  Center(
+                                child: Text('${i}',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white
+                                  ),),
+                              )
                           ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 30),
-                        child: Container(
-                          height: 30,
-                          width: 30,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              color: AppColor.primaryOrangeColor),
-                            child: const Center(
-                              child: Text('NN',
-                                style: TextStyle(
+                        );
+                      }
+
+                      if(index == 1){
+                       return Padding(
+                          padding: const EdgeInsets.only(left: 15),
+                          child: Container(
+                            height: 30,
+                            width: 30,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(100),
+                                color: Colors.orange),
+                            child:  Center(
+                              child: Text('${i}',
+                                style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white
                                 ),),
-                            )
-                        ),
-                      ),
-                    ],
+                            ),
+                          ),
+                        );
+                      }
+
+                      if(index == 2){
+                       return Padding(
+                          padding: const EdgeInsets.only(left: 30),
+                          child: Container(
+                              height: 30,
+                              width: 30,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(100),
+                                  color: AppColor.primaryOrangeColor),
+                              child:  Center(
+                                child: Text('${i}',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white
+                                  ),),
+                              )
+                          ),
+                        );
+                      }
+
+                      return const SizedBox();
+                    }),
                   )
                 ],
               )),
