@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tyarineetki/db/provider.dart';
 
@@ -24,5 +26,8 @@ class Repository {
           {required Map<String, dynamic> body, required groupType}) =>
       _provider.addNewMessage(body: body, groupType: groupType);
 
-  Stream<QuerySnapshot> fetchBannerImage() => _provider.fetchBannerImage();
+  Stream<DocumentSnapshot> fetchBannerImage() => _provider.fetchBannerImage();
+
+  Future<void> uploadImageToFirebase({required File? pickedImageFile}) =>
+      _provider.uploadImageToFirebase(pickedImageFile);
 }

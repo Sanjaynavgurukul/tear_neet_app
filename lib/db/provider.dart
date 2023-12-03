@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:tyarineetki/model/chat_group_model.dart';
 
 class Provider {
@@ -29,8 +32,8 @@ class Provider {
   }
 
 
-  Stream<QuerySnapshot> fetchBannerImage() {
-    return FirebaseFirestore.instance.collection('innerContent').snapshots();
+  Stream<DocumentSnapshot> fetchBannerImage() {
+    return FirebaseFirestore.instance.collection('innerContent').doc('banner').snapshots();
   }
 
   void updateMainGroup(
@@ -44,5 +47,15 @@ class Provider {
 
   void addGroup() {
     _db.collection('conversation').add(ChatGroupModel().getData());
+  }
+
+    Future<void> uploadImageToFirebase(File? pickedImageFile) async {
+    if (pickedImageFile != null) {
+      final storageRef = FirebaseStorage.instance.ref().child('user_image');
+      await storageRef.putFile(pickedImageFile);
+      final imageUrl = await storageRef.getDownloadURL();
+
+      print(imageUrl);
+    }
   }
 }

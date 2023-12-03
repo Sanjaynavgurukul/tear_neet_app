@@ -3,7 +3,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:tyarineetki/main.dart';
+import 'package:tyarineetki/screens/profile/view_model/profile_view_model.dart';
 import 'package:tyarineetki/widget/appbar_widget.dart';
 import 'package:tyarineetki/widget/profile_widget.dart';
 import 'package:tyarineetki/widget/textfield_widget.dart';
@@ -14,6 +16,8 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
+  final aboutController = TextEditingController();
+  late ProfileViewModel viewModel;
   final user = auth.currentUser;
   String? imageUrl;
   File? _pickedImageFile;
@@ -31,16 +35,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     });
 
     print(_pickedImageFile);
-  }
-
-  Future<void> uploadImageToFirebase() async {
-    if (_pickedImageFile != null) {
-      final storageRef = FirebaseStorage.instance.ref().child('user_image');
-      storageRef.putFile(_pickedImageFile!);
-      final imageUrl = storageRef.getDownloadURL();
-
-      print(imageUrl);
-    }
+    // viewModel.uploadImageToFirebase(pickedImageFile: _pickedImageFile);
   }
 
   Future<void> showImagePicker() {
@@ -109,6 +104,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
         });
   }
 
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   viewModel = context.watch<ProfileViewModel>();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,7 +117,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
           context: context,
           elevation: 0,
           actions: [
-            TextButton(onPressed: () {}, child: const Text('Save')),
+            TextButton(onPressed: () {
+              
+            }, child: const Text('Save')),
             const SizedBox(
               width: 18,
             )
@@ -161,8 +164,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           const SizedBox(height: 24),
           TextFieldWidget(
             label: 'About',
-            text:
-                'For your cellphone wallpaper, you can select cool images with the best image quality for your profile. a collection of wallpapers created by the boy. We hope you enjoy our expanding collection of high-definition photos that you can use as your smartphone',
+            text: aboutController.text,
             maxLines: 5,
             onChanged: (about) {},
           ),
