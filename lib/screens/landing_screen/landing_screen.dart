@@ -2,7 +2,6 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tyarineetki/helper/navigation_helper.dart';
-import 'package:tyarineetki/main.dart';
 import 'package:tyarineetki/screens/chat_group_list/chat_group_list.dart';
 import 'package:tyarineetki/screens/home/home.dart';
 import 'package:tyarineetki/screens/paper_stats_screen/paper_stats_screen.dart';

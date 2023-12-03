@@ -33,34 +33,47 @@ class ProfileWidget extends StatelessWidget {
   }
 
   Widget buildImage() {
-    final image = NetworkImage(imagePath);
-
-    return ClipOval(
-      child: Material(
-        color: Colors.transparent,
-        child: Ink.image(
-          image: image,
-          fit: BoxFit.cover,
-          width: 128,
-          height: 128,
-          child: InkWell(onTap: onClicked),
-        ),
-      ),
-    );
+    return imagePath.isNotEmpty && imagePath.substring(0, 5) == "https"
+        ? ClipOval(
+            child: Material(
+              color: Colors.transparent,
+              child: Ink.image(
+                image: NetworkImage(imagePath),
+                fit: BoxFit.cover,
+                width: 128,
+                height: 128,
+                child: InkWell(onTap: onClicked),
+              ),
+            ),
+          )
+        : ClipOval(
+            child: Material(
+              color: Colors.transparent,
+              child: Ink.image(
+                image: FileImage(File(imagePath)),
+                fit: BoxFit.cover,
+                width: 128,
+                height: 128,
+                child: InkWell(onTap: onClicked),
+              ),
+            ),
+          );
   }
 
   Widget buildEditIcon(Color color) => buildCircle(
         color: Colors.white,
         all: 3,
-        child: buildCircle(
-          color: color,
-          all: 8,
-          child: Icon(
-            isEdit ? Icons.add_a_photo : Icons.edit,
-            color: Colors.white,
-            size: 20,
-          ),
-        ),
+        child: isEdit
+            ? buildCircle(
+                color: color,
+                all: 8,
+                child: const Icon(
+                  Icons.add_a_photo,
+                  color: Colors.white,
+                  size: 20,
+                ),
+              )
+            : const SizedBox(),
       );
 
   Widget buildCircle({

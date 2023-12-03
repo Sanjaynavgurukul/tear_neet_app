@@ -5,8 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:tyarineetki/screens/home/view_model/home_view_model.dart';
 import 'package:tyarineetki/screens/landing_screen/landing_screen.dart';
-import 'package:tyarineetki/screens/profile/profile.dart';
-import 'package:tyarineetki/screens/profile/profile_page.dart';
 import 'package:tyarineetki/screens/splash_screen/initial_splash.dart';
 import 'package:tyarineetki/screens/splash_screen/splash_screen.dart';
 import 'package:tyarineetki/screens/splash_screen/view_model/splash_screen.dart';

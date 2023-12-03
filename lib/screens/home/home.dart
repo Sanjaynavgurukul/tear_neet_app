@@ -1,9 +1,9 @@
-import 'dart:async';
-
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
+import 'package:tyarineetki/model/banner_model.dart';
 import 'package:tyarineetki/model/notes_model.dart';
 import 'package:tyarineetki/model/paper_model.dart';
 import 'package:tyarineetki/screens/home/view_model/home_view_model.dart';
@@ -18,8 +18,9 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late StreamSubscription _paperListSubscription;
+  // late StreamSubscription _paperListSubscription;
   late HomeViewModel viewModel;
+  int activeIndex = 0;
 
   @override
   void initState() {
@@ -50,6 +51,7 @@ class _HomeState extends State<Home> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               appBar(),
+              slider(),
               const Gap(20),
               paperSection(),
               noteSection()
@@ -227,13 +229,13 @@ class _HomeState extends State<Home> {
                   right: 16,
                 ),
                 scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: List.generate(4, (index) {
+                child: Column(
+                  children: List.generate(2, (index) {
                     return Padding(
                       padding: const EdgeInsets.only(right: 10),
                       child: Container(
-                        height: 200,
-                        width: 140,
+                        height: 100,
+                        width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
                             color: Colors.grey.shade400),
@@ -280,10 +282,35 @@ class _HomeState extends State<Home> {
                       Map<String, dynamic> jso = snapshot.data!.docs[index]
                           .data() as Map<String, dynamic>;
                       NoteModel item = NoteModel.fromJson(jso);
-                      return ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        title: Text('${item.notesTitle}'),
-                        subtitle: Text('${item.notesDescription}'),
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 10, bottom: 10),
+                        child: Container(
+                          padding: const EdgeInsets.only(
+                              left: 16, right: 16, top: 10, bottom: 10),
+                          height: 100,
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: AppColor.greenBGColor)),
+                          child: ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            title: Padding(
+                              padding: const EdgeInsets.only(bottom: 4),
+                              child: Text(
+                                '${item.notesTitle}',
+                                style: const TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w500),
+                              ),
+                            ),
+                            subtitle: Padding(
+                              padding: const EdgeInsets.only(bottom: 4),
+                              child: Text('${item.notesDescription}',
+                                  style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400)),
+                            ),
+                          ),
+                        ),
                       );
                     }),
                   ),
@@ -303,6 +330,59 @@ class _HomeState extends State<Home> {
         label,
         style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
       ),
+    );
+  }
+
+  Widget slider() {
+    return Column(
+      children: [
+        StreamBuilder(
+            stream: viewModel.fetchBannerImage(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.none ||
+                  snapshot.connectionState == ConnectionState.waiting) {
+                return Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: Container(
+                    height: 200,
+                    width: 140,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.grey.shade400),
+                    child: const Center(
+                      child: CupertinoActivityIndicator(),
+                    ),
+                  ),
+                );
+              }
+              if (snapshot.hasError) {
+                return const SizedBox();
+              }
+
+              if (!snapshot.hasData) {
+                return const SizedBox();
+              }
+              return CarouselSlider(
+                items: List.generate(snapshot.data!.size, (index) {
+                  Map<String, dynamic> json =
+                      snapshot.data!.docs[index].data() as Map<String, dynamic>;
+                  BannerModel jso = BannerModel.fromJson(json);
+                  return CustomCacheImage(
+                    imageUrl: jso.image,
+                    height: 190,
+                  );
+                }),
+                options: CarouselOptions(
+                  height: 190.0,
+                  autoPlay: true,
+                  autoPlayInterval: const Duration(
+                    seconds: 3,
+                  ),
+                  enlargeCenterPage: true,
+                ),
+              );
+            }),
+      ],
     );
   }
 }

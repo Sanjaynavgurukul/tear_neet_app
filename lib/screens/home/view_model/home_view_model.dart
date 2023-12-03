@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:tyarineetki/helper/base_view_model.dart';
 
 class HomeViewModel extends BaseViewModel {
-
   @override
   void showToast({required String message, required BuildContext context}) {
     super.displayToastMessage(message: message, context: context);
@@ -16,5 +15,9 @@ class HomeViewModel extends BaseViewModel {
 
   Stream<QuerySnapshot> fetchNoteList() {
     return repository.fetchNoteList();
+  }
+
+  Stream<QuerySnapshot> fetchBannerImage() {
+    return repository.fetchBannerImage();
   }
 }

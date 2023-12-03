@@ -4,14 +4,14 @@ class Provider {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   Stream<QuerySnapshot> gePaperList() {
-    return FirebaseFirestore.instance
-        .collection('papers')
-        .snapshots();
+    return FirebaseFirestore.instance.collection('papers').snapshots();
   }
 
   Stream<QuerySnapshot> fetchNoteList() {
-    return FirebaseFirestore.instance
-        .collection('notes')
-        .snapshots();
+    return FirebaseFirestore.instance.collection('notes').snapshots();
+  }
+
+  Stream<QuerySnapshot> fetchBannerImage() {
+    return FirebaseFirestore.instance.collection('innerContent').snapshots();
   }
 }
