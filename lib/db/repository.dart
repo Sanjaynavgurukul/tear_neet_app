@@ -9,8 +9,12 @@ class Repository {
   Stream<QuerySnapshot> fetchNoteList() => _provider.fetchNoteList();
 
   Stream<QuerySnapshot> fetchGroupList() => _provider.fetchGroupList();
-  Stream<QuerySnapshot> fetchLeaderBoardList() => _provider.fetchLeaderBoardList();
-  Stream<QuerySnapshot> fetchList({required String colId}) => _provider.fetchList(colId: colId);
+
+  Stream<QuerySnapshot> fetchLeaderBoardList() =>
+      _provider.fetchLeaderBoardList();
+
+  Stream<QuerySnapshot> fetchList({required String colId}) =>
+      _provider.fetchList(colId: colId);
 
   void updateMainGroup(
           {required Map<String, dynamic> body, required groupType}) =>
@@ -19,4 +23,6 @@ class Repository {
   void addNewMessage(
           {required Map<String, dynamic> body, required groupType}) =>
       _provider.addNewMessage(body: body, groupType: groupType);
+
+  Stream<QuerySnapshot> fetchBannerImage() => _provider.fetchBannerImage();
 }

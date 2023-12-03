@@ -5,7 +5,6 @@ import 'package:tyarineetki/db/provider.dart';
 import 'package:tyarineetki/db/share_pref.dart';
 import 'package:tyarineetki/helper/dialog_helper.dart';
 import 'package:tyarineetki/helper/navigation_helper.dart';
-import 'package:tyarineetki/main.dart';
 import 'package:tyarineetki/screens/chat_group_list/chat_group_list.dart';
 import 'package:tyarineetki/screens/exam_time_Screen/exam_timer_screen.dart';
 import 'package:tyarineetki/screens/exam_time_Screen/view_model/exam_timer_view_model.dart';

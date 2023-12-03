@@ -28,6 +28,11 @@ class Provider {
         .snapshots();
   }
 
+
+  Stream<QuerySnapshot> fetchBannerImage() {
+    return FirebaseFirestore.instance.collection('innerContent').snapshots();
+  }
+
   void updateMainGroup(
       {required Map<String, dynamic> body, required groupType}) {
     _db.collection('conversation').doc(groupType).update(body);
