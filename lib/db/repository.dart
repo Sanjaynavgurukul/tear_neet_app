@@ -9,6 +9,7 @@ class Repository {
   Stream<QuerySnapshot> fetchNoteList() => _provider.fetchNoteList();
 
   Stream<QuerySnapshot> fetchGroupList() => _provider.fetchGroupList();
+  Stream<DocumentSnapshot> getSubDetail() => _provider.getSubDetail();
 
   Stream<QuerySnapshot> fetchLeaderBoardList() =>
       _provider.fetchLeaderBoardList();

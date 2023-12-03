@@ -33,6 +33,10 @@ class Provider {
     return FirebaseFirestore.instance.collection('innerContent').snapshots();
   }
 
+  Stream<DocumentSnapshot> getSubDetail() {
+    return FirebaseFirestore.instance.collection('innerContent').doc('subscription').snapshots();
+  }
+
   void updateMainGroup(
       {required Map<String, dynamic> body, required groupType}) {
     _db.collection('conversation').doc(groupType).update(body);
