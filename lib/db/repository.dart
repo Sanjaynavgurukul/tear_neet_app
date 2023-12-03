@@ -25,5 +25,5 @@ class Repository {
           {required Map<String, dynamic> body, required groupType}) =>
       _provider.addNewMessage(body: body, groupType: groupType);
 
-  Stream<QuerySnapshot> fetchBannerImage() => _provider.fetchBannerImage();
+  Stream<DocumentSnapshot> fetchBannerImage() => _provider.fetchBannerImage();
 }

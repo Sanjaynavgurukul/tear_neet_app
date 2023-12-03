@@ -29,8 +29,8 @@ class Provider {
   }
 
 
-  Stream<QuerySnapshot> fetchBannerImage() {
-    return FirebaseFirestore.instance.collection('innerContent').snapshots();
+  Stream<DocumentSnapshot> fetchBannerImage() {
+    return FirebaseFirestore.instance.collection('innerContent').doc('banner').snapshots();
   }
 
   Stream<DocumentSnapshot> getSubDetail() {

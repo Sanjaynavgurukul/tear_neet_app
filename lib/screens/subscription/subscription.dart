@@ -79,7 +79,7 @@ class _SubscriptionState extends State<Subscription> {
                       children: [
                         Text(
                           '${item.subName}',
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
                               fontSize: 18),
@@ -89,7 +89,7 @@ class _SubscriptionState extends State<Subscription> {
                         ),
                         Row(
                           children: [
-                            Text(
+                            const Text(
                               '\u{20B9}',
                               style: TextStyle(
                                   color: AppColor.primaryOrangeColor,
@@ -98,12 +98,12 @@ class _SubscriptionState extends State<Subscription> {
                             ),
                             Text(
                               '${item.amount}',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: AppColor.primaryOrangeColor,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 40),
                             ),
-                            Text(
+                            const Text(
                               '/Month',
                               style: TextStyle(
                                   color: Colors.black,
@@ -117,7 +117,7 @@ class _SubscriptionState extends State<Subscription> {
                         ),
                         Text(
                           '${item.description}',
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: Colors.black54,
                               fontWeight: FontWeight.normal,
                               fontSize: 14),
@@ -125,7 +125,7 @@ class _SubscriptionState extends State<Subscription> {
                         const SizedBox(
                           height: 24,
                         ),
-                        Text(
+                        const Text(
                           'What\'s Includes',
                           style: TextStyle(
                               color: Colors.black,
@@ -143,29 +143,29 @@ class _SubscriptionState extends State<Subscription> {
                                 item.packageIncludes!.length, (index) {
                               String i = item.packageIncludes![index];
                               return Padding(
-                                padding: EdgeInsets.only(top: 6, bottom: 6),
+                                padding: const EdgeInsets.only(top: 6, bottom: 6),
                                 child: Text(
                                   '${i}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Colors.black, fontSize: 16),
                                 ),
                               );
                             }),
                           ),
                         Padding(
-                          padding: EdgeInsets.only(top: 40),
+                          padding: const EdgeInsets.only(top: 40),
                           child: Container(
                             alignment: Alignment.center,
-                            padding: EdgeInsets.all(16),
+                            padding: const EdgeInsets.all(16),
                             width: double.infinity,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
-                              gradient: LinearGradient(
+                              gradient: const LinearGradient(
                                   begin: Alignment.topLeft,
                                   end: Alignment.topRight,
                                   colors: [Colors.indigoAccent, Colors.purple]),
                             ),
-                            child: Text(
+                            child: const Text(
                               'Purchase Now',
                               style: TextStyle(
                                   color: Colors.white,

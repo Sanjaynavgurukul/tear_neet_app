@@ -355,11 +355,15 @@ class _HomeState extends State<Home> {
               if (!snapshot.hasData) {
                 return const SizedBox();
               }
+
+              BannerModel item = BannerModel.fromJson(snapshot.data!.data() as Map<String,dynamic>);
+              if(item.data == null || item.data!.isEmpty){
+                return SizedBox();
+              }
               return CarouselSlider(
-                items: List.generate(snapshot.data!.size, (index) {
-                  Map<String, dynamic> json =
-                      snapshot.data!.docs[index].data() as Map<String, dynamic>;
-                  BannerModel jso = BannerModel.fromJson(json);
+                items: List.generate(item.data!.length, (index) {
+
+                  BannerModelData jso = item.data![index];
                   return CustomCacheImage(
                     imageUrl: jso.image,
                     height: 190,

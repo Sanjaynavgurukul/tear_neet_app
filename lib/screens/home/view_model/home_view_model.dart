@@ -17,7 +17,7 @@ class HomeViewModel extends BaseViewModel {
     return repository.fetchNoteList();
   }
 
-  Stream<QuerySnapshot> fetchBannerImage() {
+  Stream<DocumentSnapshot> fetchBannerImage() {
     return repository.fetchBannerImage();
   }
 }
