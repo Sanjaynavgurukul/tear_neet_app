@@ -12,6 +12,7 @@ import 'package:tyarineetki/screens/home/home.dart';
 import 'package:tyarineetki/screens/paper_stats_screen/paper_stats_screen.dart';
 import 'package:tyarineetki/screens/paper_stats_screen/view_model/paper_stats_view_model.dart';
 import 'package:tyarineetki/screens/profile/profile_page.dart';
+import 'package:tyarineetki/screens/profile/view_model/profile_view_model.dart';
 import 'package:tyarineetki/screens/stats_screen/stats_screen.dart';
 import 'package:tyarineetki/screens/test/test_screen.dart';
 import 'package:tyarineetki/theme/app_color.dart';
@@ -42,12 +43,12 @@ class _LandingScreenState extends State<LandingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Provider().addGroup();
-        },
-        child: const Icon(Icons.add),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     Provider().addGroup();
+      //   },
+      //   child: const Icon(Icons.add),
+      // ),
       bottomNavigationBar: BottomAppBar(
         child: Row(
           children: [
@@ -79,8 +80,10 @@ class _LandingScreenState extends State<LandingScreen> {
             IconButton(
                 icon: const Icon(CupertinoIcons.profile_circled),
                 onPressed: () {
-                  NavigationHelper().normalNavigatePush(
-                      context: context, screen: ProfilePage());
+                  NavigationHelper().navigatePush(
+                      context: context,
+                      viewModel: ProfileViewModel(),
+                      screen: ProfilePage());
                 }),
           ],
         ),

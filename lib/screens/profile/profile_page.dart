@@ -1,6 +1,11 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tyarineetki/helper/navigation_helper.dart';
 import 'package:tyarineetki/screens/profile/edit_profile_page.dart';
+import 'package:tyarineetki/screens/profile/view_model/profile_view_model.dart';
 import 'package:tyarineetki/screens/subscription/subscription.dart';
 import 'package:tyarineetki/screens/subscription/view_model/subscription_view_model.dart';
 import 'package:tyarineetki/widget/appbar_widget.dart';
@@ -15,7 +20,29 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  // late StreamSubscription _paperListSubscription;
+  late ProfileViewModel viewModel;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    viewModel = context.watch<ProfileViewModel>();
+  }
+
   final user = auth.currentUser;
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    viewModel.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +69,7 @@ class _ProfilePageState extends State<ProfilePage> {
         physics: const BouncingScrollPhysics(),
         children: [
           ProfileWidget(
-            imagePath:
-                'https://play-lh.googleusercontent.com/C9CAt9tZr8SSi4zKCxhQc9v4I6AOTqRmnLchsu1wVDQL0gsQ3fmbCVgQmOVM1zPru8UH=w240-h480-rw',
+            imagePath: auth.currentUser!.photoURL!,
             onClicked: () {
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => EditProfilePage()),
@@ -64,6 +90,16 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  void deo() async {
+    log('check ----');
+    User user = auth.currentUser!;
+    await FirebaseAuth.instance.currentUser!.updateDisplayName('Sanjay');
+    await FirebaseAuth.instance.currentUser!.updatePhotoURL(
+        'https://a.storyblok.com/f/191576/1200x800/215e59568f/round_profil_picture_after_.webp');
+    await FirebaseAuth.instance.currentUser!.reload();
+    viewModel.update();
+  }
+
   Widget buildName(String name, String email) => Column(
         children: [
           Text(
@@ -81,6 +117,8 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget buildUpgradeButton() => ButtonWidget(
         text: 'Upgrade To PRO',
         onClicked: () {
+          deo();
+          return;
           NavigationHelper().navigatePush(
               context: context,
               viewModel: SubscriptionViewModel(),

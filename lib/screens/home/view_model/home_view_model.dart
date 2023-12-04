@@ -20,4 +20,8 @@ class HomeViewModel extends BaseViewModel {
   Stream<DocumentSnapshot> fetchBannerImage() {
     return repository.fetchBannerImage();
   }
+
+  void updateNotify(){
+    notifyListeners();
+  }
 }

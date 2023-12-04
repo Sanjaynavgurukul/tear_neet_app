@@ -7,4 +7,8 @@ class ProfileViewModel extends BaseViewModel{
     super.displayToastMessage(message: message, context: context);
   }
 
+  void update(){
+    notifyListeners();
+  }
+
 }

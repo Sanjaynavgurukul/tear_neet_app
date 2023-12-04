@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -38,23 +41,27 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              appBar(),
-              slider(),
-              const Gap(20),
-              paperSection(),
-              noteSection()
-              // bookSection(),
-              // const Gap(20),
-              // testSection()
-            ],
-          ),
-        ),
+      body: Consumer<HomeViewModel>(
+        builder: (context, viewModel, child) {
+          return SingleChildScrollView(
+            child: SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  appBar(),
+                  slider(),
+                  const Gap(20),
+                  paperSection(),
+                  noteSection()
+                  // bookSection(),
+                  // const Gap(20),
+                  // testSection()
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -65,7 +72,7 @@ class _HomeState extends State<Home> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-           Expanded(
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -356,13 +363,13 @@ class _HomeState extends State<Home> {
                 return const SizedBox();
               }
 
-              BannerModel item = BannerModel.fromJson(snapshot.data!.data() as Map<String,dynamic>);
-              if(item.data == null || item.data!.isEmpty){
+              BannerModel item = BannerModel.fromJson(
+                  snapshot.data!.data() as Map<String, dynamic>);
+              if (item.data == null || item.data!.isEmpty) {
                 return SizedBox();
               }
               return CarouselSlider(
                 items: List.generate(item.data!.length, (index) {
-
                   BannerModelData jso = item.data![index];
                   return CustomCacheImage(
                     imageUrl: jso.image,
@@ -382,4 +389,5 @@ class _HomeState extends State<Home> {
       ],
     );
   }
+
 }
