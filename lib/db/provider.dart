@@ -31,9 +31,18 @@ class Provider {
         .snapshots();
   }
 
-
   Stream<DocumentSnapshot> fetchBannerImage() {
-    return FirebaseFirestore.instance.collection('innerContent').doc('banner').snapshots();
+    return FirebaseFirestore.instance
+        .collection('innerContent')
+        .doc('banner')
+        .snapshots();
+  }
+
+  Stream<DocumentSnapshot> getSubDetail() {
+    return FirebaseFirestore.instance
+        .collection('innerContent')
+        .doc('subscription')
+        .snapshots();
   }
 
   void updateMainGroup(
@@ -49,13 +58,31 @@ class Provider {
     _db.collection('conversation').add(ChatGroupModel().getData());
   }
 
-    Future<void> uploadImageToFirebase(File? pickedImageFile) async {
+  Future<String> uploadImageToFirebase(File? pickedImageFile) async {
     if (pickedImageFile != null) {
       final storageRef = FirebaseStorage.instance.ref().child('user_image');
       await storageRef.putFile(pickedImageFile);
       final imageUrl = await storageRef.getDownloadURL();
-
-      print(imageUrl);
+      return imageUrl;
     }
+    return '';
+  }
+
+  Future<void> saveUserDetail(
+      {required Map<String, dynamic> data, required String userId}) async {
+    try {
+      _db.collection('userDetail').doc(userId).set(data);
+    } catch (e) {
+      print('Error saving data to Firestore: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> fetchUserDetais({required String userId}) async {
+    final DocumentSnapshot<Map<String, dynamic>> snapshot =
+        await _db.collection('userDetails').doc(userId).get();
+    if (snapshot.exists) {
+      return snapshot.data() ?? {};
+    }
+    return {};
   }
 }

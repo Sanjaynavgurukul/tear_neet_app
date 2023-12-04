@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:tyarineetki/main.dart';
+import 'package:tyarineetki/model/user_model.dart';
 import 'package:tyarineetki/screens/profile/view_model/profile_view_model.dart';
 import 'package:tyarineetki/widget/appbar_widget.dart';
 import 'package:tyarineetki/widget/profile_widget.dart';
@@ -19,6 +21,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final aboutController = TextEditingController();
   late ProfileViewModel viewModel;
   final user = auth.currentUser;
+
   String? imageUrl;
   File? _pickedImageFile;
   final _imagePicker = ImagePicker();
@@ -104,11 +107,29 @@ class _EditProfilePageState extends State<EditProfilePage> {
         });
   }
 
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   viewModel = context.watch<ProfileViewModel>();
-  // }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    viewModel = context.watch<ProfileViewModel>();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // viewModel.fetchUserDetails(userId: user!.uid).then((value) {
+    //   setState(() {
+    //     userDetails = value;
+    //   });
+    // });
+
+    //    if (viewModel != null) {
+    //   viewModel.fetchUserDetails(userId: user!.uid).then((value) {
+    //     setState(() {
+    //       userDetails = value;
+    //     });
+    //   });
+    // }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,9 +138,37 @@ class _EditProfilePageState extends State<EditProfilePage> {
           context: context,
           elevation: 0,
           actions: [
-            TextButton(onPressed: () {
-              
-            }, child: const Text('Save')),
+            TextButton(
+                onPressed: () async {
+                  final imageUrl = await viewModel.uploadImageToFirebase(
+                      pickedImageFile: _pickedImageFile);
+
+                  print("this sis the image url ---->> $imageUrl");
+
+                  UserModel updatedUserModel = UserModel(
+                      userName: user!.displayName!,
+                      userEmailId: user!.email!,
+                      aboutUs: aboutController.text,
+                      imageUrl: imageUrl);
+
+                  Map<String, dynamic> data = updatedUserModel.toMap();
+
+                  print("this is the data-------$data");
+
+                  final userId = user!.uid;
+
+                  viewModel
+                      .saveUserDetails(data: data, userId: userId)
+                      .then((value) async {
+                    void updateInFirebase() async {
+                      await user!.updateDisplayName(user!.displayName);
+                      await user!.updateEmail(user!.email!);
+                      await user!.updatePhotoURL(imageUrl);
+                      viewModel.update();
+                    }
+                  });
+                },
+                child: const Text('Save')),
             const SizedBox(
               width: 18,
             )
@@ -162,12 +211,40 @@ class _EditProfilePageState extends State<EditProfilePage> {
             onChanged: (email) {},
           ),
           const SizedBox(height: 24),
-          TextFieldWidget(
-            label: 'About',
-            text: aboutController.text,
-            maxLines: 5,
-            onChanged: (about) {},
-          ),
+          // TextFieldWidget(
+          //   label: 'About',
+          //   text: aboutController.text,
+          //   maxLines: 5,
+          //   onChanged: (about) {
+          //     setState(() {
+          //       aboutController.text = about;
+          //     });
+          //   },
+          // ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'About',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: aboutController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                maxLines: 5,
+                onChanged: (value) {
+                  setState(() {
+                    aboutController.text = value;
+                  });
+                },
+              ),
+            ],
+          )
         ],
       ),
     );

@@ -9,7 +9,20 @@ class ProfileViewModel extends BaseViewModel {
     super.displayToastMessage(message: message, context: context);
   }
 
-  Future<void> uploadImageToFirebase({required File? pickedImageFile}) {
+  Future<String> uploadImageToFirebase({required File? pickedImageFile}) {
     return repository.uploadImageToFirebase(pickedImageFile: pickedImageFile);
+  }
+
+  Future<void> saveUserDetails(
+      {required Map<String, dynamic> data, required String userId}) {
+    return repository.saveUserDetails(data: data, userId: userId);
+  }
+
+  Future<Map<String, dynamic>> fetchUserDetails({required String userId}) {
+    return repository.fetchUserDetails(userId: userId);
+  }
+
+  void update() {
+    notifyListeners();
   }
 }

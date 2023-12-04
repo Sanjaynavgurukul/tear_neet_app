@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:tyarineetki/screens/chat_group_list/view_model/chat_group_view_model.dart';
 import 'package:tyarineetki/screens/home/view_model/home_view_model.dart';
 import 'package:tyarineetki/screens/landing_screen/landing_screen.dart';
+import 'package:tyarineetki/screens/profile/view_model/profile_view_model.dart';
 import 'package:tyarineetki/screens/splash_screen/initial_splash.dart';
 import 'package:tyarineetki/screens/splash_screen/splash_screen.dart';
 import 'package:tyarineetki/screens/splash_screen/view_model/splash_screen.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider<HomeViewModel>(create: (context) => HomeViewModel()),
           ChangeNotifierProvider<ChatGroupViewModel>(create: (context) => ChatGroupViewModel()),
           ChangeNotifierProvider<LeaderBoardViewModel>(create: (context) => LeaderBoardViewModel()),
+          ChangeNotifierProvider<ProfileViewModel>(create: (context) => ProfileViewModel())
         ],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,

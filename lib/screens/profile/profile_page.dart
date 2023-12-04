@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tyarineetki/helper/navigation_helper.dart';
 import 'package:tyarineetki/screens/profile/edit_profile_page.dart';
-import 'package:tyarineetki/screens/profile/subscription.dart';
+import 'package:tyarineetki/screens/subscription/subscription.dart';
+import 'package:tyarineetki/screens/subscription/view_model/subscription_view_model.dart';
 import 'package:tyarineetki/widget/appbar_widget.dart';
 import 'package:tyarineetki/widget/button_widget.dart';
 import 'package:tyarineetki/widget/profile_widget.dart';
@@ -80,8 +81,10 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget buildUpgradeButton() => ButtonWidget(
         text: 'Upgrade To PRO',
         onClicked: () {
-          NavigationHelper().normalNavigatePush(
-              context: context, screen: const SubscriptionScreen());
+          NavigationHelper().navigatePush(
+              context: context,
+              viewModel: SubscriptionViewModel(),
+              screen: const Subscription());
         },
       );
 

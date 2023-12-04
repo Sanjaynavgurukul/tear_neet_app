@@ -11,6 +11,7 @@ class Repository {
   Stream<QuerySnapshot> fetchNoteList() => _provider.fetchNoteList();
 
   Stream<QuerySnapshot> fetchGroupList() => _provider.fetchGroupList();
+  Stream<DocumentSnapshot> getSubDetail() => _provider.getSubDetail();
 
   Stream<QuerySnapshot> fetchLeaderBoardList() =>
       _provider.fetchLeaderBoardList();
@@ -28,6 +29,13 @@ class Repository {
 
   Stream<DocumentSnapshot> fetchBannerImage() => _provider.fetchBannerImage();
 
-  Future<void> uploadImageToFirebase({required File? pickedImageFile}) =>
+  Future<String> uploadImageToFirebase({required File? pickedImageFile}) =>
       _provider.uploadImageToFirebase(pickedImageFile);
+
+  Future<void> saveUserDetails(
+          {required Map<String, dynamic> data, required String userId}) =>
+      _provider.saveUserDetail(data: data, userId: userId);
+
+  Future<Map<String, dynamic>> fetchUserDetails({required String userId}) =>
+      _provider.fetchUserDetais(userId: userId);
 }

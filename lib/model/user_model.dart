@@ -24,4 +24,14 @@ class UserModel {
         imageUrl: VariableConverter.convertVariable(
             data: json['imageUrl'], variableType: 'String'),
       );
+
+      Map<String, dynamic> toMap() {
+    return {
+      'userName': userName,
+      'userEmailId': userEmailId,
+      'aboutUs': aboutUs,
+      'imageUrl': imageUrl
+    };
+  }
 }
+
