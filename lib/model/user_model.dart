@@ -5,6 +5,7 @@ class UserModel {
   String? userEmailId;
   String? aboutUs;
   String? imageUrl;
+  String? phoneNumber;
 
   //Default Constructor :D
   UserModel({
@@ -12,6 +13,7 @@ class UserModel {
     this.userEmailId,
     this.aboutUs,
     this.imageUrl,
+    this.phoneNumber
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
@@ -23,15 +25,17 @@ class UserModel {
             data: json['aboutUs'], variableType: 'String'),
         imageUrl: VariableConverter.convertVariable(
             data: json['imageUrl'], variableType: 'String'),
+        phoneNumber: VariableConverter.convertVariable(
+            data: json['phoneNumber'], variableType: 'String'),    
       );
 
-      Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap() {
     return {
       'userName': userName,
       'userEmailId': userEmailId,
       'aboutUs': aboutUs,
+      'phoneNumber':phoneNumber,
       'imageUrl': imageUrl
     };
   }
 }
-

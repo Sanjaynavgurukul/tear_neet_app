@@ -14,6 +14,7 @@ import 'package:tyarineetki/screens/paper_stats_screen/view_model/paper_stats_vi
 import 'package:tyarineetki/screens/profile/profile_page.dart';
 import 'package:tyarineetki/screens/stats_screen/stats_screen.dart';
 import 'package:tyarineetki/screens/test/test_screen.dart';
+import 'package:tyarineetki/screens/welcome_screen.dart';
 import 'package:tyarineetki/theme/app_color.dart';
 
 class LandingScreen extends StatefulWidget {
@@ -44,7 +45,9 @@ class _LandingScreenState extends State<LandingScreen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Provider().addGroup();
+          NavigationHelper()
+              .normalNavigatePush(context: context, screen: const WelcomeScreen());
+          // Provider().addGroup();
         },
         child: const Icon(Icons.add),
       ),

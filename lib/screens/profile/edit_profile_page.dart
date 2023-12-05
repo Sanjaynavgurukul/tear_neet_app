@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,10 +20,11 @@ class EditProfilePage extends StatefulWidget {
 
 class _EditProfilePageState extends State<EditProfilePage> {
   final aboutController = TextEditingController();
+  final phoneController = TextEditingController();
   late ProfileViewModel viewModel;
   final user = auth.currentUser;
 
-  String? imageUrl;
+  // String? imageUrl;
   File? _pickedImageFile;
   final _imagePicker = ImagePicker();
   void _pickedImage(source) async {
@@ -149,6 +151,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       userName: user!.displayName!,
                       userEmailId: user!.email!,
                       aboutUs: aboutController.text,
+                      phoneNumber: phoneController.text,
                       imageUrl: imageUrl);
 
                   Map<String, dynamic> data = updatedUserModel.toMap();
@@ -157,16 +160,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
                   final userId = user!.uid;
 
-                  viewModel
-                      .saveUserDetails(data: data, userId: userId)
-                      .then((value) async {
-                    void updateInFirebase() async {
-                      await user!.updateDisplayName(user!.displayName);
-                      await user!.updateEmail(user!.email!);
-                      await user!.updatePhotoURL(imageUrl);
-                      viewModel.update();
-                    }
-                  });
+                  viewModel.saveUserDetails(data: data, userId: userId);
+
+                  await user!.updateDisplayName(user!.displayName);
+                  await user!.updateEmail(user!.email!);
+                  await user!.updatePhotoURL(imageUrl);
+                  await user!.reload();
+                  viewModel.update();
+
+                  Navigator.of(context).pop();
                 },
                 child: const Text('Save')),
             const SizedBox(
@@ -194,7 +196,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           ProfileWidget(
             imagePath: _pickedImageFile != null
                 ? _pickedImageFile!.path
-                : 'https://play-lh.googleusercontent.com/C9CAt9tZr8SSi4zKCxhQc9v4I6AOTqRmnLchsu1wVDQL0gsQ3fmbCVgQmOVM1zPru8UH=w240-h480-rw',
+                : user!.photoURL ?? '',
             isEdit: true,
             onClicked: showImagePicker,
           ),
@@ -221,6 +223,30 @@ class _EditProfilePageState extends State<EditProfilePage> {
           //     });
           //   },
           // ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Phone Number',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: phoneController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    phoneController.text = value;
+                  });
+                },
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

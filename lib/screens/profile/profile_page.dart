@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tyarineetki/helper/navigation_helper.dart';
 import 'package:tyarineetki/screens/profile/edit_profile_page.dart';
@@ -16,6 +17,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final user = auth.currentUser;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +32,15 @@ class _ProfilePageState extends State<ProfilePage> {
                       context: context, screen: EditProfilePage());
                 },
                 icon: const Icon(Icons.edit)),
+            IconButton(
+                onPressed: () async {
+                  await FirebaseAuth.instance.signOut();
+
+                },
+                icon: const Icon(Icons.logout_outlined)),
             const SizedBox(
-              width: 18,
-            )
+              width: 10,
+            ),
           ],
           onBackPress: () {
             Navigator.pop(context);
@@ -42,7 +50,7 @@ class _ProfilePageState extends State<ProfilePage> {
         physics: const BouncingScrollPhysics(),
         children: [
           ProfileWidget(
-            imagePath:
+            imagePath: user!.photoURL ??
                 'https://play-lh.googleusercontent.com/C9CAt9tZr8SSi4zKCxhQc9v4I6AOTqRmnLchsu1wVDQL0gsQ3fmbCVgQmOVM1zPru8UH=w240-h480-rw',
             onClicked: () {
               Navigator.of(context).push(
@@ -55,7 +63,7 @@ class _ProfilePageState extends State<ProfilePage> {
           const SizedBox(height: 24),
           Center(child: buildUpgradeButton()),
           const SizedBox(height: 48),
-          buildAbout('Phone Number', '+91-8756646756'),
+          buildAbout('Phone Number', '9852824875'),
           const SizedBox(height: 16),
           buildAbout('About',
               'For your cellphone wallpaper, you can select cool images with the best image quality for your profile. a collection of wallpapers created by the boy. We hope you enjoy our expanding collection of high-definition photos that you can use as your smartphone'),
@@ -102,7 +110,8 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               Text(
                 '$label',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               Text(

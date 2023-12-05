@@ -15,6 +15,22 @@ class InitialSplash extends StatefulWidget {
 
 class _InitialSplashState extends State<InitialSplash> {
   late SplashViewModel viewModel;
+  PageController? _controller;
+  int currentIndex = 0;
+ List<Widget> pages = [
+  const Padding(
+    padding: EdgeInsets.only(left: 12,right: 12),
+    child: Text("In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as"),
+  ),
+  const Padding(
+    padding: EdgeInsets.only(left: 12,right: 12),
+    child: Text("In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as"),
+  ),
+  const Padding(
+    padding: EdgeInsets.only(left: 12,right: 12),
+    child: Text("In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as"),
+  ),
+];
 
   @override
   void didChangeDependencies() {
@@ -25,6 +41,13 @@ class _InitialSplashState extends State<InitialSplash> {
   }
 
   @override
+  void initState() {
+    _controller = PageController(initialPage: 0);
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: IgnorePointer(
@@ -32,14 +55,17 @@ class _InitialSplashState extends State<InitialSplash> {
         child: SafeArea(
           child: Column(
             children: [
-              Image.asset('assets/initial_splash.png'),
+              const SizedBox(
+                height: 16,
+              ),
+              Image.asset('assets/images_logo.jpeg'),
               const SizedBox(
                 height: 16,
               ),
               const Padding(
                 padding: EdgeInsets.only(left: 16, right: 16),
                 child: Text(
-                  'Who Said Learning can\'tbe fun?',
+                  'Tyari Neet Ki',
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 30,
@@ -48,26 +74,60 @@ class _InitialSplashState extends State<InitialSplash> {
                   textAlign: TextAlign.center,
                 ),
               ),
-              const SizedBox(
-                height: 16,
-              ),
+              const SizedBox(height: 50,),
               const Padding(
                 padding: EdgeInsets.only(left: 16, right: 16),
                 child: Text(
-                  'Certificate so we can create an OAuth2 client and API key for your app. To get your SHA-1, follow these instructions',
+                  'WELCOME',
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 18,
+                    fontSize: 24,
                     fontFamily: 'Ubuntu',
                   ),
                   textAlign: TextAlign.center,
                 ),
               ),
+              const SizedBox(
+                height: 30,
+              ),
+              Expanded(
+                child: PageView.builder(
+                    scrollDirection: Axis.horizontal,
+                    controller: _controller,
+                    onPageChanged: (value) {
+                      setState(() {
+                        currentIndex = value;
+                      });
+                    },
+                    itemCount: 3,
+                    itemBuilder: (context, index) {
+                      // contents of slider
+                      return pages[index];
+                    }),
+              ),
+              const SizedBox(height: 8,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  3,
+                  (index) {
+                    return Container(
+                      height: 10,
+                      width: currentIndex == index ? 25 : 10,
+                      margin: const EdgeInsets.only(right: 5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.grey,
+                      ),
+                    );
+                  },
+                ),
+              ),
               const Spacer(),
               Padding(
-                padding: EdgeInsets.only(left: 16,right: 16),
+                padding: const EdgeInsets.only(left: 16, right: 16),
                 child: InkWell(
-                  onTap: (){
+                  onTap: () {
                     _signInWithGoogle();
                   },
                   child: Container(
@@ -75,34 +135,38 @@ class _InitialSplashState extends State<InitialSplash> {
                     padding: const EdgeInsets.all(12),
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      border: Border.all(width: 1,color: Color(0xfffd5a50)),
+                        border: Border.all(width: 1, color: const Color(0xfffd5a50)),
                         borderRadius: BorderRadius.circular(12),
                         color: Colors.white),
-                    child: viewModel.loading ?const Center(child: CupertinoActivityIndicator(),):Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SvgPicture.asset('assets/google.svg'),
-                        const Text(
-                          'Login With Google',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontFamily: 'Ubuntu',
-                            fontWeight: FontWeight.bold,
+                    child: viewModel.loading
+                        ? const Center(
+                            child: CupertinoActivityIndicator(),
+                          )
+                        : Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SvgPicture.asset('assets/google.svg'),
+                              const Text(
+                                'Login With Google',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontFamily: 'Ubuntu',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const Spacer(),
+                              const Icon(
+                                CupertinoIcons.arrow_right,
+                                color: Colors.black,
+                              )
+                            ],
                           ),
-                        ),
-                        const Spacer(),
-                        const Icon(
-                          CupertinoIcons.arrow_right,
-                          color: Colors.black,
-                        )
-                      ],
-                    ),
                   ),
                 ),
               ),
               const SizedBox(
-                height: 16,
+                height: 26,
               ),
             ],
           ),
@@ -115,7 +179,7 @@ class _InitialSplashState extends State<InitialSplash> {
     viewModel.updateLoader(loadingStatus: true);
     // Trigger the authentication flow
     final googleUser = await GoogleSignIn().signIn();
-    if(googleUser == null){
+    if (googleUser == null) {
       viewModel.updateLoader(loadingStatus: false);
       return;
     }

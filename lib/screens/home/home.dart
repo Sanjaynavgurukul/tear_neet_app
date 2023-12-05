@@ -65,18 +65,18 @@ class _HomeState extends State<Home> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-           Expanded(
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   '${auth.currentUser!.displayName}',
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: AppColor.primaryOrangeColor,
                       fontWeight: FontWeight.w500,
                       fontSize: 24),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 6,
                 ),
                 const Text(
@@ -93,7 +93,7 @@ class _HomeState extends State<Home> {
               width: 50,
               height: 50,
               borderRadius: BorderRadius.circular(100),
-              imageUrl: auth!.currentUser!.photoURL)
+              imageUrl: auth.currentUser!.photoURL ?? '')
         ],
       ),
     );
@@ -356,13 +356,13 @@ class _HomeState extends State<Home> {
                 return const SizedBox();
               }
 
-              BannerModel item = BannerModel.fromJson(snapshot.data!.data() as Map<String,dynamic>);
-              if(item.data == null || item.data!.isEmpty){
+              BannerModel item = BannerModel.fromJson(
+                  snapshot.data!.data() as Map<String, dynamic>);
+              if (item.data == null || item.data!.isEmpty) {
                 return SizedBox();
               }
               return CarouselSlider(
                 items: List.generate(item.data!.length, (index) {
-
                   BannerModelData jso = item.data![index];
                   return CustomCacheImage(
                     imageUrl: jso.image,
