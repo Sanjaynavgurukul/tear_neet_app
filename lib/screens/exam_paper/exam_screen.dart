@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tyarineetki/helper/dialog_helper.dart';
 import 'package:tyarineetki/screens/exam_paper/view_model/exam_view_model.dart';
 import 'package:tyarineetki/theme/app_color.dart';
 import 'package:tyarineetki/widget/custom_cashe_image.dart';
@@ -29,6 +30,13 @@ class _ExamScreenState extends State<ExamScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return main();
+  }
+
+  Widget main() {
+    Map<String, dynamic> item =
+        viewModel.getData[viewModel.currentQuestionPosition];
+    bool answered = item['submitAnswer'].isNotEmpty;
     return Scaffold(
       bottomNavigationBar: SizedBox(
         height: 60,
@@ -65,10 +73,18 @@ class _ExamScreenState extends State<ExamScreen> {
               Expanded(
                   child: InkWell(
                 onTap: () {
-                  if (viewModel.currentQuestionPosition ==
-                      viewModel.getData().length - 1) {
+                  if (!answered) {
                     viewModel.showToast(
-                        message: 'Last Question', context: context);
+                        message: 'Select Option', context: context);
+                    return;
+                  }
+                  if (viewModel.currentQuestionPosition ==
+                      viewModel.getData.length - 1) {
+                    DialogHelper().endExamDialog(context: context,data: {});
+                    viewModel.showToast(
+                        message:
+                            'Correct answer is ${viewModel.calculateScore()}/${viewModel.getData.length}',
+                        context: context);
                     return;
                   }
 
@@ -99,7 +115,7 @@ class _ExamScreenState extends State<ExamScreen> {
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
             ),
             Text(
-              'Total ${viewModel.getData().length} Question',
+              'Total ${viewModel.getData.length} Question',
               style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.normal,
@@ -110,18 +126,16 @@ class _ExamScreenState extends State<ExamScreen> {
         backgroundColor: AppColor.lightPrimaryOrangeColor,
         elevation: 0,
       ),
-      body: mainView(viewModel.currentQuestionPosition),
+      body: mainView(item),
     );
   }
 
-  Widget mainView(int index) {
+  Widget mainView(Map<String, dynamic> item) {
     return Container(
       padding: const EdgeInsets.all(16),
       child: ListView.builder(
           itemCount: 1,
-          itemBuilder: (context, index) {
-            Map<String, dynamic> item =
-                viewModel.getData()[viewModel.currentQuestionPosition];
+          itemBuilder: (context, inrr) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -133,7 +147,7 @@ class _ExamScreenState extends State<ExamScreen> {
                 const SizedBox(
                   height: 16,
                 ),
-                optionsItem(item, 0)
+                optionsItem(item, viewModel.currentQuestionPosition)
               ],
             );
           }),
@@ -148,7 +162,7 @@ class _ExamScreenState extends State<ExamScreen> {
         bool selected = item['submitAnswer'] == optionIndex;
         return InkWell(
           onTap: () {
-            viewModel.updateAnswerQuestion(index: index, answer: optionIndex);
+            viewModel.updateAnswerQuestion(answer: optionIndex);
           },
           child: Container(
             padding: const EdgeInsets.only(right: 16),
@@ -202,11 +216,11 @@ class _ExamScreenState extends State<ExamScreen> {
   Widget imageSection(Map<String, dynamic> item) {
     String? img = item['image'];
     if (img == null || img.isEmpty) {
-      return SizedBox();
+      return const SizedBox();
     }
 
     return Container(
-      margin: EdgeInsets.only(top: 12),
+      margin: const EdgeInsets.only(top: 12),
       child: CustomCacheImage(
         imageUrl: img,
         height: 200,

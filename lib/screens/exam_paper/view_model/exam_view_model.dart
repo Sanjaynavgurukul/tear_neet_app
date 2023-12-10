@@ -15,68 +15,70 @@ class ExamViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  List<Map<String, dynamic>> getData() {
-    return [
-      {
-        "question":
-            "A flashing red traffic light signifies that a driver should do what?",
-        'options': [
-          "stop",
-          "speed up",
-          "proceed with caution",
-          "honk the horn",
-        ],
-        'image':'https://i.ytimg.com/vi/nxdd24V9BZo/maxresdefault.jpg',
-        "answer": "A",
-        "submitAnswer": "",
-        'type': 'text'
-      },
-      {
-        "question": "A knish is traditionally stuffed with what filling?",
-        'options': [
-          "potato",
-          "creamed corn",
-          "lemon custard",
-          "raspberry jelly",
-        ],
-        'image':'',
-        "answer": "A",
-        "submitAnswer": "",
-        'type': 'text'
-      },
-      {
-        "question": "A pita is a type of what?",
-        'options': [
-          "fresh fruit",
-          "flat bread",
-          "French tart",
-          "friend bean dip",
-        ],
-        'image':'',
-        "answer": "B",
-        "submitAnswer": "",
-        'type': 'text'
-      },
-      {
-        "question":
-            "A portrait that comically exaggerates a person's physical traits is called a what?",
-        'options': [
-          "landscape",
-          "caricature",
-          "still life",
-          "Impressionism",
-        ],
-        'image':'',
-        "answer": "B",
-        "submitAnswer": "",
-        'type': 'text'
-      }
-    ];
+  List<Map<String, dynamic>> getData = [
+    {
+      "question":
+      "A flashing red traffic light signifies that a driver should do what?",
+      'options': [
+        "stop",
+        "speed up",
+        "proceed with caution",
+        "honk the horn",
+      ],
+      'image':'https://i.ytimg.com/vi/nxdd24V9BZo/maxresdefault.jpg',
+      "answer": "A",
+      "submitAnswer": "",
+      'type': 'text'
+    },
+    {
+      "question": "A knish is traditionally stuffed with what filling?",
+      'options': [
+        "potato",
+        "creamed corn",
+        "lemon custard",
+        "raspberry jelly",
+      ],
+      'image':'',
+      "answer": "A",
+      "submitAnswer": "",
+      'type': 'text'
+    },
+    {
+      "question": "A pita is a type of what?",
+      'options': [
+        "fresh fruit",
+        "flat bread",
+        "French tart",
+        "friend bean dip",
+      ],
+      'image':'',
+      "answer": "B",
+      "submitAnswer": "",
+      'type': 'text'
+    },
+    {
+      "question":
+      "A portrait that comically exaggerates a person's physical traits is called a what?",
+      'options': [
+        "landscape",
+        "caricature",
+        "still life",
+        "Impressionism",
+      ],
+      'image':'',
+      "answer": "B",
+      "submitAnswer": "",
+      'type': 'text'
+    }
+  ];
+
+  void updateAnswerQuestion({ required String answer}) {
+    getData[currentQuestionPosition]['submitAnswer'] = answer;
+    notifyListeners();
   }
 
-  void updateAnswerQuestion({required int index, required String answer}) {
-    getData()[index]['submitAnswer'] = answer;
-    log('----- demo 5--- ${getData()[index]}');
-    notifyListeners();
+  int calculateScore(){
+    int count = getData.where((item) => item['answer'] == item['submitAnswer']).length;
+    return count;
   }
 }
