@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tyarineetki/db/provider.dart';
+import 'package:tyarineetki/model/user_model.dart';
 
 class Repository {
   final Provider _provider = Provider();
@@ -36,6 +37,6 @@ class Repository {
           {required Map<String, dynamic> data, required String userId}) =>
       _provider.saveUserDetail(data: data, userId: userId);
 
-  Future<Map<String, dynamic>> fetchUserDetails({required String userId}) =>
+  Future<UserModel> fetchUserDetails({required String userId}) =>
       _provider.fetchUserDetais(userId: userId);
 }

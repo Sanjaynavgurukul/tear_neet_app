@@ -29,6 +29,14 @@ class UserModel {
             data: json['phoneNumber'], variableType: 'String'),    
       );
 
+  factory UserModel.fromMap(Map<String, dynamic> map) => UserModel(
+     aboutUs: map   ['aboutUs'],
+     userEmailId: map   ['userEmailId'],
+     imageUrl: map   ['imageUrl'],
+     phoneNumber: map   ['phoneNumber'],
+    userName: map   ['userName'],
+      );
+
   Map<String, dynamic> toMap() {
     return {
       'userName': userName,

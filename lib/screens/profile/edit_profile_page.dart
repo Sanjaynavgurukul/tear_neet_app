@@ -1,7 +1,4 @@
-import 'dart:convert';
 import 'dart:io';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -118,161 +115,131 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   void initState() {
     super.initState();
-    // viewModel.fetchUserDetails(userId: user!.uid).then((value) {
-    //   setState(() {
-    //     userDetails = value;
-    //   });
-    // });
-
-    //    if (viewModel != null) {
-    //   viewModel.fetchUserDetails(userId: user!.uid).then((value) {
-    //     setState(() {
-    //       userDetails = value;
-    //     });
-    //   });
-    // }
+    viewModel = Provider.of<ProfileViewModel>(context, listen: false);
+    viewModel.fetchUserDetails(userId: user!.uid).then((snapshot) {
+      aboutController.text = snapshot.aboutUs ?? '';
+      phoneController.text = snapshot.phoneNumber ?? '';
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(
-          context: context,
-          elevation: 0,
-          actions: [
-            TextButton(
-                onPressed: () async {
-                  final imageUrl = await viewModel.uploadImageToFirebase(
-                      pickedImageFile: _pickedImageFile);
+        appBar: buildAppBar(
+            context: context,
+            elevation: 0,
+            actions: [
+              TextButton(
+                  onPressed: () async {
+                    final imageUrl = await viewModel.uploadImageToFirebase(
+                        pickedImageFile: _pickedImageFile);
 
-                  print("this sis the image url ---->> $imageUrl");
+                    print("this sis the image url ---->> $imageUrl");
 
-                  UserModel updatedUserModel = UserModel(
-                      userName: user!.displayName!,
-                      userEmailId: user!.email!,
-                      aboutUs: aboutController.text,
-                      phoneNumber: phoneController.text,
-                      imageUrl: imageUrl);
+                    UserModel updatedUserModel = UserModel(
+                        userName: user!.displayName!,
+                        userEmailId: user!.email!,
+                        aboutUs: aboutController.text,
+                        phoneNumber: phoneController.text,
+                        imageUrl: imageUrl);
 
-                  Map<String, dynamic> data = updatedUserModel.toMap();
+                    Map<String, dynamic> data = updatedUserModel.toMap();
 
-                  print("this is the data-------$data");
+                    
 
-                  final userId = user!.uid;
+                    final userId = user!.uid;
 
-                  viewModel.saveUserDetails(data: data, userId: userId);
+                    viewModel.saveUserDetails(data: data, userId: userId);
 
-                  await user!.updateDisplayName(user!.displayName);
-                  await user!.updateEmail(user!.email!);
-                  await user!.updatePhotoURL(imageUrl);
-                  await user!.reload();
-                  viewModel.update();
+                    await user!.updateDisplayName(user!.displayName);
+                    await user!.updateEmail(user!.email!);
+                    await user!.updatePhotoURL(imageUrl);
+                    await user!.reload();
+                    viewModel.update();
 
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Save')),
-            const SizedBox(
-              width: 18,
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Save')),
+              const SizedBox(
+                width: 18,
+              )
+            ],
+            onBackPress: () {
+              Navigator.pop(context);
+            }),
+        body: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          physics: const BouncingScrollPhysics(),
+          children: [
+            ProfileWidget(
+              imagePath: _pickedImageFile != null
+                  ? _pickedImageFile!.path
+                  : user!.photoURL ?? '',
+              isEdit: true,
+              onClicked: showImagePicker,
+            ),
+            const SizedBox(height: 24),
+            TextFieldWidget(
+              label: 'Full Name',
+              text: user!.displayName!,
+              onChanged: (name) {},
+            ),
+            const SizedBox(height: 24),
+            TextFieldWidget(
+              label: 'Email',
+              text: user!.email!,
+              onChanged: (email) {},
+            ),
+            const SizedBox(height: 24),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Phone Number',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                const SizedBox(height: 8),
+                TextField(
+                  controller: phoneController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      phoneController.text = value;
+                    });
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'About',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                const SizedBox(height: 8),
+                TextField(
+                  controller: aboutController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  maxLines: 5,
+                  onChanged: (value) {
+                    setState(() {
+                      aboutController.text = value;
+                    });
+                  },
+                ),
+              ],
             )
           ],
-          onBackPress: () {
-            Navigator.pop(context);
-          }),
-      // appBar: AppBar(
-      //   elevation: 0,
-      //   leading: IconButton(
-      //       onPressed: () {}, icon: const Icon(Icons.keyboard_backspace)),
-      //   actions: [
-      //     TextButton(onPressed: () {}, child: const Text('Save')),
-      //     const SizedBox(
-      //       width: 18,
-      //     )
-      //   ],
-      // ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
-        physics: const BouncingScrollPhysics(),
-        children: [
-          ProfileWidget(
-            imagePath: _pickedImageFile != null
-                ? _pickedImageFile!.path
-                : user!.photoURL ?? '',
-            isEdit: true,
-            onClicked: showImagePicker,
-          ),
-          const SizedBox(height: 24),
-          TextFieldWidget(
-            label: 'Full Name',
-            text: user!.displayName!,
-            onChanged: (name) {},
-          ),
-          const SizedBox(height: 24),
-          TextFieldWidget(
-            label: 'Email',
-            text: user!.email!,
-            onChanged: (email) {},
-          ),
-          const SizedBox(height: 24),
-          // TextFieldWidget(
-          //   label: 'About',
-          //   text: aboutController.text,
-          //   maxLines: 5,
-          //   onChanged: (about) {
-          //     setState(() {
-          //       aboutController.text = about;
-          //     });
-          //   },
-          // ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Phone Number',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: phoneController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    phoneController.text = value;
-                  });
-                },
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'About',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: aboutController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                maxLines: 5,
-                onChanged: (value) {
-                  setState(() {
-                    aboutController.text = value;
-                  });
-                },
-              ),
-            ],
-          )
-        ],
-      ),
-    );
+        ));
   }
 }

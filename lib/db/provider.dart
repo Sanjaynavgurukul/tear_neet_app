@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:tyarineetki/model/chat_group_model.dart';
+import 'package:tyarineetki/model/user_model.dart';
 
 class Provider {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -77,12 +79,16 @@ class Provider {
     }
   }
 
-  Future<Map<String, dynamic>> fetchUserDetais({required String userId}) async {
-    final DocumentSnapshot<Map<String, dynamic>> snapshot =
-        await _db.collection('userDetails').doc(userId).get();
+  Future<UserModel> fetchUserDetais({required String userId}) async {
+     final DocumentSnapshot<Map<String, dynamic>> snapshot =
+        await _db.collection('userDetail').doc(userId).get();
+ 
     if (snapshot.exists) {
-      return snapshot.data() ?? {};
+      Map<String, dynamic> data = snapshot.data()!;
+      debugPrint('FB Data ${snapshot.data()}');
+      UserModel userModel = UserModel.fromMap(data);
+      return userModel;
     }
-    return {};
+    return UserModel();
   }
 }

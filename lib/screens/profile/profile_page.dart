@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tyarineetki/helper/navigation_helper.dart';
 import 'package:tyarineetki/screens/profile/edit_profile_page.dart';
+import 'package:tyarineetki/screens/profile/view_model/profile_view_model.dart';
 import 'package:tyarineetki/screens/subscription/subscription.dart';
 import 'package:tyarineetki/screens/subscription/view_model/subscription_view_model.dart';
 import 'package:tyarineetki/widget/appbar_widget.dart';
@@ -16,8 +18,26 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  late ProfileViewModel viewModel;
   final user = auth.currentUser;
-  
+  final phoneController = TextEditingController();
+  final aboutController = TextEditingController();
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    viewModel = context.watch<ProfileViewModel>();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    viewModel = Provider.of<ProfileViewModel>(context, listen: false);
+    viewModel.fetchUserDetails(userId: user!.uid).then((snapshot) {
+      aboutController.text = snapshot.aboutUs ?? '';
+      phoneController.text = snapshot.phoneNumber ?? '';
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +55,6 @@ class _ProfilePageState extends State<ProfilePage> {
             IconButton(
                 onPressed: () async {
                   await FirebaseAuth.instance.signOut();
-
                 },
                 icon: const Icon(Icons.logout_outlined)),
             const SizedBox(
@@ -63,10 +82,9 @@ class _ProfilePageState extends State<ProfilePage> {
           const SizedBox(height: 24),
           Center(child: buildUpgradeButton()),
           const SizedBox(height: 48),
-          buildAbout('Phone Number', '9852824875'),
+          buildAbout('Phone Number', phoneController),
           const SizedBox(height: 16),
-          buildAbout('About',
-              'For your cellphone wallpaper, you can select cool images with the best image quality for your profile. a collection of wallpapers created by the boy. We hope you enjoy our expanding collection of high-definition photos that you can use as your smartphone'),
+          buildAbout('About', aboutController),
         ],
       ),
     );
@@ -96,7 +114,8 @@ class _ProfilePageState extends State<ProfilePage> {
         },
       );
 
-  Widget buildAbout(String label, String about) => Container(
+  Widget buildAbout(String label, TextEditingController controller) =>
+      Container(
         margin: const EdgeInsets.only(left: 16, right: 16),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
@@ -109,15 +128,17 @@ class _ProfilePageState extends State<ProfilePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '$label',
+                label,
                 style:
                     const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
-              Text(
-                about,
-                style: const TextStyle(fontSize: 16, height: 1.4),
-              ),
+              TextField(
+                controller: controller,
+                style: const TextStyle(fontSize: 16),
+                decoration: const InputDecoration(border: InputBorder.none),
+                readOnly: true,
+              )
             ],
           ),
         ),

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:tyarineetki/helper/base_view_model.dart';
+import 'package:tyarineetki/model/user_model.dart';
 
 class ProfileViewModel extends BaseViewModel {
   @override
@@ -18,7 +19,7 @@ class ProfileViewModel extends BaseViewModel {
     return repository.saveUserDetails(data: data, userId: userId);
   }
 
-  Future<Map<String, dynamic>> fetchUserDetails({required String userId}) {
+  Future<UserModel> fetchUserDetails({required String userId}) {
     return repository.fetchUserDetails(userId: userId);
   }
 
