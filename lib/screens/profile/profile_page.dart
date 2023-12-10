@@ -70,7 +70,7 @@ class _ProfilePageState extends State<ProfilePage> {
         children: [
           ProfileWidget(
             imagePath: auth.currentUser!.photoURL!,
-            onClicked: () {
+            onClicked: () async{
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => EditProfilePage()),
               );
@@ -117,8 +117,6 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget buildUpgradeButton() => ButtonWidget(
         text: 'Upgrade To PRO',
         onClicked: () {
-          deo();
-          return;
           NavigationHelper().navigatePush(
               context: context,
               viewModel: SubscriptionViewModel(),

@@ -5,7 +5,10 @@ import 'package:tyarineetki/db/provider.dart';
 import 'package:tyarineetki/db/share_pref.dart';
 import 'package:tyarineetki/helper/dialog_helper.dart';
 import 'package:tyarineetki/helper/navigation_helper.dart';
+import 'package:tyarineetki/main.dart';
 import 'package:tyarineetki/screens/chat_group_list/chat_group_list.dart';
+import 'package:tyarineetki/screens/exam_paper/exam_screen.dart';
+import 'package:tyarineetki/screens/exam_paper/view_model/exam_view_model.dart';
 import 'package:tyarineetki/screens/exam_time_Screen/exam_timer_screen.dart';
 import 'package:tyarineetki/screens/exam_time_Screen/view_model/exam_timer_view_model.dart';
 import 'package:tyarineetki/screens/home/home.dart';
@@ -43,12 +46,12 @@ class _LandingScreenState extends State<LandingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     Provider().addGroup();
-      //   },
-      //   child: const Icon(Icons.add),
-      // ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          NavigationHelper().navigatePush(context: context, viewModel: ExamViewModel(), screen: const ExamScreen());
+        },
+        child: const Icon(Icons.add),
+      ),
       bottomNavigationBar: BottomAppBar(
         child: Row(
           children: [
