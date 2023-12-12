@@ -77,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             InkWell(
               onTap: () {
-                viewModel.signInWithGoogle();
+                viewModel.signInWithGoogle(context: context);
               },
               child: Container(
                 alignment: Alignment.center,

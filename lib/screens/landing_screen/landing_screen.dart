@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tyarineetki/helper/navigation_helper.dart';
@@ -8,7 +7,6 @@ import 'package:tyarineetki/screens/login/login_screen.dart';
 import 'package:tyarineetki/screens/login/view_model/login_view_model.dart';
 import 'package:tyarineetki/screens/profile/profile_page.dart';
 import 'package:tyarineetki/screens/profile/view_model/profile_view_model.dart';
-import 'package:tyarineetki/screens/splash_screen/splash_screen.dart';
 import 'package:tyarineetki/screens/stats_screen/stats_screen.dart';
 import 'package:tyarineetki/screens/test/test_screen.dart';
 import 'package:tyarineetki/theme/app_color.dart';
@@ -38,17 +36,6 @@ class _LandingScreenState extends State<LandingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await FirebaseAuth.instance.signOut();
-          NavigationHelper().normalNavigatePushReplacementUntil(
-              context: context, screen: SplashScreen());
-        },
-        child: Icon(Icons.add),
-      ),
-      body: Container(),
-    );
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {

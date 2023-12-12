@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tyarineetki/helper/utils.dart';
 import 'package:tyarineetki/model/chat_group_model.dart';
 
 class Provider {
@@ -28,13 +29,18 @@ class Provider {
         .snapshots();
   }
 
-
   Stream<DocumentSnapshot> fetchBannerImage() {
-    return FirebaseFirestore.instance.collection('innerContent').doc('banner').snapshots();
+    return FirebaseFirestore.instance
+        .collection('innerContent')
+        .doc('banner')
+        .snapshots();
   }
 
   Stream<DocumentSnapshot> getSubDetail() {
-    return FirebaseFirestore.instance.collection('innerContent').doc('subscription').snapshots();
+    return FirebaseFirestore.instance
+        .collection('innerContent')
+        .doc('subscription')
+        .snapshots();
   }
 
   void updateMainGroup(
@@ -48,5 +54,21 @@ class Provider {
 
   void addGroup() {
     _db.collection('conversation').add(ChatGroupModel().getData());
+  }
+
+  void newUser({required Map<String, dynamic> body, required String userId}) {
+    util.userId = userId;
+    _db.collection('users').doc(userId).set(body);
+  }
+
+  void updateUser({required Map<String, dynamic> body}) {
+    _db.collection('users').doc(util.userId).update(body);
+  }
+
+  Stream<DocumentSnapshot> geUserDetail() {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc('${util.userId}')
+        .snapshots();
   }
 }

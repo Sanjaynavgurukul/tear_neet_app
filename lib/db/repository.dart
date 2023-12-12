@@ -9,6 +9,7 @@ class Repository {
   Stream<QuerySnapshot> fetchNoteList() => _provider.fetchNoteList();
 
   Stream<QuerySnapshot> fetchGroupList() => _provider.fetchGroupList();
+
   Stream<DocumentSnapshot> getSubDetail() => _provider.getSubDetail();
 
   Stream<QuerySnapshot> fetchLeaderBoardList() =>
@@ -26,4 +27,16 @@ class Repository {
       _provider.addNewMessage(body: body, groupType: groupType);
 
   Stream<DocumentSnapshot> fetchBannerImage() => _provider.fetchBannerImage();
+
+  void newUser({required Map<String, dynamic> body, required String userId}) {
+    _provider.newUser(body: body, userId: userId);
+  }
+
+  void updateUser({required Map<String, dynamic> body}) {
+    _provider.updateUser(body: body);
+  }
+
+  Stream<DocumentSnapshot> geUserDetail() {
+    return _provider.getSubDetail();
+  }
 }

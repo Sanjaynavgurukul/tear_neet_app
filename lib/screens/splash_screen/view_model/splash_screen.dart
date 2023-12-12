@@ -1,10 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tyarineetki/helper/base_view_model.dart';
 import 'package:tyarineetki/helper/navigation_helper.dart';
+import 'package:tyarineetki/helper/utils.dart';
+import 'package:tyarineetki/main.dart';
+import 'package:tyarineetki/model/User.dart';
 import 'package:tyarineetki/screens/landing_screen/landing_screen.dart';
 import 'package:tyarineetki/screens/login/login_screen.dart';
 import 'package:tyarineetki/screens/login/view_model/login_view_model.dart';
+import 'package:tyarineetki/screens/splash_screen/welcome_screen.dart';
 
 class SplashViewModel extends BaseViewModel {
   bool loading = false;
@@ -20,9 +25,45 @@ class SplashViewModel extends BaseViewModel {
   }
 
   void initiate({required BuildContext context}) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    if (auth.currentUser == null) {
+    FirebaseAuth fAuth = FirebaseAuth.instance;
+    if (fAuth.currentUser == null) {
       navigateToLogin(context: context);
+      return;
+    }
+
+    auth = fAuth;
+
+    checkUser(id: fAuth.currentUser!.uid, context: context);
+  }
+
+  void checkUser({required String id, required BuildContext context}) async {
+    DocumentReference dbRef =
+        FirebaseFirestore.instance.collection('users').doc(id);
+
+    dbRef.get().then((data) {
+      if (data.exists) {
+        util.userId = id;
+        Map<String, dynamic> json = data.data() as Map<String, dynamic>;
+        util.user = CurrentUser.fromJson(json);
+        checkPhoneNumber(context: context);
+      } else {
+        navigateToLogin(context: context);
+      }
+    });
+  }
+
+  void checkPhoneNumber({required BuildContext context}) {
+    if (util.user == null) {
+      updateLoader(loadingStatus: false);
+      showToast(
+          message: 'Something Went Wrong Please Try again later',
+          context: context);
+      return;
+    }
+
+    if (util.user!.phone == null || util.user!.phone!.isEmpty) {
+      NavigationHelper()
+          .normalNavigatePush(context: context, screen: const WelcomeScreen());
       return;
     }
 
