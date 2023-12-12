@@ -7,6 +7,7 @@ import 'package:tyarineetki/screens/login/login_screen.dart';
 import 'package:tyarineetki/screens/login/view_model/login_view_model.dart';
 import 'package:tyarineetki/screens/profile/profile_page.dart';
 import 'package:tyarineetki/screens/profile/view_model/profile_view_model.dart';
+import 'package:tyarineetki/screens/splash_screen/welcome_screen.dart';
 import 'package:tyarineetki/screens/stats_screen/stats_screen.dart';
 import 'package:tyarineetki/screens/test/test_screen.dart';
 import 'package:tyarineetki/theme/app_color.dart';
@@ -39,10 +40,11 @@ class _LandingScreenState extends State<LandingScreen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          NavigationHelper().navigatePush(
-              context: context,
-              viewModel: LoginViewModel(),
-              screen: const LoginScreen());
+          NavigationHelper().normalNavigatePush(context: context, screen: WelcomeScreen());
+          // NavigationHelper().navigatePush(
+          //     context: context,
+          //     viewModel: LoginViewModel(),
+          //     screen: const LoginScreen());
         },
         child: const Icon(Icons.add),
       ),

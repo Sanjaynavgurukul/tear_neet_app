@@ -94,6 +94,6 @@ class LoginViewModel extends BaseViewModel {
     }
 
     NavigationHelper()
-        .normalNavigatePush(context: context, screen: const LandingScreen());
+        .normalNavigatePush(context: context, screen: const WelcomeScreen());
   }
 }

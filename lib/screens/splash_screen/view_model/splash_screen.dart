@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:tyarineetki/db/share_pref.dart';
 import 'package:tyarineetki/helper/base_view_model.dart';
 import 'package:tyarineetki/helper/navigation_helper.dart';
 import 'package:tyarineetki/helper/utils.dart';
@@ -52,7 +53,7 @@ class SplashViewModel extends BaseViewModel {
     });
   }
 
-  void checkPhoneNumber({required BuildContext context}) {
+  void checkPhoneNumber({required BuildContext context}) async {
     if (util.user == null) {
       updateLoader(loadingStatus: false);
       showToast(
@@ -64,6 +65,19 @@ class SplashViewModel extends BaseViewModel {
     if (util.user!.phone == null || util.user!.phone!.isEmpty) {
       NavigationHelper()
           .normalNavigatePush(context: context, screen: const WelcomeScreen());
+      return;
+    }
+
+    bool? status = await pref.getWelcomeDisplayed();
+    if (status == null) {
+      NavigationHelper().normalNavigatePushReplacement(
+          context: context, screen: const WelcomeScreen());
+      return;
+    }
+
+    if (!status) {
+      NavigationHelper().normalNavigatePushReplacement(
+          context: context, screen: const WelcomeScreen());
       return;
     }
 

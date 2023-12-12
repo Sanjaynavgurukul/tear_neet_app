@@ -11,6 +11,16 @@ class SharePreference {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('local_timer');
   }
+
+  Future<void> setWelcomeDisplayed({required bool value}) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('welcome_displayed', value);
+  }
+
+  Future<bool?> getWelcomeDisplayed() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('welcome_displayed');
+  }
 }
 
 final pref = SharePreference();
