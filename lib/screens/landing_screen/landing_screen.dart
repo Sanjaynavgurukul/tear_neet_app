@@ -1,21 +1,14 @@
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tyarineetki/db/provider.dart';
-import 'package:tyarineetki/db/share_pref.dart';
-import 'package:tyarineetki/helper/dialog_helper.dart';
 import 'package:tyarineetki/helper/navigation_helper.dart';
-import 'package:tyarineetki/main.dart';
 import 'package:tyarineetki/screens/chat_group_list/chat_group_list.dart';
-import 'package:tyarineetki/screens/exam_paper/exam_screen.dart';
-import 'package:tyarineetki/screens/exam_paper/view_model/exam_view_model.dart';
-import 'package:tyarineetki/screens/exam_time_Screen/exam_timer_screen.dart';
-import 'package:tyarineetki/screens/exam_time_Screen/view_model/exam_timer_view_model.dart';
 import 'package:tyarineetki/screens/home/home.dart';
-import 'package:tyarineetki/screens/paper_stats_screen/paper_stats_screen.dart';
-import 'package:tyarineetki/screens/paper_stats_screen/view_model/paper_stats_view_model.dart';
+import 'package:tyarineetki/screens/login/login_screen.dart';
+import 'package:tyarineetki/screens/login/view_model/login_view_model.dart';
 import 'package:tyarineetki/screens/profile/profile_page.dart';
 import 'package:tyarineetki/screens/profile/view_model/profile_view_model.dart';
+import 'package:tyarineetki/screens/splash_screen/splash_screen.dart';
 import 'package:tyarineetki/screens/stats_screen/stats_screen.dart';
 import 'package:tyarineetki/screens/test/test_screen.dart';
 import 'package:tyarineetki/theme/app_color.dart';
@@ -47,8 +40,22 @@ class _LandingScreenState extends State<LandingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          NavigationHelper().navigatePush(context: context, viewModel: ExamViewModel(), screen: const ExamScreen());
+        onPressed: () async {
+          await FirebaseAuth.instance.signOut();
+          NavigationHelper().normalNavigatePushReplacementUntil(
+              context: context, screen: SplashScreen());
+        },
+        child: Icon(Icons.add),
+      ),
+      body: Container(),
+    );
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          NavigationHelper().navigatePush(
+              context: context,
+              viewModel: LoginViewModel(),
+              screen: const LoginScreen());
         },
         child: const Icon(Icons.add),
       ),

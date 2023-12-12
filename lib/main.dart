@@ -5,8 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:tyarineetki/screens/chat_group_list/view_model/chat_group_view_model.dart';
 import 'package:tyarineetki/screens/home/view_model/home_view_model.dart';
-import 'package:tyarineetki/screens/landing_screen/landing_screen.dart';
-import 'package:tyarineetki/screens/splash_screen/initial_splash.dart';
 import 'package:tyarineetki/screens/splash_screen/splash_screen.dart';
 import 'package:tyarineetki/screens/splash_screen/view_model/splash_screen.dart';
 import 'package:tyarineetki/screens/stats_screen/view_model/leaderboard_view_model.dart';
@@ -17,7 +15,7 @@ late final FirebaseAuth auth;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   app = await Firebase.initializeApp();
-  auth = FirebaseAuth.instanceFor(app: app);
+  // FirebaseAuth.instanceFor(app: app);
   runApp(const MyApp());
 }
 
@@ -64,19 +62,21 @@ class MyApp extends StatelessWidget {
                   )),
               brightness: Brightness.light,
             ),
-            home: StreamBuilder<User?>(
-              stream: auth.authStateChanges(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const InitialSplash();
-                }
-                String? phoneNumber = auth.currentUser!.phoneNumber;
-                if(phoneNumber == null || phoneNumber.isEmpty){
-                  return  const LandingScreen();
-                }
-                return const SplashScreen();
-              },
-            )),
+            home: const SplashScreen(),
+            // home: StreamBuilder<User?>(
+            //   stream: auth.authStateChanges(),
+            //   builder: (context, snapshot) {
+            //     if (!snapshot.hasData) {
+            //       return const InitialSplash();
+            //     }
+            //     String? phoneNumber = auth.currentUser!.phoneNumber;
+            //     if(phoneNumber == null || phoneNumber.isEmpty){
+            //       return  const LandingScreen();
+            //     }
+            //     return const SplashScreen();
+            //   },
+            // )
+        ),
       ),
     );
   }
