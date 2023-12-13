@@ -1,13 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tyarineetki/helper/navigation_helper.dart';
 import 'package:tyarineetki/screens/chat_group_list/chat_group_list.dart';
 import 'package:tyarineetki/screens/home/home.dart';
-import 'package:tyarineetki/screens/login/login_screen.dart';
-import 'package:tyarineetki/screens/login/view_model/login_view_model.dart';
 import 'package:tyarineetki/screens/profile/profile_page.dart';
 import 'package:tyarineetki/screens/profile/view_model/profile_view_model.dart';
-import 'package:tyarineetki/screens/splash_screen/welcome_screen.dart';
 import 'package:tyarineetki/screens/stats_screen/stats_screen.dart';
 import 'package:tyarineetki/screens/test/test_screen.dart';
 import 'package:tyarineetki/theme/app_color.dart';
@@ -40,11 +38,38 @@ class _LandingScreenState extends State<LandingScreen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          NavigationHelper().normalNavigatePush(context: context, screen: WelcomeScreen());
-          // NavigationHelper().navigatePush(
-          //     context: context,
-          //     viewModel: LoginViewModel(),
-          //     screen: const LoginScreen());
+          Map<String, dynamic> body = {
+            'coverImage':
+                'https://designforwriters.com/wp-content/uploads/2017/10/design-for-writers-book-cover-tf-2-a-million-to-one.jpg',
+            'paperTitle': 'NEET 2023 Exam Paper',
+            'totalQuestion': '200',
+            'totalTime': 200,
+            'type': 'needPaper',
+            'syllabus': [
+              {'label': 'Physics - Section A', 'value': '1-35'},
+              {
+                'label': 'Physics - Section B',
+                'value': '1-35 (attempt any 10)'
+              },
+              {'label': 'Chemistry - Section A', 'value': '1-35'},
+              {
+                'label': 'Chemistry - Section B',
+                'value': '1-35 (Attempt any 10)'
+              },
+              {'label': 'Biology - Section A', 'value': '1-35'},
+              {
+                'label': 'biology - Section A',
+                'value': '1-35 (Attempt any 10)'
+              },
+              {'label': 'Chemistry - Section A', 'value': '1-35'},
+              {
+                'label': 'Chemistry - Section A',
+                'value': '1-35 (Attempt any 10)'
+              }
+            ]
+          };
+
+          FirebaseFirestore.instance.collection('papers').add(body);
         },
         child: const Icon(Icons.add),
       ),

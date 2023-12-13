@@ -1,16 +1,21 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:tyarineetki/helper/base_view_model.dart';
+import 'package:tyarineetki/model/paper_model.dart';
 
 class ExamViewModel extends BaseViewModel {
   int currentQuestionPosition = 0;
+  PaperModel? data;
+
+  ExamViewModel();
+
+  ExamViewModel.argument({required this.data});
+
   @override
   void showToast({required String message, required BuildContext context}) {
     super.displayToastMessage(message: message, context: context);
   }
 
-  void updateIndex({required int index}){
+  void updateIndex({required int index}) {
     currentQuestionPosition = index;
     notifyListeners();
   }
@@ -18,14 +23,14 @@ class ExamViewModel extends BaseViewModel {
   List<Map<String, dynamic>> getData = [
     {
       "question":
-      "A flashing red traffic light signifies that a driver should do what?",
+          "A flashing red traffic light signifies that a driver should do what?",
       'options': [
         "stop",
         "speed up",
         "proceed with caution",
         "honk the horn",
       ],
-      'image':'https://i.ytimg.com/vi/nxdd24V9BZo/maxresdefault.jpg',
+      'image': 'https://i.ytimg.com/vi/nxdd24V9BZo/maxresdefault.jpg',
       "answer": "A",
       "submitAnswer": "",
       'type': 'text'
@@ -38,7 +43,7 @@ class ExamViewModel extends BaseViewModel {
         "lemon custard",
         "raspberry jelly",
       ],
-      'image':'',
+      'image': '',
       "answer": "A",
       "submitAnswer": "",
       'type': 'text'
@@ -51,34 +56,35 @@ class ExamViewModel extends BaseViewModel {
         "French tart",
         "friend bean dip",
       ],
-      'image':'',
+      'image': '',
       "answer": "B",
       "submitAnswer": "",
       'type': 'text'
     },
     {
       "question":
-      "A portrait that comically exaggerates a person's physical traits is called a what?",
+          "A portrait that comically exaggerates a person's physical traits is called a what?",
       'options': [
         "landscape",
         "caricature",
         "still life",
         "Impressionism",
       ],
-      'image':'',
+      'image': '',
       "answer": "B",
       "submitAnswer": "",
       'type': 'text'
     }
   ];
 
-  void updateAnswerQuestion({ required String answer}) {
+  void updateAnswerQuestion({required String answer}) {
     getData[currentQuestionPosition]['submitAnswer'] = answer;
     notifyListeners();
   }
 
-  int calculateScore(){
-    int count = getData.where((item) => item['answer'] == item['submitAnswer']).length;
+  int calculateScore() {
+    int count =
+        getData.where((item) => item['answer'] == item['submitAnswer']).length;
     return count;
   }
 }

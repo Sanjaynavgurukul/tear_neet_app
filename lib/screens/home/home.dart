@@ -1,15 +1,14 @@
-import 'dart:developer';
-
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
+import 'package:tyarineetki/helper/navigation_helper.dart';
 import 'package:tyarineetki/main.dart';
 import 'package:tyarineetki/model/banner_model.dart';
 import 'package:tyarineetki/model/notes_model.dart';
 import 'package:tyarineetki/model/paper_model.dart';
+import 'package:tyarineetki/screens/exam_paper/exam_detail_screen.dart';
+import 'package:tyarineetki/screens/exam_paper/view_model/exam_view_model.dart';
 import 'package:tyarineetki/screens/home/view_model/home_view_model.dart';
 import 'package:tyarineetki/theme/app_color.dart';
 import 'package:tyarineetki/widget/custom_cashe_image.dart';
@@ -41,27 +40,31 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Consumer<HomeViewModel>(
-        builder: (context, viewModel, child) {
-          return SingleChildScrollView(
-            child: SafeArea(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  appBar(),
-                  slider(),
-                  const Gap(20),
-                  paperSection(),
-                  noteSection()
-                  // bookSection(),
-                  // const Gap(20),
-                  // testSection()
-                ],
-              ),
-            ),
-          );
-        },
+      body: SafeArea(
+        child: Consumer<HomeViewModel>(
+          builder: (context, viewModel, child) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                appBar(),
+                Expanded(
+                    child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      // slider(),
+                      // const Gap(20),
+                      paperSection(),
+                      // noteSection()
+                    ],
+                  ),
+                ))
+              ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -78,12 +81,12 @@ class _HomeState extends State<Home> {
               children: [
                 Text(
                   '${auth.currentUser!.displayName}',
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: AppColor.primaryOrangeColor,
                       fontWeight: FontWeight.w500,
                       fontSize: 24),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 6,
                 ),
                 const Text(
@@ -100,7 +103,7 @@ class _HomeState extends State<Home> {
               width: 50,
               height: 50,
               borderRadius: BorderRadius.circular(100),
-              imageUrl: auth!.currentUser!.photoURL)
+              imageUrl: auth.currentUser!.photoURL)
         ],
       ),
     );
@@ -170,41 +173,116 @@ class _HomeState extends State<Home> {
                       Map<String, dynamic> jso = snapshot.data!.docs[index]
                           .data() as Map<String, dynamic>;
                       PaperModel item = PaperModel.fromJson(jso);
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: SizedBox(
-                          height: 200,
-                          width: 140,
-                          child: Stack(
-                            children: [
-                              CustomCacheImage(
-                                  height: 200,
-                                  width: 140,
-                                  imageUrl: item.coverImage),
-                              const Positioned(
-                                top: 4,
-                                right: 12,
-                                child: Icon(
-                                  Icons.arrow_right_alt,
-                                  color: Colors.white,
+                      return Container(
+                        width: 200,
+                        margin: const EdgeInsets.only(
+                            right: 12, bottom: 12, top: 12),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                offset: const Offset(0, 0),
+                                color: Colors.grey.shade300,
+                                blurRadius: 2.0,
+                              ),
+                            ],
+                            border: Border.all(
+                                width: 1, color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 200,
+                              padding: const EdgeInsets.all(12),
+                              decoration: const BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(12),
+                                      topLeft: Radius.circular(12)),
+                                  color: AppColor.lightPrimaryOrangeColor),
+                              child: Text(
+                                '${item.paperTitle}',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w500, fontSize: 16),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 12, right: 12),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Time : ',
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                      Text(
+                                        '${item.totalTime} minutes',
+                                        style: const TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 2,
+                                  ),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Questions : ',
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                      Text(
+                                        '${item.totalQuestion}',
+                                        style: const TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 12, right: 12, bottom: 12, top: 12),
+                              child: InkWell(
+                                onTap: (){
+                                  NavigationHelper().navigatePush(context: context, viewModel: ExamViewModel.argument(data: item), screen: const ExamDetailPage());
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  padding: const EdgeInsets.all(12),
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: AppColor.primaryOrangeColor),
+                                  child: const Text(
+                                    "Start Test",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
                               ),
-                              Positioned(
-                                  bottom: 0,
-                                  left: 0,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 12, right: 12, bottom: 12),
-                                    child: Text(
-                                      '${item.paperTitle}',
-                                      style: const TextStyle(
-                                          color: Colors.white, fontSize: 16),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ))
-                            ],
-                          ),
+                            )
+                          ],
                         ),
                       );
                     }),
@@ -366,7 +444,7 @@ class _HomeState extends State<Home> {
               BannerModel item = BannerModel.fromJson(
                   snapshot.data!.data() as Map<String, dynamic>);
               if (item.data == null || item.data!.isEmpty) {
-                return SizedBox();
+                return const SizedBox();
               }
               return CarouselSlider(
                 items: List.generate(item.data!.length, (index) {
@@ -389,5 +467,4 @@ class _HomeState extends State<Home> {
       ],
     );
   }
-
 }
