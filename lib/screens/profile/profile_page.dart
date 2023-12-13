@@ -90,6 +90,10 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+
+  Widget mainView(){
+    return
+  }
   void deo() async {
     log('check ----');
     User user = auth.currentUser!;
