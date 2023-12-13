@@ -39,4 +39,7 @@ class Repository {
   Stream<DocumentSnapshot> geUserDetail() {
     return _provider.getSubDetail();
   }
+
+  Stream<QuerySnapshot> fetchLeads({required String docId}) =>
+      _provider.fetchLeads(docId: docId);
 }

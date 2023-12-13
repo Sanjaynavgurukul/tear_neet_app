@@ -29,6 +29,14 @@ class Provider {
         .snapshots();
   }
 
+  Stream<QuerySnapshot> fetchLeads({required String docId}) {
+    return _db
+        .collection('leaderboard')
+        .doc(docId)
+        .collection('leadData')
+        .snapshots();
+  }
+
   Stream<DocumentSnapshot> fetchBannerImage() {
     return FirebaseFirestore.instance
         .collection('innerContent')

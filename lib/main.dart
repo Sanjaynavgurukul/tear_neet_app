@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return  AnnotatedRegion<SystemUiOverlayStyle>(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         // statusBarColor: Styles.greyBGColor, // transparent status bar
         statusBarColor: Colors.transparent, // transparent status bar
@@ -33,49 +33,56 @@ class MyApp extends StatelessWidget {
       ),
       child: MultiProvider(
         providers: [
-          ChangeNotifierProvider<SplashViewModel>(create: (context) => SplashViewModel()),
-          ChangeNotifierProvider<HomeViewModel>(create: (context) => HomeViewModel()),
-          ChangeNotifierProvider<ChatGroupViewModel>(create: (context) => ChatGroupViewModel()),
-          ChangeNotifierProvider<LeaderBoardViewModel>(create: (context) => LeaderBoardViewModel()),
+          ChangeNotifierProvider<SplashViewModel>(
+              create: (context) => SplashViewModel()),
+          ChangeNotifierProvider<HomeViewModel>(
+              create: (context) => HomeViewModel()),
+          ChangeNotifierProvider<ChatGroupViewModel>(
+              create: (context) => ChatGroupViewModel()),
+          ChangeNotifierProvider<LeaderBoardViewModel>(
+              create: (context) => LeaderBoardViewModel()),
         ],
         child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Flutter Demo',
-            theme:ThemeData(
-              // useMaterial3: true,
-              primaryColor: Color(0xfffd5a50),
-              scaffoldBackgroundColor: Colors.white,
-              fontFamily: 'WorkSans',
-              // useMaterial3: true,
-              appBarTheme: const AppBarTheme(
-                  centerTitle: false,
-                  backgroundColor: Colors.white,
-                  elevation: 2,
-                  iconTheme: IconThemeData(color: Colors.black),
-                  titleTextStyle: TextStyle(color: Colors.black, fontSize: 18),
-                  // titleSpacing: 6,
-                  systemOverlayStyle: SystemUiOverlayStyle(
-                    statusBarColor: Colors.transparent, // transparent status bar
-                    systemNavigationBarColor: Colors.transparent, // navigation bar color
-                    statusBarIconBrightness: Brightness.dark, // status bar icons' color
-                    systemNavigationBarIconBrightness: Brightness.dark,
-                  )),
-              brightness: Brightness.light,
-            ),
-            home: const SplashScreen(),
-            // home: StreamBuilder<User?>(
-            //   stream: auth.authStateChanges(),
-            //   builder: (context, snapshot) {
-            //     if (!snapshot.hasData) {
-            //       return const InitialSplash();
-            //     }
-            //     String? phoneNumber = auth.currentUser!.phoneNumber;
-            //     if(phoneNumber == null || phoneNumber.isEmpty){
-            //       return  const LandingScreen();
-            //     }
-            //     return const SplashScreen();
-            //   },
-            // )
+          debugShowCheckedModeBanner: false,
+          title: 'Tyari Neet Ki',
+          theme: ThemeData(
+            // useMaterial3: true,
+            primaryColor: Color(0xfffd5a50),
+            scaffoldBackgroundColor: Colors.white,
+            fontFamily: 'WorkSans',
+            // useMaterial3: true,
+            appBarTheme: const AppBarTheme(
+                centerTitle: false,
+                backgroundColor: Colors.white,
+                elevation: 2,
+                iconTheme: IconThemeData(color: Colors.black),
+                titleTextStyle: TextStyle(color: Colors.black, fontSize: 18),
+                // titleSpacing: 6,
+                systemOverlayStyle: SystemUiOverlayStyle(
+                  statusBarColor: Colors.transparent,
+                  // transparent status bar
+                  systemNavigationBarColor: Colors.transparent,
+                  // navigation bar color
+                  statusBarIconBrightness: Brightness.dark,
+                  // status bar icons' color
+                  systemNavigationBarIconBrightness: Brightness.dark,
+                )),
+            brightness: Brightness.light,
+          ),
+          home: const SplashScreen(),
+          // home: StreamBuilder<User?>(
+          //   stream: auth.authStateChanges(),
+          //   builder: (context, snapshot) {
+          //     if (!snapshot.hasData) {
+          //       return const InitialSplash();
+          //     }
+          //     String? phoneNumber = auth.currentUser!.phoneNumber;
+          //     if(phoneNumber == null || phoneNumber.isEmpty){
+          //       return  const LandingScreen();
+          //     }
+          //     return const SplashScreen();
+          //   },
+          // )
         ),
       ),
     );

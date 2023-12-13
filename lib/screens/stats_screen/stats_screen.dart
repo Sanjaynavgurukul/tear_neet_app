@@ -4,8 +4,6 @@ import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:tyarineetki/helper/navigation_helper.dart';
 import 'package:tyarineetki/model/leaderboard_list_model.dart';
-import 'package:tyarineetki/screens/paper_stats_screen/paper_stats_screen.dart';
-import 'package:tyarineetki/screens/paper_stats_screen/view_model/paper_stats_view_model.dart';
 import 'package:tyarineetki/screens/stats_screen/stats_leader_board_screen.dart';
 import 'package:tyarineetki/screens/stats_screen/view_model/leaderboard_view_model.dart';
 import 'package:tyarineetki/theme/app_color.dart';
@@ -116,7 +114,8 @@ class _StatsScreenState extends State<StatsScreen> {
               children: List.generate(snapshot.data!.size, (index) {
                 Map<String, dynamic> jso =
                     snapshot.data!.docs[index].data() as Map<String, dynamic>;
-                LeaderBoardListModel item = LeaderBoardListModel.fromJson(jso);
+                LeaderBoardListModel item = LeaderBoardListModel.fromJson(jso,
+                    docId: snapshot.data!.docs[index].id);
                 return itemView(item);
               }),
             ),
@@ -125,103 +124,114 @@ class _StatsScreenState extends State<StatsScreen> {
   }
 
   Widget itemView(LeaderBoardListModel item) {
-    return Container(
-      height: 120,
-      width: double.infinity,
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Stack(
-        children: [
-          CustomCacheImage(imageUrl: item.coverImage),
-          Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '${item.label}',
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18),
-                  ),
-                  Text(
-                    '${item.description}',
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 12),
-                  ),
-                  const Spacer(),
-                  if(item.userList != null && item.userList!.isNotEmpty)
-                    Stack(
-                    children: List.generate(item.userList!.length, (index){
-                      String i = item.userList![index].substring(0,2).toUpperCase();
-                      if(index == 0){
-                        return Padding(
-                          padding: const EdgeInsets.only(left: 0),
-                          child: Container(
-                              height: 30,
-                              width: 30,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  color: Colors.purple),
-                              child:  Center(
-                                child: Text('${i}',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white
-                                  ),),
-                              )
-                          ),
-                        );
-                      }
+    return InkWell(
+      onTap: () {
+        NavigationHelper().navigatePush(
+            context: context,
+            viewModel: LeaderBoardViewModel.argument(data: item),
+            screen: const StatsLeaderBoardScreen());
+      },
+      child: Container(
+        height: 120,
+        width: double.infinity,
+        padding: const EdgeInsets.only(bottom: 12),
+        child: Stack(
+          children: [
+            CustomCacheImage(imageUrl: item.coverImage),
+            Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${item.label}',
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
+                    ),
+                    Text(
+                      '${item.description}',
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 12),
+                    ),
+                    const Spacer(),
+                    if (item.userList != null && item.userList!.isNotEmpty)
+                      Stack(
+                        children: List.generate(item.userList!.length, (index) {
+                          String i = item.userList![index]
+                              .substring(0, 2)
+                              .toUpperCase();
+                          if (index == 0) {
+                            return Padding(
+                              padding: const EdgeInsets.only(left: 0),
+                              child: Container(
+                                  height: 30,
+                                  width: 30,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(100),
+                                      color: Colors.purple),
+                                  child: Center(
+                                    child: Text(
+                                      '${i}',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
+                                  )),
+                            );
+                          }
 
-                      if(index == 1){
-                       return Padding(
-                          padding: const EdgeInsets.only(left: 15),
-                          child: Container(
-                            height: 30,
-                            width: 30,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100),
-                                color: Colors.orange),
-                            child:  Center(
-                              child: Text('${i}',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white
-                                ),),
-                            ),
-                          ),
-                        );
-                      }
+                          if (index == 1) {
+                            return Padding(
+                              padding: const EdgeInsets.only(left: 15),
+                              child: Container(
+                                height: 30,
+                                width: 30,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    color: Colors.orange),
+                                child: Center(
+                                  child: Text(
+                                    '${i}',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
 
-                      if(index == 2){
-                       return Padding(
-                          padding: const EdgeInsets.only(left: 30),
-                          child: Container(
-                              height: 30,
-                              width: 30,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  color: AppColor.primaryOrangeColor),
-                              child:  Center(
-                                child: Text('${i}',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white
-                                  ),),
-                              )
-                          ),
-                        );
-                      }
+                          if (index == 2) {
+                            return Padding(
+                              padding: const EdgeInsets.only(left: 30),
+                              child: Container(
+                                  height: 30,
+                                  width: 30,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(100),
+                                      color: AppColor.primaryOrangeColor),
+                                  child: Center(
+                                    child: Text(
+                                      '${i}',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
+                                  )),
+                            );
+                          }
 
-                      return const SizedBox();
-                    }),
-                  )
-                ],
-              )),
-        ],
+                          return const SizedBox();
+                        }),
+                      )
+                  ],
+                )),
+          ],
+        ),
       ),
     );
   }

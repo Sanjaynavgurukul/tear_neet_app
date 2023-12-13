@@ -1,5 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
+import 'package:tyarineetki/model/leaders_model.dart';
+import 'package:tyarineetki/screens/stats_screen/view_model/leaderboard_view_model.dart';
 import 'package:tyarineetki/theme/app_color.dart';
 import 'package:tyarineetki/widget/custom_cashe_image.dart';
 
@@ -11,194 +15,364 @@ class StatsLeaderBoardScreen extends StatefulWidget {
 }
 
 class _StatsLeaderBoardScreenState extends State<StatsLeaderBoardScreen> {
+  late LeaderBoardViewModel viewModel;
+
   @override
- Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          // gradient: LinearGradient(
-          //   begin: Alignment.topCenter,
-          //   end: Alignment.bottomCenter,
-          //   colors: [
-          //     AppColor.primaryOrangeColor,
-          //     Colors.white
-          //   ]
-          // )
-        ),
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.only(top: 70),
-          child: Column(
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [otherKing(rank: '2'), king(), otherKing(rank: '3')],
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    viewModel = context.watch<LeaderBoardViewModel>();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (viewModel.data == null) {
+      return const Material(
+        color: Colors.black,
+        child: Text('No Data Foud'),
+      );
+    }
+
+    return StreamBuilder(
+        stream: viewModel.fetchLeads(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.none ||
+              snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CupertinoActivityIndicator(),
+            );
+          }
+
+          if (snapshot.hasError) {
+            return const Material(
+              color: Colors.white,
+              child: SizedBox(
+                child: Center(
+                  child: Text('No Data Found'),
+                ),
               ),
-              otherRankList()
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+            );
+          }
 
-  Widget king() {
-    double width = MediaQuery.of(context).size.width / 3;
+          if (!snapshot.hasData) {
+            return const Material(
+              color: Colors.white,
+              child: SizedBox(
+                child: Center(
+                  child: Text('No Data Found'),
+                ),
+              ),
+            );
+          }
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 30),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Lottie.asset('assets/crow.json', height: 100),
-          Container(
-            width: width,
-            alignment: Alignment.center,
-            height: width,
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: AppColor.primaryOrangeColor.withOpacity(0.5),
-                  blurRadius: 15.0, // soften the shadow
-                  spreadRadius: 5.0, //extend the shadow
-                )
-              ],
-              borderRadius: BorderRadius.circular(100),
+          if (snapshot.data!.size == 0) {
+            return const Material(
+              color: Colors.white,
+              child: SizedBox(
+                child: Center(
+                  child: Text('No Data Found'),
+                ),
+              ),
+            );
+          }
+
+          return Scaffold(
+            // floatingActionButton: FloatingActionButton(
+            //   onPressed: () {
+            //     FirebaseFirestore.instance
+            //         .collection('leaderboard')
+            //         .doc(viewModel.data!.id)
+            //         .collection('leadData')
+            //         .add({
+            //       'image': '',
+            //       'score': 433,
+            //       'number': '8851134245',
+            //       'name': 'Sanjay Jana',
+            //       'userId': '${util.userId}',
+            //       'time': FieldValue.serverTimestamp()
+            //     });
+            //   },
+            //   child: const Icon(Icons.add),
+            // ),
+            appBar: AppBar(
+              elevation: 0,
+              backgroundColor: AppColor.lightPrimaryOrangeColor,
+              title: Text('${viewModel.data!.label}'),
             ),
-            child: Stack(
-              children: [
-                CustomCacheImage(
-                    width: width,
-                    height: width,
-                    border: Border.all(
-                        width: 3, color: AppColor.primaryOrangeColor),
-                    showBorder: true,
-                    borderRadius: BorderRadius.circular(100),
-                    imageUrl:
-                        'https://image.lexica.art/full_jpg/7515495b-982d-44d2-9931-5a8bbbf27532')
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
+            body: SizedBox(
+              width: double.infinity,
+              height: double.infinity,
+              child: SingleChildScrollView(
+                  padding: const EdgeInsets.only(top: 12, left: 16, right: 16),
+                  child: SizedBox(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: List.generate(snapshot.data!.size, (index) {
+                        Map<String, dynamic> jso = snapshot.data!.docs[index]
+                            .data() as Map<String, dynamic>;
+                        LeaderModel item = LeaderModel.fromJson(jso);
 
-  Widget otherKing({required String rank}) {
-    double width = MediaQuery.of(context).size.width / 4;
+                        if (index == 0) return king(item: item);
+                        if (index == 1) {
+                          return otherKing(item: item, rank: '2', position: 2);
+                        }
+                        if (index == 2) {
+                          return otherKing(item: item, rank: '3', position: 3);
+                        }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(
-          rank,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Icon(
-          rank == '2'
-              ? Icons.arrow_drop_up_rounded
-              : Icons.arrow_drop_down_rounded,
-          size: 50,
-          color: rank == '2' ? AppColor.primaryOrangeColor : Colors.black,
-        ),
-        const SizedBox(
-          height: 12,
-        ),
-        Container(
-          width: width,
-          alignment: Alignment.center,
-          height: width,
-          decoration: BoxDecoration(
-            // boxShadow: [
-            //   BoxShadow(
-            //     color: Colors.green.withOpacity(0.5),
-            //     blurRadius: 15.0, // soften the shadow
-            //     spreadRadius: 5.0, //extend the shadow
-            //   )
-            // ],
-            borderRadius: BorderRadius.circular(100),
-          ),
-          child: Stack(
-            children: [
-              CustomCacheImage(
-                  width: width,
-                  height: width,
-                  border: Border.all(width: 3, color: Colors.green),
-                  showBorder: true,
-                  borderRadius: BorderRadius.circular(100),
-                  imageUrl:
-                      'https://image.lexica.art/full_jpg/7515495b-982d-44d2-9931-5a8bbbf27532')
-            ],
-          ),
-        )
-      ],
-    );
-  }
-
-  Widget otherRankList() {
-    return Container(
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 30),
-      child: Column(
-        children: List.generate(20, (index) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Container(
-              padding: const EdgeInsets.only(right: 16),
-              decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(100),
-                    topLeft: Radius.circular(100),
-                  ),
-                  border: Border.all(width: 1, color: Colors.grey.shade100)),
-              child: Row(
-                children: [
-                  CustomCacheImage(
-                      width: 60,
-                      height: 60,
-                      borderRadius: BorderRadius.circular(100),
-                      imageUrl:
-                          'https://play-lh.googleusercontent.com/0SAFn-mRhhDjQNYU46ZwA7tz0xmRiQG4ZuZmuwU8lYmqj6zEpnqsee_6QDuhQ4ZofwXj=w240-h480-rw'),
-                  const SizedBox(
-                    width: 12,
-                  ),
-                  const Expanded(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Sanjay Jana',
-                        style:
-                            TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                      ),
-                      SizedBox(
-                        height: 4,
-                      ),
-                      Text(
-                        '+9-8765674653',
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.normal),
-                      )
-                    ],
+                        return otherRankList(item: item, position: index + 1);
+                      }),
+                    ),
                   )),
-                  const SizedBox(width: 4,),
-                  Column(
-                    children: [
-                      Icon(Icons.leaderboard,size: 16,color: AppColor.primaryOrangeColor.withOpacity(0.6),),
-                      const SizedBox(height: 4,),
-                      Text('${index+4}',style: const TextStyle(fontWeight: FontWeight.bold),)
-                    ],
-                  )
-                ],
-              ),
             ),
           );
-        }),
+        });
+  }
+
+  Widget king({required LeaderModel item}) {
+    double width = MediaQuery.of(context).size.width / 3;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: Container(
+        padding: const EdgeInsets.only(right: 16),
+        child: Row(
+          children: [
+            imageView(item),
+            const SizedBox(
+              width: 12,
+            ),
+            Expanded(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${item.name}',
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  '+91-${item.number}',
+                  style: const TextStyle(
+                      fontSize: 12, fontWeight: FontWeight.normal),
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                Container(
+                  padding: const EdgeInsets.only(
+                      left: 4, right: 4, top: 2, bottom: 2),
+                  decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(4)),
+                  child: const Text(
+                    'First Position',
+                    style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+                )
+              ],
+            )),
+            const SizedBox(
+              width: 4,
+            ),
+            Column(
+              children: [
+                Lottie.asset('assets/crow.json', height: 30),
+                const SizedBox(
+                  height: 4,
+                ),
+                const Text(
+                  '${4}',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                )
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget otherKing(
+      {required LeaderModel item,
+      required String rank,
+      required int position}) {
+    double width = MediaQuery.of(context).size.width / 4;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: Container(
+        padding: const EdgeInsets.only(right: 16),
+        child: Row(
+          children: [
+            imageView(item),
+            const SizedBox(
+              width: 12,
+            ),
+            Expanded(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${item.name}',
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  '+91-${item.number}',
+                  style: const TextStyle(
+                      fontSize: 12, fontWeight: FontWeight.normal),
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                Container(
+                  padding: const EdgeInsets.only(
+                      left: 4, right: 4, top: 2, bottom: 2),
+                  decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(4)),
+                  child: Text(
+                    '${position == 2 ? "Second" : "Third"} Position',
+                    style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+                )
+              ],
+            )),
+            const SizedBox(
+              width: 4,
+            ),
+            const Column(
+              children: [
+                Icon(
+                  Icons.stacked_bar_chart,
+                  color: AppColor.primaryOrangeColor,
+                  size: 20,
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  '${4}',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                )
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget otherRankList({required LeaderModel item, required int position}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: Container(
+        padding: const EdgeInsets.only(right: 16),
+        child: Row(
+          children: [
+            imageView(item),
+            const SizedBox(
+              width: 12,
+            ),
+            Expanded(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${item.name}',
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  '+91-${item.number}',
+                  style: const TextStyle(
+                      fontSize: 12, fontWeight: FontWeight.normal),
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                Container(
+                  padding: const EdgeInsets.only(
+                      left: 4, right: 4, top: 2, bottom: 2),
+                  decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(4)),
+                  child: Text(
+                    '$position Position',
+                    style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+                )
+              ],
+            )),
+            const SizedBox(
+              width: 4,
+            ),
+            const Column(
+              children: [
+                Icon(
+                  Icons.stacked_bar_chart,
+                  color: Colors.grey,
+                  size: 20,
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  '${4}',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                )
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget imageView(LeaderModel item) {
+    if (item.image == null || item.image!.isNotEmpty) {
+      return CustomCacheImage(
+          width: 60,
+          height: 60,
+          borderRadius: BorderRadius.circular(100),
+          imageUrl: '${item.image}');
+    }
+    return Container(
+      alignment: Alignment.center,
+      width: 60,
+      height: 60,
+      decoration: BoxDecoration(
+        color: Colors.grey.shade200,
+        borderRadius: BorderRadius.circular(100),
+      ),
+      child: Text(
+        item.name!.substring(0, 2).toUpperCase(),
+        style: const TextStyle(color: Colors.black),
       ),
     );
   }

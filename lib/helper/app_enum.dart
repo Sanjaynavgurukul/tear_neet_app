@@ -1,0 +1,4 @@
+enum PaperEnum{
+  neetPaper,
+  botanicalPaper
+}
