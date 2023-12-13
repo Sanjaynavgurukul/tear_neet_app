@@ -1,16 +1,18 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:tyarineetki/widget/custom_cashe_image.dart';
 
 class ProfileWidget extends StatelessWidget {
   final String imagePath;
-  final bool isEdit;
+  final int type;
   final VoidCallback onClicked;
 
   const ProfileWidget({
     Key? key,
     required this.imagePath,
-    this.isEdit = false,
+    required this.type,
     required this.onClicked,
   }) : super(key: key);
 
@@ -33,18 +35,13 @@ class ProfileWidget extends StatelessWidget {
   }
 
   Widget buildImage() {
-    return imagePath.isNotEmpty && imagePath.substring(0, 5) == "https"
-        ? ClipOval(
-            child: Material(
-              color: Colors.transparent,
-              child: Ink.image(
-                image: NetworkImage(imagePath),
-                fit: BoxFit.cover,
-                width: 128,
-                height: 128,
-                child: InkWell(onTap: onClicked),
-              ),
-            ),
+    log('check demo image ----2 ----- $imagePath ---- $type');
+    return type == 1
+        ? CustomCacheImage(
+            imageUrl: imagePath,
+            width: 128,
+            height: 128,
+            borderRadius: BorderRadius.circular(100),
           )
         : ClipOval(
             child: Material(
@@ -54,7 +51,7 @@ class ProfileWidget extends StatelessWidget {
                 fit: BoxFit.cover,
                 width: 128,
                 height: 128,
-                child: InkWell(onTap: onClicked),
+                child: const SizedBox(),
               ),
             ),
           );
@@ -63,17 +60,15 @@ class ProfileWidget extends StatelessWidget {
   Widget buildEditIcon(Color color) => buildCircle(
         color: Colors.white,
         all: 3,
-        child: isEdit
-            ? buildCircle(
-                color: color,
-                all: 8,
-                child: const Icon(
-                  Icons.add_a_photo,
-                  color: Colors.white,
-                  size: 20,
-                ),
-              )
-            : const SizedBox(),
+        child: buildCircle(
+          color: color,
+          all: 8,
+          child: const Icon(
+            Icons.add_a_photo,
+            color: Colors.white,
+            size: 20,
+          ),
+        ),
       );
 
   Widget buildCircle({
@@ -81,11 +76,14 @@ class ProfileWidget extends StatelessWidget {
     required double all,
     required Color color,
   }) =>
-      ClipOval(
-        child: Container(
-          padding: EdgeInsets.all(all),
-          color: color,
-          child: child,
+      InkWell(
+        onTap: onClicked,
+        child: ClipOval(
+          child: Container(
+            padding: EdgeInsets.all(all),
+            color: color,
+            child: child,
+          ),
         ),
       );
 }

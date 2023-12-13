@@ -1,46 +1,69 @@
+import 'dart:developer';
 import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:tyarineetki/main.dart';
+import 'package:provider/provider.dart';
+import 'package:tyarineetki/screens/profile/view_model/profile_view_model.dart';
+import 'package:tyarineetki/theme/app_color.dart';
 import 'package:tyarineetki/widget/appbar_widget.dart';
-import 'package:tyarineetki/widget/profile_widget.dart';
+import 'package:tyarineetki/widget/custom_cashe_image.dart';
 import 'package:tyarineetki/widget/textfield_widget.dart';
 
 class EditProfilePage extends StatefulWidget {
+  const EditProfilePage({super.key});
+
   @override
   _EditProfilePageState createState() => _EditProfilePageState();
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  final user = auth.currentUser;
+  // late StreamSubscription _paperListSubscription;
+  late ProfileViewModel viewModel;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    viewModel = context.watch<ProfileViewModel>();
+  }
+
   String? imageUrl;
-  File? _pickedImageFile;
+  XFile? selectedImage;
   final _imagePicker = ImagePicker();
+
   void _pickedImage(source) async {
-    final pickedImage = await _imagePicker.pickImage(
+    XFile? pickedImage = await _imagePicker.pickImage(
         source: source, imageQuality: 75, maxHeight: 1024, maxWidth: 1024);
-    debugPrint(
-        "----------Image Picker: Selected Image Path From Camera -----> ${pickedImage!.path}");
     if (pickedImage == null) {
       return;
     }
-    setState(() {
-      _pickedImageFile = File(pickedImage.path);
-    });
 
-    print(_pickedImageFile);
+    viewModel.pictureType == 2;
+    selectedImage = pickedImage;
+    viewModel.update();
+    // DialogHelper().showLoadingDialog(context: context);
+    // Navigator.pop(context);
+    // await Future.delayed(const Duration(seconds: 1));
+    // setState(() {});
+
+    log('check demo image ---- ${selectedImage!.path}');
   }
 
   Future<void> uploadImageToFirebase() async {
-    if (_pickedImageFile != null) {
-      final storageRef = FirebaseStorage.instance.ref().child('user_image');
-      storageRef.putFile(_pickedImageFile!);
-      final imageUrl = storageRef.getDownloadURL();
-
-      print(imageUrl);
-    }
+    // if (_pickedImageFile != null) {
+    //   final storageRef = FirebaseStorage.instance.ref().child('user_image');
+    //   storageRef.putFile(_pickedImageFile!);
+    //   final imageUrl = storageRef.getDownloadURL();
+    //
+    //   print(imageUrl);
+    // }
   }
 
   Future<void> showImagePicker() {
@@ -112,62 +135,141 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(
-          context: context,
-          elevation: 0,
-          actions: [
-            TextButton(onPressed: () {}, child: const Text('Save')),
-            const SizedBox(
-              width: 18,
-            )
-          ],
-          onBackPress: () {
-            Navigator.pop(context);
-          }),
-      // appBar: AppBar(
-      //   elevation: 0,
-      //   leading: IconButton(
-      //       onPressed: () {}, icon: const Icon(Icons.keyboard_backspace)),
-      //   actions: [
-      //     TextButton(onPressed: () {}, child: const Text('Save')),
-      //     const SizedBox(
-      //       width: 18,
-      //     )
-      //   ],
-      // ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
-        physics: const BouncingScrollPhysics(),
+        appBar: buildAppBar(
+            context: context,
+            elevation: 0,
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    viewModel.updateProfilePicture(context: context);
+                  },
+                  child: const Text('Save')),
+              const SizedBox(
+                width: 18,
+              )
+            ],
+            onBackPress: () {
+              Navigator.pop(context);
+            }),
+        body: mainView());
+  }
+
+  Widget mainView() {
+    if (viewModel.currentUser == null) {
+      return const Center(
+        child: Text('No Profile Found'),
+      );
+    }
+
+    return ListView(
+      padding: const EdgeInsets.symmetric(horizontal: 32),
+      physics: const BouncingScrollPhysics(),
+      children: [
+        imageSection(),
+        const SizedBox(height: 24),
+        TextFieldWidget(
+          label: 'Full Name',
+          text: viewModel.currentUser!.name!,
+          change: (name) {
+            viewModel.currentUser!.name = name;
+          },
+        ),
+        const SizedBox(height: 24),
+        TextFieldWidget(
+          label: 'Phone Number',
+          text: viewModel.currentUser!.phone!,
+          change: (phone) {
+            viewModel.currentUser!.phone = phone;
+          },
+        ),
+        const SizedBox(height: 24),
+        TextFieldWidget(
+          label: 'About',
+          text: viewModel.currentUser!.bio!,
+          maxLines: 7,
+          change: (about) {
+            viewModel.currentUser!.bio = about;
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget imageSection() {
+    return SizedBox(
+      width: 128,
+      height: 128,
+      child: Stack(
+        alignment: Alignment.center,
         children: [
-          ProfileWidget(
-            imagePath: _pickedImageFile != null
-                ? _pickedImageFile!.path
-                : 'https://play-lh.googleusercontent.com/C9CAt9tZr8SSi4zKCxhQc9v4I6AOTqRmnLchsu1wVDQL0gsQ3fmbCVgQmOVM1zPru8UH=w240-h480-rw',
-            isEdit: true,
-            onClicked: showImagePicker,
-          ),
-          const SizedBox(height: 24),
-          TextFieldWidget(
-            label: 'Full Name',
-            text: user!.displayName!,
-            onChanged: (name) {},
-          ),
-          const SizedBox(height: 24),
-          TextFieldWidget(
-            label: 'Email',
-            text: user!.email!,
-            onChanged: (email) {},
-          ),
-          const SizedBox(height: 24),
-          TextFieldWidget(
-            label: 'About',
-            text:
-                'For your cellphone wallpaper, you can select cool images with the best image quality for your profile. a collection of wallpapers created by the boy. We hope you enjoy our expanding collection of high-definition photos that you can use as your smartphone',
-            maxLines: 5,
-            onChanged: (about) {},
+          buildImage(),
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: buildEditIcon(),
           ),
         ],
       ),
     );
+    // return ProfileWidget(
+    //   type: pictureType,
+    //   imagePath: pictureType == 2
+    //       ? selectedImage!.path
+    //       : viewModel.currentUser!.profile ??
+    //           'https://www.pngitem.com/pimgs/m/30-307416_profile-icon-png-image-free-download-searchpng-employee.png',
+    //   onClicked: showImagePicker,
+    // );
   }
+
+  Widget buildImage() {
+    return viewModel.pictureType == 1
+        ? CustomCacheImage(
+            imageUrl: viewModel.currentUser!.profile,
+            width: 128,
+            height: 128,
+            borderRadius: BorderRadius.circular(100),
+          )
+        : selectedImage == null
+            ? CustomCacheImage(
+                imageUrl: viewModel.currentUser!.profile,
+                width: 128,
+                height: 128,
+                borderRadius: BorderRadius.circular(100),
+              )
+            : ClipOval(
+                child: Material(
+                    color: Colors.transparent,
+                    child: Image.file(File(selectedImage!.path))),
+              );
+  }
+
+  Widget buildEditIcon() => buildCircle(
+        color: Colors.white,
+        all: 3,
+        child: buildCircle(
+          color: AppColor.primaryOrangeColor,
+          all: 8,
+          child: const Icon(
+            Icons.add_a_photo,
+            color: Colors.white,
+            size: 20,
+          ),
+        ),
+      );
+
+  Widget buildCircle({
+    required Widget child,
+    required double all,
+    required Color color,
+  }) =>
+      InkWell(
+        onTap: showImagePicker,
+        child: ClipOval(
+          child: Container(
+            padding: EdgeInsets.all(all),
+            color: color,
+            child: child,
+          ),
+        ),
+      );
 }

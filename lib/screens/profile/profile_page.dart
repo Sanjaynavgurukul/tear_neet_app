@@ -1,16 +1,21 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tyarineetki/helper/navigation_helper.dart';
+import 'package:tyarineetki/helper/utils.dart';
+import 'package:tyarineetki/model/User.dart';
 import 'package:tyarineetki/screens/profile/edit_profile_page.dart';
 import 'package:tyarineetki/screens/profile/view_model/profile_view_model.dart';
 import 'package:tyarineetki/screens/subscription/subscription.dart';
 import 'package:tyarineetki/screens/subscription/view_model/subscription_view_model.dart';
+import 'package:tyarineetki/theme/app_color.dart';
 import 'package:tyarineetki/widget/appbar_widget.dart';
 import 'package:tyarineetki/widget/button_widget.dart';
-import 'package:tyarineetki/widget/profile_widget.dart';
+import 'package:tyarineetki/widget/custom_cashe_image.dart';
+import 'package:tyarineetki/widget/read_more.dart';
 
 import '../../main.dart';
 
@@ -35,8 +40,6 @@ class _ProfilePageState extends State<ProfilePage> {
     viewModel = context.watch<ProfileViewModel>();
   }
 
-  final user = auth.currentUser;
-
   @override
   void dispose() {
     // TODO: implement dispose
@@ -53,8 +56,11 @@ class _ProfilePageState extends State<ProfilePage> {
           actions: [
             IconButton(
                 onPressed: () {
-                  NavigationHelper().normalNavigatePush(
-                      context: context, screen: EditProfilePage());
+                  NavigationHelper().navigatePush(
+                      context: context,
+                      viewModel:
+                          ProfileViewModel.dynamic(currentUser: util.user),
+                      screen: EditProfilePage());
                 },
                 icon: const Icon(Icons.edit)),
             const SizedBox(
@@ -64,36 +70,75 @@ class _ProfilePageState extends State<ProfilePage> {
           onBackPress: () {
             Navigator.pop(context);
           }),
-      body: ListView(
-        padding: const EdgeInsets.only(top: 16),
-        physics: const BouncingScrollPhysics(),
-        children: [
-          ProfileWidget(
-            imagePath: auth.currentUser!.photoURL!,
-            onClicked: () async{
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => EditProfilePage()),
-              );
-            },
-          ),
-          const SizedBox(height: 24),
-          buildName(user!.displayName!, '${user!.email}'),
-          const SizedBox(height: 24),
-          Center(child: buildUpgradeButton()),
-          const SizedBox(height: 48),
-          buildAbout('Phone Number', '+91-8756646756'),
-          const SizedBox(height: 16),
-          buildAbout('About',
-              'For your cellphone wallpaper, you can select cool images with the best image quality for your profile. a collection of wallpapers created by the boy. We hope you enjoy our expanding collection of high-definition photos that you can use as your smartphone'),
-        ],
-      ),
+      body: mainView(),
     );
   }
 
+  Widget mainView() {
+    return Container(
+      child: StreamBuilder(
+          stream: viewModel.fetchProfile(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.none ||
+                snapshot.connectionState == ConnectionState.waiting) {
+              return const Material(
+                color: Colors.white,
+                child: Center(
+                  child: CupertinoActivityIndicator(),
+                ),
+              );
+            }
 
-  Widget mainView(){
-    return
+            if (snapshot.hasError) {
+              return const SizedBox(
+                child: Center(
+                  child: Text('No Profile Found'),
+                ),
+              );
+            }
+
+            if (!snapshot.hasData) {
+              return const Material(
+                color: Colors.white,
+                child: SizedBox(
+                  child: Center(
+                    child: Text('No Profile Found'),
+                  ),
+                ),
+              );
+            }
+
+            Map<String, dynamic> json =
+                snapshot.data!.data() as Map<String, dynamic>;
+            CurrentUser user = CurrentUser.fromJson(json);
+            util.user = user;
+
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: 128,
+                    height: 128,
+                    child: CustomCacheImage(
+                        borderRadius: BorderRadius.circular(100),
+                        imageUrl: user.profile),
+                  ),
+                  const SizedBox(height: 24),
+                  buildName(user.name!, '${user.email}'),
+                  const SizedBox(height: 24),
+                  Center(child: buildUpgradeButton()),
+                  const SizedBox(height: 48),
+                  if (user.phone == null || user.phone!.isNotEmpty)
+                    buildAbout('Phone Number', value: '+91-${user.phone}'),
+                  const SizedBox(height: 16),
+                  buildAbout('About', value: user.bio),
+                ],
+              ),
+            );
+          }),
+    );
   }
+
   void deo() async {
     log('check ----');
     User user = auth.currentUser!;
@@ -128,7 +173,8 @@ class _ProfilePageState extends State<ProfilePage> {
         },
       );
 
-  Widget buildAbout(String label, String about) => Container(
+  Widget buildAbout(String label, {String? value}) => Container(
+        width: double.infinity,
         margin: const EdgeInsets.only(left: 16, right: 16),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
@@ -142,13 +188,30 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               Text(
                 '$label',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
-              Text(
-                about,
-                style: const TextStyle(fontSize: 16, height: 1.4),
-              ),
+              value != null && value.isNotEmpty
+                  ? SizedBox(
+                      key: const Key('showMore'),
+                      child: ReadMoreText(
+                        '${value}',
+                        trimLines: 3,
+                        preDataText: "",
+                        preDataTextStyle:
+                            const TextStyle(fontWeight: FontWeight.w500),
+                        style: const TextStyle(color: Colors.black),
+                        colorClickableText: AppColor.primaryOrangeColor,
+                        trimMode: TrimMode.Line,
+                        trimCollapsedText: ' See More',
+                        trimExpandedText: ' show less',
+                      ),
+                    )
+                  : const Text(
+                      'NO BIO AVAILABLE',
+                      style: TextStyle(fontSize: 16, height: 1.4),
+                    ),
             ],
           ),
         ),

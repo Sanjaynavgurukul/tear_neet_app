@@ -34,7 +34,7 @@ class _StatsLeaderBoardScreenState extends State<StatsLeaderBoardScreen> {
     if (viewModel.data == null) {
       return const Material(
         color: Colors.black,
-        child: Text('No Data Foud'),
+        child: Text('No Profile Found'),
       );
     }
 
@@ -43,8 +43,11 @@ class _StatsLeaderBoardScreenState extends State<StatsLeaderBoardScreen> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.none ||
               snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CupertinoActivityIndicator(),
+            return const Material(
+              color: Colors.white,
+              child: Center(
+                child: CupertinoActivityIndicator(),
+              ),
             );
           }
 

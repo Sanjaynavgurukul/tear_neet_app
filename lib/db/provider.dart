@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tyarineetki/helper/utils.dart';
 import 'package:tyarineetki/model/chat_group_model.dart';
@@ -70,6 +72,8 @@ class Provider {
   }
 
   void updateUser({required Map<String, dynamic> body}) {
+    log('cehck user iddd ----- ${body}');
+    log('cehck user iddd -----2---- ${util.userId}');
     _db.collection('users').doc(util.userId).update(body);
   }
 
