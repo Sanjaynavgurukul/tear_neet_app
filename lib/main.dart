@@ -10,7 +10,7 @@ import 'package:tyarineetki/screens/splash_screen/view_model/splash_screen.dart'
 import 'package:tyarineetki/screens/stats_screen/view_model/leaderboard_view_model.dart';
 
 late final FirebaseApp app;
-late final FirebaseAuth auth;
+final FirebaseAuth auth = FirebaseAuth.instance;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

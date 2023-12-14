@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,9 +10,10 @@ import 'package:tyarineetki/helper/dialog_helper.dart';
 import 'package:tyarineetki/helper/navigation_helper.dart';
 import 'package:tyarineetki/helper/utils.dart';
 import 'package:tyarineetki/model/User.dart';
+import 'package:tyarineetki/screens/login/login_screen.dart';
+import 'package:tyarineetki/screens/login/view_model/login_view_model.dart';
 import 'package:tyarineetki/screens/profile/edit_profile_page.dart';
 import 'package:tyarineetki/screens/profile/view_model/profile_view_model.dart';
-import 'package:tyarineetki/screens/splash_screen/splash_screen.dart';
 import 'package:tyarineetki/screens/subscription/subscription.dart';
 import 'package:tyarineetki/screens/subscription/view_model/subscription_view_model.dart';
 import 'package:tyarineetki/theme/app_color.dart';
@@ -62,7 +65,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       context: context,
                       viewModel:
                           ProfileViewModel.dynamic(currentUser: util.user),
-                      screen: EditProfilePage());
+                      screen: const EditProfilePage());
                 },
                 icon: const Icon(Icons.edit)),
             IconButton(
@@ -79,8 +82,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   DialogHelper().showLoadingDialog(context: context);
                   FirebaseAuth.instance.signOut();
                   Navigator.pop(context);
-                  NavigationHelper().normalNavigatePushReplacementUntil(
-                      context: context, screen: const SplashScreen());
+                  NavigationHelper().navigatePushAndRemoveUntil(
+                      context: context,
+                      viewModel: LoginViewModel(),
+                      screen: const LoginScreen());
                 },
                 icon: const Icon(Icons.exit_to_app)),
             const SizedBox(

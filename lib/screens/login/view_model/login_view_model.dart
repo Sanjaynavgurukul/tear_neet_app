@@ -5,6 +5,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tyarineetki/helper/base_view_model.dart';
 import 'package:tyarineetki/helper/navigation_helper.dart';
 import 'package:tyarineetki/helper/utils.dart';
+import 'package:tyarineetki/main.dart';
 import 'package:tyarineetki/model/User.dart';
 import 'package:tyarineetki/screens/landing_screen/landing_screen.dart';
 import 'package:tyarineetki/screens/splash_screen/welcome_screen.dart';

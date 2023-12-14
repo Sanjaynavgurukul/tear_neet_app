@@ -11,6 +11,8 @@ import 'package:tyarineetki/model/paper_model.dart';
 import 'package:tyarineetki/screens/exam_paper/exam_detail_screen.dart';
 import 'package:tyarineetki/screens/exam_paper/view_model/exam_view_model.dart';
 import 'package:tyarineetki/screens/home/view_model/home_view_model.dart';
+import 'package:tyarineetki/screens/pdf_view/pdf_view_screen.dart';
+import 'package:tyarineetki/screens/pdf_view/view_model/pdf_view_model.dart';
 import 'package:tyarineetki/theme/app_color.dart';
 import 'package:tyarineetki/widget/custom_cashe_image.dart';
 import 'package:tyarineetki/widget/read_more.dart';
@@ -52,7 +54,7 @@ class _HomeState extends State<Home> {
                 appBar(),
                 Expanded(
                     child: SingleChildScrollView(
-                      padding: EdgeInsets.only(bottom: 30),
+                  padding: EdgeInsets.only(bottom: 30),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -363,113 +365,128 @@ class _HomeState extends State<Home> {
                         as Map<String, dynamic>;
                     NoteModel item = NoteModel.fromJson(jso);
 
-                    return Container(
-                      margin:
+                    return Padding(
+                      padding:
                           const EdgeInsets.only(left: 16, right: 16, bottom: 6),
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              offset: const Offset(0, 0),
-                              color: Colors.grey.shade300,
-                              blurRadius: 2.0,
-                            ),
-                          ],
-                          borderRadius: BorderRadius.circular(8),
-                          color: Colors.white,
-                          border: Border.all(
-                              width: 1, color: Colors.grey.shade300)),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: AppColor.lightPrimaryOrangeColor),
-                            padding: const EdgeInsets.all(8),
-                            child: const Icon(
-                              Icons.note_alt_rounded,
-                              color: AppColor.primaryOrangeColor,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 8,
-                          ),
-                          Expanded(
-                              child: Column(
+                      child: InkWell(
+                        onTap: () {
+                          NavigationHelper().navigatePush(
+                              context: context,
+                              viewModel:
+                                  PdfViewModel.argument(data: item),
+                              screen: const PdfViewScreen());
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  offset: const Offset(0, 0),
+                                  color: Colors.grey.shade300,
+                                  blurRadius: 2.0,
+                                ),
+                              ],
+                              borderRadius: BorderRadius.circular(8),
+                              color: Colors.white,
+                              border: Border.all(
+                                  width: 1, color: Colors.grey.shade300)),
+                          child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Text(
-                                '${item.notesTitle}',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              const SizedBox(
-                                height: 2,
-                              ),
-                              SizedBox(
-                                key: const Key('showMoreNotes'),
-                                child: ReadMoreText(
-                                  '${item.notesDescription}',
-                                  trimLines: 2,
-                                  preDataText: "",
-                                  preDataTextStyle: const TextStyle(
-                                      fontWeight: FontWeight.w500),
-                                  style: const TextStyle(color: Colors.black),
-                                  colorClickableText:
-                                      AppColor.primaryOrangeColor,
-                                  trimMode: TrimMode.Line,
-                                  trimCollapsedText: ' See More',
-                                  trimExpandedText: ' show less',
+                              Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: AppColor.lightPrimaryOrangeColor),
+                                padding: const EdgeInsets.all(8),
+                                child: const Icon(
+                                  Icons.note_alt_rounded,
+                                  color: AppColor.primaryOrangeColor,
                                 ),
                               ),
                               const SizedBox(
-                                height: 4,
+                                width: 8,
                               ),
-                              Row(
+                              Expanded(
+                                  child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(2),
-                                        color: item.isPaid ?? false
-                                            ? AppColor.primaryOrangeColor
-                                            : Colors.grey),
-                                    padding: const EdgeInsets.only(
-                                        left: 4, right: 4),
-                                    child: Text(
-                                      item.isPaid ?? false ? 'PREMIUM' : "FREE",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: item.isPaid!
-                                              ? Colors.white
-                                              : Colors.white),
+                                  Text(
+                                    '${item.notesTitle}',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(
+                                    height: 2,
+                                  ),
+                                  SizedBox(
+                                    key: const Key('showMoreNotes'),
+                                    child: ReadMoreText(
+                                      '${item.notesDescription}',
+                                      trimLines: 2,
+                                      preDataText: "",
+                                      preDataTextStyle: const TextStyle(
+                                          fontWeight: FontWeight.w500),
+                                      style:
+                                          const TextStyle(color: Colors.black),
+                                      colorClickableText:
+                                          AppColor.primaryOrangeColor,
+                                      trimMode: TrimMode.Line,
+                                      trimCollapsedText: ' See More',
+                                      trimExpandedText: ' show less',
                                     ),
                                   ),
                                   const SizedBox(
-                                    width: 8,
+                                    height: 4,
                                   ),
-                                  if (item.isPaid!)
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(2),
-                                          color: Colors.green),
-                                      padding: const EdgeInsets.only(
-                                          left: 4, right: 4),
-                                      child: const Text(
-                                        'PURCHASED',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(2),
+                                            color: item.isPaid ?? false
+                                                ? AppColor.primaryOrangeColor
+                                                : Colors.grey),
+                                        padding: const EdgeInsets.only(
+                                            left: 4, right: 4),
+                                        child: Text(
+                                          item.isPaid ?? false
+                                              ? 'PREMIUM'
+                                              : "FREE",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: item.isPaid!
+                                                  ? Colors.white
+                                                  : Colors.white),
+                                        ),
                                       ),
-                                    )
+                                      const SizedBox(
+                                        width: 8,
+                                      ),
+                                      if (item.isPaid!)
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(2),
+                                              color: Colors.green),
+                                          padding: const EdgeInsets.only(
+                                              left: 4, right: 4),
+                                          child: const Text(
+                                            'PURCHASED',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white),
+                                          ),
+                                        )
+                                    ],
+                                  ),
                                 ],
-                              ),
+                              ))
                             ],
-                          ))
-                        ],
+                          ),
+                        ),
                       ),
                     );
                   }),

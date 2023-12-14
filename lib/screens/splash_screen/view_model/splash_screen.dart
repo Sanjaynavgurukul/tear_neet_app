@@ -34,8 +34,6 @@ class SplashViewModel extends BaseViewModel {
       return;
     }
 
-    auth = fAuth;
-
     checkUser(id: fAuth.currentUser!.uid, context: context);
   }
 
