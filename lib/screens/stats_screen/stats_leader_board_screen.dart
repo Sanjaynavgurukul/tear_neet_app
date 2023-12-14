@@ -196,9 +196,9 @@ class _StatsLeaderBoardScreenState extends State<StatsLeaderBoardScreen> {
                 const SizedBox(
                   height: 4,
                 ),
-                const Text(
-                  '${4}',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                Text(
+                  '${item.score}',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 )
               ],
             )
@@ -263,19 +263,19 @@ class _StatsLeaderBoardScreenState extends State<StatsLeaderBoardScreen> {
             const SizedBox(
               width: 4,
             ),
-            const Column(
+            Column(
               children: [
-                Icon(
+                const Icon(
                   Icons.stacked_bar_chart,
                   color: AppColor.primaryOrangeColor,
                   size: 20,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 4,
                 ),
                 Text(
-                  '${4}',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  '${item.score}',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 )
               ],
             )
@@ -323,7 +323,7 @@ class _StatsLeaderBoardScreenState extends State<StatsLeaderBoardScreen> {
                       color: Colors.grey,
                       borderRadius: BorderRadius.circular(4)),
                   child: Text(
-                    '$position Position',
+                    '$position th Position',
                     style: const TextStyle(
                         fontSize: 12,
                         color: Colors.white,
@@ -335,19 +335,19 @@ class _StatsLeaderBoardScreenState extends State<StatsLeaderBoardScreen> {
             const SizedBox(
               width: 4,
             ),
-            const Column(
+            Column(
               children: [
-                Icon(
+                const Icon(
                   Icons.stacked_bar_chart,
                   color: Colors.grey,
                   size: 20,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 4,
                 ),
                 Text(
-                  '${4}',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  '${item.score}',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 )
               ],
             )

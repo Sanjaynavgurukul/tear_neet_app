@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:tyarineetki/helper/navigation_helper.dart';
 import 'package:tyarineetki/main.dart';
@@ -12,6 +13,7 @@ import 'package:tyarineetki/screens/exam_paper/view_model/exam_view_model.dart';
 import 'package:tyarineetki/screens/home/view_model/home_view_model.dart';
 import 'package:tyarineetki/theme/app_color.dart';
 import 'package:tyarineetki/widget/custom_cashe_image.dart';
+import 'package:tyarineetki/widget/read_more.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -50,14 +52,15 @@ class _HomeState extends State<Home> {
                 appBar(),
                 Expanded(
                     child: SingleChildScrollView(
+                      padding: EdgeInsets.only(bottom: 30),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      // slider(),
-                      // const Gap(20),
+                      slider(),
+                      const Gap(20),
                       paperSection(),
-                      // noteSection()
+                      noteSection()
                     ],
                   ),
                 ))
@@ -263,8 +266,12 @@ class _HomeState extends State<Home> {
                               padding: const EdgeInsets.only(
                                   left: 12, right: 12, bottom: 12, top: 12),
                               child: InkWell(
-                                onTap: (){
-                                  NavigationHelper().navigatePush(context: context, viewModel: ExamViewModel.argument(data: item), screen: const ExamDetailPage());
+                                onTap: () {
+                                  NavigationHelper().navigatePush(
+                                      context: context,
+                                      viewModel:
+                                          ExamViewModel.argument(data: item),
+                                      screen: const ExamDetailPage());
                                 },
                                 child: Container(
                                   alignment: Alignment.center,
@@ -348,50 +355,124 @@ class _HomeState extends State<Home> {
                 height: 12,
               ),
               SizedBox(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.only(
-                    left: 16,
-                    right: 16,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: List.generate(snapshot.data!.size, (index) {
-                      Map<String, dynamic> jso = snapshot.data!.docs[index]
-                          .data() as Map<String, dynamic>;
-                      NoteModel item = NoteModel.fromJson(jso);
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 10, bottom: 10),
-                        child: Container(
-                          padding: const EdgeInsets.only(
-                              left: 16, right: 16, top: 10, bottom: 10),
-                          height: 100,
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: AppColor.greenBGColor)),
-                          child: ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            title: Padding(
-                              padding: const EdgeInsets.only(bottom: 4),
-                              child: Text(
-                                '${item.notesTitle}',
-                                style: const TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w500),
-                              ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: List.generate(snapshot.data!.size, (index) {
+                    Map<String, dynamic> jso = snapshot.data!.docs[index].data()
+                        as Map<String, dynamic>;
+                    NoteModel item = NoteModel.fromJson(jso);
+
+                    return Container(
+                      margin:
+                          const EdgeInsets.only(left: 16, right: 16, bottom: 6),
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              offset: const Offset(0, 0),
+                              color: Colors.grey.shade300,
+                              blurRadius: 2.0,
                             ),
-                            subtitle: Padding(
-                              padding: const EdgeInsets.only(bottom: 4),
-                              child: Text('${item.notesDescription}',
-                                  style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400)),
+                          ],
+                          borderRadius: BorderRadius.circular(8),
+                          color: Colors.white,
+                          border: Border.all(
+                              width: 1, color: Colors.grey.shade300)),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: AppColor.lightPrimaryOrangeColor),
+                            padding: const EdgeInsets.all(8),
+                            child: const Icon(
+                              Icons.note_alt_rounded,
+                              color: AppColor.primaryOrangeColor,
                             ),
                           ),
-                        ),
-                      );
-                    }),
-                  ),
+                          const SizedBox(
+                            width: 8,
+                          ),
+                          Expanded(
+                              child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${item.notesTitle}',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(
+                                height: 2,
+                              ),
+                              SizedBox(
+                                key: const Key('showMoreNotes'),
+                                child: ReadMoreText(
+                                  '${item.notesDescription}',
+                                  trimLines: 2,
+                                  preDataText: "",
+                                  preDataTextStyle: const TextStyle(
+                                      fontWeight: FontWeight.w500),
+                                  style: const TextStyle(color: Colors.black),
+                                  colorClickableText:
+                                      AppColor.primaryOrangeColor,
+                                  trimMode: TrimMode.Line,
+                                  trimCollapsedText: ' See More',
+                                  trimExpandedText: ' show less',
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 4,
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(2),
+                                        color: item.isPaid ?? false
+                                            ? AppColor.primaryOrangeColor
+                                            : Colors.grey),
+                                    padding: const EdgeInsets.only(
+                                        left: 4, right: 4),
+                                    child: Text(
+                                      item.isPaid ?? false ? 'PREMIUM' : "FREE",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: item.isPaid!
+                                              ? Colors.white
+                                              : Colors.white),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 8,
+                                  ),
+                                  if (item.isPaid!)
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(2),
+                                          color: Colors.green),
+                                      padding: const EdgeInsets.only(
+                                          left: 4, right: 4),
+                                      child: const Text(
+                                        'PURCHASED',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white),
+                                      ),
+                                    )
+                                ],
+                              ),
+                            ],
+                          ))
+                        ],
+                      ),
+                    );
+                  }),
                 ),
               )
             ],

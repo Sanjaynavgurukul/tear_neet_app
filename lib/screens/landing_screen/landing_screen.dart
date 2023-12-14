@@ -36,43 +36,54 @@ class _LandingScreenState extends State<LandingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Map<String, dynamic> body = {
-            'coverImage':
-                'https://designforwriters.com/wp-content/uploads/2017/10/design-for-writers-book-cover-tf-2-a-million-to-one.jpg',
-            'paperTitle': 'NEET 2023 Exam Paper',
-            'totalQuestion': '200',
-            'totalTime': 200,
-            'type': 'needPaper',
-            'syllabus': [
-              {'label': 'Physics - Section A', 'value': '1-35'},
-              {
-                'label': 'Physics - Section B',
-                'value': '1-35 (attempt any 10)'
-              },
-              {'label': 'Chemistry - Section A', 'value': '1-35'},
-              {
-                'label': 'Chemistry - Section B',
-                'value': '1-35 (Attempt any 10)'
-              },
-              {'label': 'Biology - Section A', 'value': '1-35'},
-              {
-                'label': 'biology - Section A',
-                'value': '1-35 (Attempt any 10)'
-              },
-              {'label': 'Chemistry - Section A', 'value': '1-35'},
-              {
-                'label': 'Chemistry - Section A',
-                'value': '1-35 (Attempt any 10)'
-              }
-            ]
-          };
-
-          FirebaseFirestore.instance.collection('papers').add(body);
-        },
-        child: const Icon(Icons.add),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     Map<String, dynamic> body1 = {
+      //       'notesTitle': 'Demonstrate Note',
+      //       "notesDescription":
+      //           'Profile Icon Png Image Free Download Searchpng - Employee Photo Placeholder',
+      //       "type": 'demoDescin',
+      //       "noteUrl": 'https://www.africau.edu/images/default/sample.pdf',
+      //       "subscriptionType": 'YHUDJHSIJJJJ',
+      //       "isPaid": false
+      //     };
+      //     FirebaseFirestore.instance.collection('notes').add(body1);
+      //     return;
+      //     Map<String, dynamic> body = {
+      //       'coverImage':
+      //           'https://designforwriters.com/wp-content/uploads/2017/10/design-for-writers-book-cover-tf-2-a-million-to-one.jpg',
+      //       'paperTitle': 'NEET 2023 Exam Paper',
+      //       'totalQuestion': '200',
+      //       'totalTime': 200,
+      //       'type': 'needPaper',
+      //       'syllabus': [
+      //         {'label': 'Physics - Section A', 'value': '1-35'},
+      //         {
+      //           'label': 'Physics - Section B',
+      //           'value': '1-35 (attempt any 10)'
+      //         },
+      //         {'label': 'Chemistry - Section A', 'value': '1-35'},
+      //         {
+      //           'label': 'Chemistry - Section B',
+      //           'value': '1-35 (Attempt any 10)'
+      //         },
+      //         {'label': 'Biology - Section A', 'value': '1-35'},
+      //         {
+      //           'label': 'biology - Section A',
+      //           'value': '1-35 (Attempt any 10)'
+      //         },
+      //         {'label': 'Chemistry - Section A', 'value': '1-35'},
+      //         {
+      //           'label': 'Chemistry - Section A',
+      //           'value': '1-35 (Attempt any 10)'
+      //         }
+      //       ]
+      //     };
+      //
+      //     FirebaseFirestore.instance.collection('papers').add(body);
+      //   },
+      //   child: const Icon(Icons.add),
+      // ),
       bottomNavigationBar: BottomAppBar(
         child: Row(
           children: [
