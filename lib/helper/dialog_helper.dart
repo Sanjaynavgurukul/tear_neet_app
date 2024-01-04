@@ -51,6 +51,81 @@ class DialogHelper {
     );
   }
 
+  Future<bool?> showInfodialog(
+      {required BuildContext context, String? message,String? heading}) async {
+    return showDialog<bool?>(
+      context: context,
+      barrierDismissible: false, // Prevent dialog dismissal on tap outside.
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  heading ?? 'Warning',
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                Text(
+                  message ?? '',
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const SizedBox(height: 18),
+                InkWell(
+                  onTap: () => Navigator.pop(context, false),
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 20, right: 20),
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.transparent,
+                    ),
+                    child: Text(
+                      'Cancel',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.grey.shade500),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 18),
+                InkWell(
+                  onTap: () => Navigator.pop(context, true),
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 20, right: 20),
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: AppColor.primaryOrangeColor),
+                    child: const Text(
+                      'Continue',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Future<bool?> showPdfIfoDialod(
       {required BuildContext context,
       String? message,

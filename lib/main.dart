@@ -15,7 +15,7 @@ final FirebaseAuth auth = FirebaseAuth.instance;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   app = await Firebase.initializeApp();
-  // FirebaseAuth.instanceFor(app: app);
+  // Fire  baseAuth.instanceFor(app: app);
   runApp(const MyApp());
 }
 

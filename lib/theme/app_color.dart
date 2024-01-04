@@ -67,4 +67,6 @@ class AppColor {
         return avocadoColor;
     }
   }
+
 }
+

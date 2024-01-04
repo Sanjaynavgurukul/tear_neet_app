@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tyarineetki/db/share_pref.dart';
+import 'package:tyarineetki/helper/dialog_helper.dart';
 import 'package:tyarineetki/helper/navigation_helper.dart';
 import 'package:tyarineetki/model/paper_model.dart';
 import 'package:tyarineetki/screens/exam_paper/exam_screen.dart';
@@ -43,10 +46,26 @@ class _ExamDetailPageState extends State<ExamDetailPage> {
       floatingActionButton: FloatingActionButton.extended(
           backgroundColor: AppColor.primaryOrangeColor,
           onPressed: () {
-            NavigationHelper().navigatePush(
-                context: context,
-                viewModel: ExamViewModel.argument(data: viewModel.data),
-                screen: ExamScreen());
+            DateTime dateTime = DateTime.now();
+            pref.setTimer(value: dateTime.millisecondsSinceEpoch);
+            viewModel.startExam();
+            DialogHelper()
+                .showInfodialog(
+                    context: context,
+                    heading: 'Start Exam',
+                    message:
+                        'You are about to start the exam once you start will can nt cancel until complete the exam.')
+                .then((value) {
+              if (value == null || !value) {
+                return;
+              }
+
+              viewModel.startExam();
+              NavigationHelper().navigatePush(
+                  context: context,
+                  viewModel: ExamViewModel.argument(data: viewModel.data),
+                  screen: ExamScreen());
+            });
           },
           label: const Text('Start Test Now')),
       appBar: AppBar(

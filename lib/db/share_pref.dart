@@ -2,14 +2,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SharePreference {
   // set and get local login cred :D
-  Future<void> setTimer({required String value}) async {
+  Future<void> setTimer({required int value}) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('local_timer', value);
+    await prefs.setInt('examTimer', value);
   }
 
-  Future<String?> getTimer() async {
+  Future<int?> getTimer() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('local_timer');
+    return prefs.getInt('examTimer');
   }
 
   Future<void> setWelcomeDisplayed({required bool value}) async {
