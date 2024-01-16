@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -6,7 +7,6 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/provider.dart';
 import 'package:tyarineetki/db/share_pref.dart';
 import 'package:tyarineetki/helper/dialog_helper.dart';
-import 'package:tyarineetki/helper/time_helper.dart';
 import 'package:tyarineetki/screens/exam_paper/view_model/exam_view_model.dart';
 import 'package:tyarineetki/theme/app_color.dart';
 import 'package:tyarineetki/widget/custom_cashe_image.dart';
@@ -74,7 +74,7 @@ class _ExamScreenState extends State<ExamScreen> {
 
   Widget main() {
     Map<String, dynamic> item =
-        viewModel.getData[viewModel.currentQuestionPosition];
+        viewModel.getData![viewModel.currentQuestionPosition];
     bool answered = item['submitAnswer'].isNotEmpty;
     return Scaffold(
       bottomNavigationBar: SizedBox(
@@ -118,11 +118,11 @@ class _ExamScreenState extends State<ExamScreen> {
                     return;
                   }
                   if (viewModel.currentQuestionPosition ==
-                      viewModel.getData.length - 1) {
-                    DialogHelper().endExamDialog(context: context, data: {});
+                      viewModel.getData!.length - 1) {
+                    showSuccessDialog();
                     viewModel.showToast(
                         message:
-                            'Correct answer is ${viewModel.calculateScore()}/${viewModel.getData.length}',
+                            'Correct answer is ${viewModel.calculateScore()}/${viewModel.getData!.length}',
                         context: context);
                     return;
                   }
@@ -154,7 +154,7 @@ class _ExamScreenState extends State<ExamScreen> {
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
             ),
             Text(
-              'Total ${viewModel.getData.length} Question',
+              'Total ${viewModel.getData!.length} Question',
               style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.normal,
@@ -175,6 +175,89 @@ class _ExamScreenState extends State<ExamScreen> {
     );
   }
 
+  void showSuccessDialog() {
+    DialogHelper().showLoadingDialog(context: context);
+    int count = viewModel.calculateScore();
+    Navigator.pop(context);
+    showDialog<bool?>(
+      context: context,
+      barrierDismissible: true,
+      // Prevent dialog dismissal on tap outside.
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: WillPopScope(
+            onWillPop: () async {
+              return true;
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      color: Colors.green,
+                    ),
+                    child: const Icon(
+                      Icons.done,
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  const Text(
+                      "You have successfully complete the exam. Your score",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      )),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Text("Correct Answer : $count/50 ",
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      )),
+                  const Text("Total Score : 450/500",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      )),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text("Continue",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: AppColor.primaryOrangeColor,
+                            fontWeight: FontWeight.w700,
+                          )))
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Widget displayTimer() {
     return FutureBuilder<int?>(
       future: pref.getTimer(), // async work
@@ -186,19 +269,24 @@ class _ExamScreenState extends State<ExamScreen> {
             if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else {
-              if(snapshot.data == null || snapshot.data! == 0){
-                DialogHelper().showWarningDialog(context: context,message: 'Time out Please Try Again Later').then((value){
+              if (snapshot.data == null || snapshot.data! == 0) {
+                DialogHelper()
+                    .showWarningDialog(
+                        context: context,
+                        message: 'Time out Please Try Again Later')
+                    .then((value) {
                   Navigator.pop(context);
                 });
                 return const SizedBox();
               }
 
-              DateTime startTime = DateTime.fromMillisecondsSinceEpoch(snapshot.data!);
-              DateTime endTime = startTime.add(Duration(minutes: 200));
+              DateTime startTime =
+                  DateTime.fromMillisecondsSinceEpoch(snapshot.data!);
+              DateTime endTime = startTime.add(const Duration(minutes: 200));
               int second = endTime.difference(DateTime.now()).inSeconds;
               return CustomTimerText(
                   text: "",
-                  timerSec: second??0,
+                  timerSec: second ?? 0,
                   onEnd: () {},
                   textType: TextType.Heading1);
             }
@@ -234,7 +322,14 @@ class _ExamScreenState extends State<ExamScreen> {
   }
 
   Widget optionsItem(Map<String, dynamic> data, int index) {
-    List<Map<String, dynamic>> options = data['options'];
+    List<dynamic> initialData = data['options'];
+
+    List<Map<String, dynamic>> options = initialData.map((e) {
+      String d = jsonEncode(e);
+      return jsonDecode(d) as Map<String,dynamic>;
+    }).toList();
+
+    // List<Map<String, dynamic>> options = data['options'] as List<Map<String,dynamic>>;
     return Column(
       children: List.generate(options.length, (index) {
         String optionIndex = getAlphabet(index + 1);

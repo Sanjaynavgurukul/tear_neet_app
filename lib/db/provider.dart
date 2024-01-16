@@ -91,4 +91,18 @@ class Provider {
         .doc('${util.userId}')
         .snapshots();
   }
+
+  Future<DocumentReference?> saveSub(
+      {required Map<String, dynamic> body}) async {
+    final FirebaseFirestore db = FirebaseFirestore.instance;
+
+    return db
+        .collection('subscription')
+        .add(body)
+        .then((DocumentReference document) {
+      return document;
+    }).catchError((e) {
+      return null;
+    });
+  }
 }

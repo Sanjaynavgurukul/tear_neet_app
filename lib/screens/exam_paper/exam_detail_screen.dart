@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -46,26 +48,7 @@ class _ExamDetailPageState extends State<ExamDetailPage> {
       floatingActionButton: FloatingActionButton.extended(
           backgroundColor: AppColor.primaryOrangeColor,
           onPressed: () {
-            DateTime dateTime = DateTime.now();
-            pref.setTimer(value: dateTime.millisecondsSinceEpoch);
-            viewModel.startExam();
-            DialogHelper()
-                .showInfodialog(
-                    context: context,
-                    heading: 'Start Exam',
-                    message:
-                        'You are about to start the exam once you start will can nt cancel until complete the exam.')
-                .then((value) {
-              if (value == null || !value) {
-                return;
-              }
-
-              viewModel.startExam();
-              NavigationHelper().navigatePush(
-                  context: context,
-                  viewModel: ExamViewModel.argument(data: viewModel.data),
-                  screen: ExamScreen());
-            });
+            getData();
           },
           label: const Text('Start Test Now')),
       appBar: AppBar(
@@ -209,5 +192,42 @@ class _ExamDetailPageState extends State<ExamDetailPage> {
         ],
       ),
     );
+  }
+
+
+  void getData()async{
+   try{
+     log('check doc id ---- ${viewModel.data!.id}');
+     DialogHelper().showLoadingDialog(context: context);
+     final QuerySnapshot result =
+     await  FirebaseFirestore.instance.collection('papers').doc('${viewModel.data!.id}').collection('question').get();
+     final List<DocumentSnapshot> documents = result.docs;
+     List<Map<String,dynamic>> data = documents.map((e) => e.data() as Map<String,dynamic>).toList();
+
+     DateTime dateTime = DateTime.now();
+     pref.setTimer(value: dateTime.millisecondsSinceEpoch);
+     viewModel.startExam();
+     DialogHelper()
+         .showInfodialog(
+         context: context,
+         heading: 'Start Exam',
+         message:
+         'You are about to start the exam once you start will can nt cancel until complete the exam.')
+         .then((value) {
+       if (value == null || !value) {
+         return;
+       }
+
+       viewModel.startExam();
+       Navigator.pop(context);
+       NavigationHelper().navigatePush(
+           context: context,
+           viewModel: ExamViewModel.argument(data: viewModel.data,getData: data),
+           screen: ExamScreen());
+     });
+   }catch (e){
+     Navigator.pop(context);
+     DialogHelper().showWarningDialog(context: context,message: 'No Data Found');
+   }
   }
 }

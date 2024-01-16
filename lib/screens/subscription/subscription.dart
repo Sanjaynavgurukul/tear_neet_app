@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tyarineetki/helper/navigation_helper.dart';
+import 'package:tyarineetki/helper/utils.dart';
 import 'package:tyarineetki/model/subscription_model.dart';
+import 'package:tyarineetki/screens/purchase/purchase.dart';
 import 'package:tyarineetki/screens/subscription/view_model/subscription_view_model.dart';
 import 'package:tyarineetki/theme/app_color.dart';
 
@@ -143,7 +146,8 @@ class _SubscriptionState extends State<Subscription> {
                                 item.packageIncludes!.length, (index) {
                               String i = item.packageIncludes![index];
                               return Padding(
-                                padding: const EdgeInsets.only(top: 6, bottom: 6),
+                                padding:
+                                    const EdgeInsets.only(top: 6, bottom: 6),
                                 child: Text(
                                   '${i}',
                                   style: const TextStyle(
@@ -154,23 +158,39 @@ class _SubscriptionState extends State<Subscription> {
                           ),
                         Padding(
                           padding: const EdgeInsets.only(top: 40),
-                          child: Container(
-                            alignment: Alignment.center,
-                            padding: const EdgeInsets.all(16),
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              gradient: const LinearGradient(
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.topRight,
-                                  colors: [Colors.indigoAccent, Colors.purple]),
-                            ),
-                            child: const Text(
-                              'Purchase Now',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold),
+                          child: InkWell(
+                            onTap: () {
+                              Map<String, dynamic> body = {
+                                'userName': util.user!.name,
+                                'userEmail': util.user!.email,
+                                'userPhone': util.user!.phone,
+                                'amount':item.amount
+                              };
+                              NavigationHelper().normalNavigatePush(
+                                  context: context,
+                                  screen: PurchasePage(paramData: body));
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.all(16),
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                gradient: const LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.topRight,
+                                    colors: [
+                                      Colors.indigoAccent,
+                                      Colors.purple
+                                    ]),
+                              ),
+                              child: const Text(
+                                'Purchase Now',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                              ),
                             ),
                           ),
                         )

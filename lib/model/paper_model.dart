@@ -2,7 +2,9 @@ import 'package:tyarineetki/model/variable_converter.dart';
 
 class PaperModel {
   String? coverImage;
+  String? id;
   String? paperTitle;
+  String? leaderboardDocId;
   String? totalQuestion;
   String? details;
   num? totalTime;
@@ -12,16 +14,22 @@ class PaperModel {
   //default Cosntructor :D
   PaperModel(
       {this.totalQuestion,
+      this.id,
       this.coverImage,
+      this.leaderboardDocId,
       this.paperTitle,
       this.type,
       this.syllabus,
       this.totalTime,
       this.details});
 
-  factory PaperModel.fromJson(Map<String, dynamic> json) => PaperModel(
+  factory PaperModel.fromJson(Map<String, dynamic> json, String docId) =>
+      PaperModel(
+        id: docId,
         coverImage: VariableConverter.convertVariable(
             data: json['coverImage'], variableType: 'String'),
+        leaderboardDocId: VariableConverter.convertVariable(
+            data: json['leaderboardDocId'], variableType: 'String'),
         paperTitle: VariableConverter.convertVariable(
             data: json['paperTitle'], variableType: 'String'),
         type: VariableConverter.convertVariable(

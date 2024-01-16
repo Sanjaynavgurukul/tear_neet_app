@@ -177,7 +177,7 @@ class _HomeState extends State<Home> {
                     children: List.generate(snapshot.data!.size, (index) {
                       Map<String, dynamic> jso = snapshot.data!.docs[index]
                           .data() as Map<String, dynamic>;
-                      PaperModel item = PaperModel.fromJson(jso);
+                      PaperModel item = PaperModel.fromJson(jso,snapshot.data!.docs[index].id);
                       return Container(
                         width: 200,
                         margin: const EdgeInsets.only(
@@ -272,7 +272,7 @@ class _HomeState extends State<Home> {
                                   NavigationHelper().navigatePush(
                                       context: context,
                                       viewModel:
-                                          ExamViewModel.argument(data: item),
+                                          ExamViewModel.detailArgument(data: item),
                                       screen: const ExamDetailPage());
                                 },
                                 child: Container(

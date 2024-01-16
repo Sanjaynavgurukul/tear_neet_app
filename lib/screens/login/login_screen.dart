@@ -28,6 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void _onIntroEnd(context) {}
 
   Widget _buildImage(String url) {
+    return  Image.asset(url,width: double.infinity,height: double.infinity,fit: BoxFit.contain,);
     return CustomCacheImage(
       imageUrl: url,
       width: double.infinity,
@@ -45,28 +46,28 @@ class _LoginScreenState extends State<LoginScreen> {
       autoScrollDuration: 3000,
       infiniteAutoScroll: false,
       isProgress: true,
-      globalHeader: Align(
-        alignment: Alignment.topRight,
-        child: SafeArea(
-          bottom: false,
-          right: false,
-          left: false,
-          child: Padding(
-            padding: const EdgeInsets.only(right: 16, top: 16),
-            child: Container(
-              padding:
-                  const EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 4),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(100),
-                  color: Colors.black.withOpacity(0.6)),
-              child: const Text(
-                "English",
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ),
-        ),
-      ),
+      // globalHeader: Align(
+      //   alignment: Alignment.topRight,
+      //   child: SafeArea(
+      //     bottom: false,
+      //     right: false,
+      //     left: false,
+      //     child: Padding(
+      //       padding: const EdgeInsets.only(right: 16, top: 16),
+      //       child: Container(
+      //         padding:
+      //             const EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 4),
+      //         decoration: BoxDecoration(
+      //             borderRadius: BorderRadius.circular(100),
+      //             color: Colors.black.withOpacity(0.6)),
+      //         child: const Text(
+      //           "English",
+      //           style: TextStyle(color: Colors.white),
+      //         ),
+      //       ),
+      //     ),
+      //   ),
+      // ),
       globalFooter: Container(
         margin: const EdgeInsets.only(top: 12),
         width: double.infinity,
@@ -115,12 +116,16 @@ class _LoginScreenState extends State<LoginScreen> {
       pages: [
         getItem(
             image:
-                "https://watermark.lovepik.com/photo/40011/8111.jpg_wh1200.jpg"),
-        getItem(
-            image: "https://img.lovepik.com/photo/40012/3881.jpg_wh860.jpg"),
+                "assets/slider_1.png"),
         getItem(
             image:
-                "https://img.freepik.com/free-vector/medicine-pharmacy-blue-poster-with-hospital-symbols-flat-illustration_1284-36584.jpg"),
+            "assets/slider_2.png"),
+        getItem(
+            image:
+            "assets/slider_3.png"),
+        getItem(
+            image:
+            "assets/slider_4.png"),
       ],
       onDone: () => _onIntroEnd(context),
       onSkip: () => _onIntroEnd(context),
@@ -173,47 +178,12 @@ class _LoginScreenState extends State<LoginScreen> {
         alignment: Alignment.center,
         height: 300,
         width: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            tileMode: TileMode.mirror,
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0x00f44336), Colors.black38, Colors.black],
-            stops: [
-              0,
-              0.2,
-              0.6,
-            ],
-          ),
-          backgroundBlendMode: BlendMode.srcOver,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'An immutable description',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(
-              height: 6,
-            ),
-            Text(
-              'An immutable description of how to paint an arbitrary shape.',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.grey.shade400,
-                  fontSize: 14,
-                  fontWeight: FontWeight.normal),
-            ),
-          ],
-        ),
+
       ),
       titleWidget: const SizedBox(),
-      image: _buildImage('$image'),
+      image: Container(
+        color: Color(0xff03012e),
+          child: _buildImage('$image')),
       decoration: pageDecoration,
     );
   }

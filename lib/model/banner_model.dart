@@ -16,15 +16,21 @@ class BannerModel {
 class BannerModelData {
   String? image;
   String? type;
+  String? ctaType;
+  String? pdfLink;
 
   //default constructor
 
-  BannerModelData({this.image, this.type});
+  BannerModelData({this.image, this.type, this.ctaType, this.pdfLink});
 
   factory BannerModelData.fromJson(Map<String, dynamic> json) =>
       BannerModelData(
           image: VariableConverter.convertVariable(
               data: json['image'], variableType: 'String'),
+          ctaType: VariableConverter.convertVariable(
+              data: json['ctaType'], variableType: 'String'),
+          pdfLink: VariableConverter.convertVariable(
+              data: json['pdfLink'], variableType: 'String'),
           type: VariableConverter.convertVariable(
               data: json['type'], variableType: 'String'));
 }
