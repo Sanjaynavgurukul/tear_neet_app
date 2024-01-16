@@ -440,48 +440,6 @@ class _HomeState extends State<Home> {
                                   const SizedBox(
                                     height: 4,
                                   ),
-                                  Row(
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(2),
-                                            color: item.isPaid ?? false
-                                                ? AppColor.primaryOrangeColor
-                                                : Colors.grey),
-                                        padding: const EdgeInsets.only(
-                                            left: 4, right: 4),
-                                        child: Text(
-                                          item.isPaid ?? false
-                                              ? 'PREMIUM'
-                                              : "FREE",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: item.isPaid!
-                                                  ? Colors.white
-                                                  : Colors.white),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 8,
-                                      ),
-                                      if (item.isPaid!)
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              color: Colors.green),
-                                          padding: const EdgeInsets.only(
-                                              left: 4, right: 4),
-                                          child: const Text(
-                                            'PURCHASED',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white),
-                                          ),
-                                        )
-                                    ],
-                                  ),
                                 ],
                               ))
                             ],

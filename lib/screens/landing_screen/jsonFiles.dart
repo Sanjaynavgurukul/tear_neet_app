@@ -4172,11 +4172,20 @@ Map<String, dynamic> bannerData() {
   ///label = type appbar title
   ///bannerList
   return {
-    "image": "https://cdn.vectorstock.com/i/preview-1x/03/25/education-typography-banner-vector-26430325.jpg",
+    "image":
+        "https://cdn.vectorstock.com/i/preview-1x/03/25/education-typography-banner-vector-26430325.jpg",
     "type": "",
     "ctaType": "note",
     "pdfLink":
         "https://www.antennahouse.com/hubfs/xsl-fo-sample/pdf/basic-link-1.pdf",
     "label": "Some Note"
+  };
+}
+
+Map<String, dynamic> noteModel() {
+  return {
+    "noteUrl": "",
+    "type": "",
+    "ctaType": "note",
   };
 }
