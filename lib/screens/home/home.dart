@@ -177,7 +177,8 @@ class _HomeState extends State<Home> {
                     children: List.generate(snapshot.data!.size, (index) {
                       Map<String, dynamic> jso = snapshot.data!.docs[index]
                           .data() as Map<String, dynamic>;
-                      PaperModel item = PaperModel.fromJson(jso,snapshot.data!.docs[index].id);
+                      PaperModel item = PaperModel.fromJson(
+                          jso, snapshot.data!.docs[index].id);
                       return Container(
                         width: 200,
                         margin: const EdgeInsets.only(
@@ -271,8 +272,8 @@ class _HomeState extends State<Home> {
                                 onTap: () {
                                   NavigationHelper().navigatePush(
                                       context: context,
-                                      viewModel:
-                                          ExamViewModel.detailArgument(data: item),
+                                      viewModel: ExamViewModel.detailArgument(
+                                          data: item),
                                       screen: const ExamDetailPage());
                                 },
                                 child: Container(
@@ -372,8 +373,7 @@ class _HomeState extends State<Home> {
                         onTap: () {
                           NavigationHelper().navigatePush(
                               context: context,
-                              viewModel:
-                                  PdfViewModel.argument(data: item),
+                              viewModel: PdfViewModel.argument(data: item),
                               screen: const PdfViewScreen());
                         },
                         child: Container(
@@ -511,6 +511,7 @@ class _HomeState extends State<Home> {
 
   Widget slider() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         StreamBuilder(
             stream: viewModel.fetchBannerImage(),
@@ -544,22 +545,51 @@ class _HomeState extends State<Home> {
               if (item.data == null || item.data!.isEmpty) {
                 return const SizedBox();
               }
-              return CarouselSlider(
-                items: List.generate(item.data!.length, (index) {
-                  BannerModelData jso = item.data![index];
-                  return CustomCacheImage(
-                    imageUrl: jso.image,
-                    height: 190,
-                  );
-                }),
-                options: CarouselOptions(
-                  height: 190.0,
-                  autoPlay: true,
-                  autoPlayInterval: const Duration(
-                    seconds: 3,
-                  ),
-                  enlargeCenterPage: true,
-                ),
+
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                      padding:
+                          const EdgeInsets.only(left: 8, right: 16, bottom: 12),
+                      child: label(label: 'Announcement', wantPadding: false)),
+                  CarouselSlider(
+                    items: List.generate(item.data!.length, (index) {
+                      BannerModelData jso = item.data![index];
+                      return InkWell(
+                        onTap: jso.ctaType == null || jso.ctaType!.isEmpty
+                            ? null
+                            : () {
+                                if (jso.ctaType == "note") {
+                                  NoteModel noteModel = NoteModel(
+                                      notesTitle: jso.label,
+                                      noteUrl: jso.pdfLink);
+                                  NavigationHelper().navigatePush(
+                                      context: context,
+                                      viewModel: PdfViewModel.argument(
+                                          data: noteModel),
+                                      screen: const PdfViewScreen());
+                                  return;
+                                }
+
+                              },
+                        child: CustomCacheImage(
+                          imageUrl: jso.image,
+                          height: 210,
+                        ),
+                      );
+                    }),
+                    options: CarouselOptions(
+                      viewportFraction: 0.96,
+                      height: 220.0,
+                      autoPlay: true,
+                      autoPlayInterval: const Duration(
+                        seconds: 3,
+                      ),
+                      enlargeCenterPage: true,
+                    ),
+                  )
+                ],
               );
             }),
       ],

@@ -40,6 +40,7 @@ class _LandingScreenState extends State<LandingScreen> {
     return Scaffold(
       // floatingActionButton: FloatingActionButton(
       //   onPressed: () async {
+      //     FirebaseFirestore.instance.collection('innerContent').doc('banner').set(data)
       //   },
       //   child: const Icon(Icons.add),
       // ),

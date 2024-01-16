@@ -4158,13 +4158,25 @@ List<Map<String, dynamic>> questionList = [
 //
 // FirebaseFirestore.instance.collection('papers').add(body);
 
+Map<String, dynamic> leaderboardDataMapModel({required num score}) => {
+      'image': '${util.user!.profile}',
+      'name': '${util.user!.name}',
+      'number': '${util.user!.phone}',
+      'score': '$score',
+      'time': '${DateTime.now().millisecondsSinceEpoch}',
+      'erId': '${util.userId}',
+    };
 
-
- Map<String,dynamic> leaderboardDataMapModel({required num score}) => {
-  'image':'${util.user!.profile}',
-  'name':'${util.user!.name}',
-  'number':'${util.user!.phone}',
-  'score':'$score',
-  'time':'${DateTime.now().millisecondsSinceEpoch}',
-  'erId':'${util.userId}',
-};
+Map<String, dynamic> bannerData() {
+  ///CTA TYPE : note, paper
+  ///label = type appbar title
+  ///bannerList
+  return {
+    "image": "https://cdn.vectorstock.com/i/preview-1x/03/25/education-typography-banner-vector-26430325.jpg",
+    "type": "",
+    "ctaType": "note",
+    "pdfLink":
+        "https://www.antennahouse.com/hubfs/xsl-fo-sample/pdf/basic-link-1.pdf",
+    "label": "Some Note"
+  };
+}

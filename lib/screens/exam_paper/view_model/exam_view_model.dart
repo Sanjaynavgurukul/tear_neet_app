@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:tyarineetki/helper/base_view_model.dart';
 import 'package:tyarineetki/model/paper_model.dart';
-import 'package:tyarineetki/screens/landing_screen/question_list.dart';
+import 'package:tyarineetki/screens/landing_screen/jsonFiles.dart';
 
 class ExamViewModel extends BaseViewModel {
   int currentQuestionPosition = 0;
