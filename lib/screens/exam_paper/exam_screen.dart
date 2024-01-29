@@ -7,6 +7,8 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/provider.dart';
 import 'package:tyarineetki/db/share_pref.dart';
 import 'package:tyarineetki/helper/dialog_helper.dart';
+import 'package:tyarineetki/helper/navigation_helper.dart';
+import 'package:tyarineetki/screens/exam_paper/aswer_submit_preview.dart';
 import 'package:tyarineetki/screens/exam_paper/view_model/exam_view_model.dart';
 import 'package:tyarineetki/theme/app_color.dart';
 import 'package:tyarineetki/widget/custom_cashe_image.dart';
@@ -242,6 +244,10 @@ class _ExamScreenState extends State<ExamScreen> {
                   TextButton(
                       onPressed: () {
                         Navigator.pop(context);
+                        NavigationHelper().normalNavigatePush(
+                            context: context,
+                            screen: AnsWerSubmitPreview(
+                                data: viewModel.getData ?? []));
                       },
                       child: const Text("Continue",
                           style: TextStyle(
@@ -326,7 +332,7 @@ class _ExamScreenState extends State<ExamScreen> {
 
     List<Map<String, dynamic>> options = initialData.map((e) {
       String d = jsonEncode(e);
-      return jsonDecode(d) as Map<String,dynamic>;
+      return jsonDecode(d) as Map<String, dynamic>;
     }).toList();
 
     // List<Map<String, dynamic>> options = data['options'] as List<Map<String,dynamic>>;
@@ -377,7 +383,8 @@ class _ExamScreenState extends State<ExamScreen> {
                         ? CustomCacheImage(
                             imageUrl: item['content'],
                             borderRadius: BorderRadius.zero,
-                            height: 50,
+                            height: 200,
+                            fit: BoxFit.fill,
                           )
                         : Text(
                             item['content'],

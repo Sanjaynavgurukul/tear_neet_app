@@ -68,5 +68,6 @@ class ExamViewModel extends BaseViewModel {
   void saveResult({required num score})async{
     Map<String,dynamic> d = leaderboardDataMapModel(score: score);
       await FirebaseFirestore.instance.collection('leaderBoard').doc(data!.leaderboardDocId).collection('leadData').add(d);
+
   }
 }
