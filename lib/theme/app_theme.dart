@@ -9,7 +9,7 @@ class AppTheme {
       primaryColor: AppColor.primaryOrangeColor,
       scaffoldBackgroundColor: AppColor.whiteColor,
       fontFamily: 'WorkSans',
-      // useMaterial3: true,
+      useMaterial3: false,
       appBarTheme: const AppBarTheme(
           centerTitle: false,
           backgroundColor: Colors.white,

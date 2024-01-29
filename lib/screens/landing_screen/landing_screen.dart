@@ -1,9 +1,10 @@
 import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tyarineetki/helper/navigation_helper.dart';
+import 'package:tyarineetki/main.dart';
 import 'package:tyarineetki/screens/chat_group_list/chat_group_list.dart';
 import 'package:tyarineetki/screens/home/home.dart';
 import 'package:tyarineetki/screens/profile/profile_page.dart';
@@ -20,6 +21,22 @@ class LandingScreen extends StatefulWidget {
 }
 
 class _LandingScreenState extends State<LandingScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    super.initState();
+    FirebaseMessaging.instance.getInitialMessage().then(
+          (value) {},
+        );
+
+    FirebaseMessaging.onMessage.listen(showFlutterNotification);
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {});
+  }
+
+
+
   int selectedIndex = 0;
   List<Widget> pages = [
     const Home(),
@@ -28,6 +45,11 @@ class _LandingScreenState extends State<LandingScreen> {
     const TestScreen()
   ];
 
+
+  void getT()async{
+    String? token = await FirebaseMessaging.instance.getToken();
+    log('cehck token ---- ${token}');
+  }
   Color getColor(int index) {
     if (index == selectedIndex) {
       return AppColor.primaryOrangeColor;
@@ -38,12 +60,12 @@ class _LandingScreenState extends State<LandingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () async {
-      //     FirebaseFirestore.instance.collection('innerContent').doc('banner').set(data)
-      //   },
-      //   child: const Icon(Icons.add),
-      // ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          getT();
+        },
+        child: const Icon(Icons.add),
+      ),
       bottomNavigationBar: BottomAppBar(
         child: Row(
           children: [

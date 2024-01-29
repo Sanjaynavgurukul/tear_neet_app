@@ -70,6 +70,8 @@ dependencies:
   uuid: any
   syncfusion_flutter_pdfviewer: ^23.2.7
   flutter_html: any
+  flutter_local_notifications: ^16.3.2
+
 
 
 dev_dependencies:

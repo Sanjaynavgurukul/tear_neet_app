@@ -4167,6 +4167,10 @@ Map<String, dynamic> leaderboardDataMapModel({required num score}) => {
       'erId': '${util.userId}',
     };
 
+Map<String, dynamic> subscriptionModel() {
+  return {};
+}
+
 Map<String, dynamic> bannerData() {
   ///CTA TYPE : note, paper
   ///label = type appbar title
