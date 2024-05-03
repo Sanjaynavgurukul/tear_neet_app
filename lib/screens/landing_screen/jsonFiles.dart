@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tyarineetki/helper/utils.dart';
 
 List<Map<String, dynamic>> questionList = [
@@ -4176,8 +4177,9 @@ Map<String, dynamic> bannerData() {
   ///label = type appbar title
   ///bannerList
   return {
+    "paperId":"LpqUQH0FDbG1aMaWeYWb",//This is is paper id
     "image":
-        "https://cdn.vectorstock.com/i/preview-1x/03/25/education-typography-banner-vector-26430325.jpg",
+        "https://www.requestadobe.com/assets/_resources/Social_assets/Adobe_Education_Black_Banner_1200x670.jpg",
     "type": "",
     "ctaType": "note",
     "pdfLink":
@@ -4192,4 +4194,43 @@ Map<String, dynamic> noteModel() {
     "type": "",
     "ctaType": "note",
   };
+}
+
+void addSubect(){
+  List<Map<String,dynamic>> data = [
+    {
+      "icon":'https://cdn-icons-png.flaticon.com/512/188/188802.png',
+      "type":"physics",
+      "label":"Physics"
+    },
+    {
+      "icon":'https://www.kindpng.com/picc/m/332-3321771_thumb-image-maths-icon-png-transparent-png.png',
+      "type":"math",
+      "label":"Math"
+    },
+    {
+      "icon":'https://icons.veryicon.com/png/o/education-technology/educational-icon-1/chemistry-6.png',
+      "type":"chemistry",
+      "label":"Chemistry"
+    },
+    {
+      "icon":'https://cdn-icons-png.flaticon.com/512/10310/10310245.png',
+      "type":"account",
+      "label":"Account"
+    },
+    {
+      "icon":'https://freepngimg.com/download/icon/business/70298-management-business-icons-consultant-company-social-marketing.png',
+      "type":"business",
+      "label":"Business"
+    },
+    {
+      "icon":'https://cdn-icons-png.flaticon.com/512/981/981272.png',
+      "type":"politics",
+      "label":"Politics"
+    },
+  ];
+
+  for (var i in data){
+    FirebaseFirestore.instance.collection('subject').add(i);
+  }
 }

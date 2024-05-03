@@ -21,6 +21,10 @@ class HomeViewModel extends BaseViewModel {
     return repository.fetchBannerImage();
   }
 
+  Stream<QuerySnapshot> getSubjectList() {
+    return repository.getSubjectList();
+  }
+
   void updateNotify(){
     notifyListeners();
   }

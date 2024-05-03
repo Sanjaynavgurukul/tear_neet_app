@@ -8,12 +8,17 @@ import 'package:tyarineetki/screens/landing_screen/jsonFiles.dart';
 class ExamViewModel extends BaseViewModel {
   int currentQuestionPosition = 0;
   PaperModel? data;
-  List<Map<String,dynamic>>? getData;
+  List<Map<String, dynamic>>? getData;
+  String? paperId;
+  bool fromDynamic = false;
 
   ExamViewModel();
 
+  ExamViewModel.dynamic({required this.paperId, this.fromDynamic = true});
+
   ExamViewModel.detailArgument({required this.data});
-  ExamViewModel.argument({required this.data,required this.getData});
+
+  ExamViewModel.argument({required this.data, required this.getData});
 
   @override
   void showToast({required String message, required BuildContext context}) {
@@ -25,7 +30,7 @@ class ExamViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void startExam(){
+  void startExam() {
     repository.startExam();
   }
 
@@ -65,9 +70,23 @@ class ExamViewModel extends BaseViewModel {
     return count;
   }
 
-  void saveResult({required num score})async{
-    Map<String,dynamic> d = leaderboardDataMapModel(score: score);
-      await FirebaseFirestore.instance.collection('leaderBoard').doc(data!.leaderboardDocId).collection('leadData').add(d);
+  void saveResult({required num score}) async {
+    Map<String, dynamic> d = leaderboardDataMapModel(score: score);
+    await FirebaseFirestore.instance
+        .collection('leaderBoard')
+        .doc(data!.leaderboardDocId)
+        .collection('leadData')
+        .add(d);
+  }
 
+  void getDynamicData() async {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('papers')
+        .doc(paperId)
+        .get();
+    Map<String, dynamic> jso = documentSnapshot.data() as Map<String, dynamic>;
+    PaperModel item = PaperModel.fromJson(jso, documentSnapshot.id);
+    data = item;
+    notifyListeners();
   }
 }

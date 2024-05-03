@@ -7,12 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:417746687100:android:0a52e0a23a75a69cebe5f9",
+        "mobilesdk_app_id": "1:417746687100:android:d96951607eb29e53ebe5f9",
         "android_client_info": {
           "package_name": "com.tyari.tyarineetki"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "417746687100-v42smmeictq5peuvj8ji97g1lpupif41.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAmZP7nu66uqraE42EhuDn3hpFmQa2_xNI"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "417746687100-gkc1v03amhna27dtfrtun7m55m88mhli.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "417746687100-2ef7u05bnselq1f1ninbffg66vi89e6g.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.tayari"
+              }
+            }
+          ]
         }
       }
     }

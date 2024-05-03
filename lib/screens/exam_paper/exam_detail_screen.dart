@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tyarineetki/db/share_pref.dart';
@@ -12,7 +13,9 @@ import 'package:tyarineetki/screens/exam_paper/view_model/exam_view_model.dart';
 import 'package:tyarineetki/theme/app_color.dart';
 
 class ExamDetailPage extends StatefulWidget {
-  const ExamDetailPage({super.key});
+  const ExamDetailPage({super.key, this.fromDynamic = false});
+
+  final bool fromDynamic;
 
   @override
   State<ExamDetailPage> createState() => _ExamDetailPageState();
@@ -25,6 +28,17 @@ class _ExamDetailPageState extends State<ExamDetailPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      getDynamicData();
+    });
+  }
+
+  void getDynamicData() {
+    if (!widget.fromDynamic) {
+      return;
+    }
+
+    viewModel.getDynamicData();
   }
 
   @override
@@ -60,6 +74,10 @@ class _ExamDetailPageState extends State<ExamDetailPage> {
   }
 
   Widget mainView() {
+    if(viewModel.data == null){
+      return const Center(child: CupertinoActivityIndicator(),);
+    }
+
     return SingleChildScrollView(
       padding: const EdgeInsets.only(left: 16, right: 16),
       child: SizedBox(
@@ -194,40 +212,45 @@ class _ExamDetailPageState extends State<ExamDetailPage> {
     );
   }
 
+  void getData() async {
+    try {
+      log('check doc id ---- ${viewModel.data!.id}');
+      DialogHelper().showLoadingDialog(context: context);
+      final QuerySnapshot result = await FirebaseFirestore.instance
+          .collection('papers')
+          .doc('${viewModel.data!.id}')
+          .collection('question')
+          .get();
+      final List<DocumentSnapshot> documents = result.docs;
+      List<Map<String, dynamic>> data =
+          documents.map((e) => e.data() as Map<String, dynamic>).toList();
 
-  void getData()async{
-   try{
-     log('check doc id ---- ${viewModel.data!.id}');
-     DialogHelper().showLoadingDialog(context: context);
-     final QuerySnapshot result =
-     await  FirebaseFirestore.instance.collection('papers').doc('${viewModel.data!.id}').collection('question').get();
-     final List<DocumentSnapshot> documents = result.docs;
-     List<Map<String,dynamic>> data = documents.map((e) => e.data() as Map<String,dynamic>).toList();
+      DateTime dateTime = DateTime.now();
+      pref.setTimer(value: dateTime.millisecondsSinceEpoch);
+      viewModel.startExam();
+      DialogHelper()
+          .showInfodialog(
+              context: context,
+              heading: 'Start Exam',
+              message:
+                  'You are about to start the exam once you start will can nt cancel until complete the exam.')
+          .then((value) {
+        if (value == null || !value) {
+          return;
+        }
 
-     DateTime dateTime = DateTime.now();
-     pref.setTimer(value: dateTime.millisecondsSinceEpoch);
-     viewModel.startExam();
-     DialogHelper()
-         .showInfodialog(
-         context: context,
-         heading: 'Start Exam',
-         message:
-         'You are about to start the exam once you start will can nt cancel until complete the exam.')
-         .then((value) {
-       if (value == null || !value) {
-         return;
-       }
-
-       viewModel.startExam();
-       Navigator.pop(context);
-       NavigationHelper().navigatePush(
-           context: context,
-           viewModel: ExamViewModel.argument(data: viewModel.data,getData: data),
-           screen: ExamScreen());
-     });
-   }catch (e){
-     Navigator.pop(context);
-     DialogHelper().showWarningDialog(context: context,message: 'No Data Found');
-   }
+        viewModel.startExam();
+        Navigator.pop(context);
+        NavigationHelper().navigatePush(
+            context: context,
+            viewModel:
+                ExamViewModel.argument(data: viewModel.data, getData: data),
+            screen: ExamScreen());
+      });
+    } catch (e) {
+      Navigator.pop(context);
+      DialogHelper()
+          .showWarningDialog(context: context, message: 'No Data Found');
+    }
   }
 }

@@ -16,6 +16,9 @@ class Repository {
   Stream<QuerySnapshot> fetchLeaderBoardList() =>
       _provider.fetchLeaderBoardList();
 
+  Stream<QuerySnapshot> getSubjectList() =>
+      _provider.getSubjectList();
+
   Stream<QuerySnapshot> fetchList({required String colId}) =>
       _provider.fetchList(colId: colId);
 
