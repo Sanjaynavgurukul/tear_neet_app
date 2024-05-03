@@ -28,6 +28,10 @@ class Provider {
     return _db.collection('subject').snapshots();
   }
 
+  Stream<QuerySnapshot> getChapterList({required String chapterId}) {
+    return _db.collection('subject').doc(chapterId).collection('chapters').snapshots();
+  }
+
   Stream<QuerySnapshot> fetchList({required String colId}) {
     return _db
         .collection(colId)

@@ -14,6 +14,8 @@ import 'package:tyarineetki/screens/exam_paper/view_model/exam_view_model.dart';
 import 'package:tyarineetki/screens/home/view_model/home_view_model.dart';
 import 'package:tyarineetki/screens/pdf_view/pdf_view_screen.dart';
 import 'package:tyarineetki/screens/pdf_view/view_model/pdf_view_model.dart';
+import 'package:tyarineetki/screens/subject_chapter/subject_chatper.dart';
+import 'package:tyarineetki/screens/subject_chapter/view_model/subject_chapter_view_model.dart';
 import 'package:tyarineetki/theme/app_color.dart';
 import 'package:tyarineetki/widget/custom_cashe_image.dart';
 import 'package:tyarineetki/widget/feature_label.dart';
@@ -93,7 +95,7 @@ class _HomeState extends State<Home> {
         padding: const EdgeInsets.only(bottom: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [slider(), subjectSection(), paperSection(),noteSection()],
+          children: [slider(), subjectSection(), paperSection(), noteSection()],
         ),
       ),
     );
@@ -134,30 +136,40 @@ class _HomeState extends State<Home> {
                   child: Row(
                     children: List.generate(data.data!.length, (index) {
                       SubjectModelData item = data.data![index];
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CustomCacheImage(
-                            shadow: [
-                              BoxShadow(
-                                  color: Colors.grey.shade300,
-                                  blurRadius: 4.0,
-                                  spreadRadius: 1),
-                            ],
-                            borderRadius: BorderRadius.circular(100),
-                            color: Colors.white,
-                            imageUrl: item.icon,
-                            width: 60,
-                            height: 60,
-                            padding: const EdgeInsets.all(6),
-                            margin: const EdgeInsets.only(right: 8),
-                          ),
-                          const SizedBox(
-                            height: 4,
-                          ),
-                          Text('${item.label}')
-                        ],
+                      return InkWell(
+                        onTap: () {
+                          NavigationHelper().navigatePush(
+                              context: context,
+                              viewModel: SubjectChapterViewModel(),
+                              screen: SubjectChapter(
+                                data: item,
+                              ));
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomCacheImage(
+                              shadow: [
+                                BoxShadow(
+                                    color: Colors.grey.shade300,
+                                    blurRadius: 4.0,
+                                    spreadRadius: 1),
+                              ],
+                              borderRadius: BorderRadius.circular(100),
+                              color: Colors.white,
+                              imageUrl: item.icon,
+                              width: 60,
+                              height: 60,
+                              padding: const EdgeInsets.all(6),
+                              margin: const EdgeInsets.only(right: 8),
+                            ),
+                            const SizedBox(
+                              height: 4,
+                            ),
+                            Text('${item.label}')
+                          ],
+                        ),
                       );
                     }),
                   ),
@@ -243,7 +255,8 @@ class _HomeState extends State<Home> {
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.w500, fontSize: 16),
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16),
                                 ),
                               ),
                               const SizedBox(
@@ -259,7 +272,8 @@ class _HomeState extends State<Home> {
                                     Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
                                         const Text(
                                           'Time : ',
@@ -279,7 +293,8 @@ class _HomeState extends State<Home> {
                                     Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
                                         const Text(
                                           'Questions : ',
@@ -395,12 +410,12 @@ class _HomeState extends State<Home> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: List.generate(snapshot.data!.size, (index) {
                     Map<String, dynamic> jso = snapshot.data!.docs[index].data()
-                    as Map<String, dynamic>;
+                        as Map<String, dynamic>;
                     NoteModel item = NoteModel.fromJson(jso);
 
                     return Padding(
                       padding:
-                      const EdgeInsets.only(left: 16, right: 16, bottom: 6),
+                          const EdgeInsets.only(left: 16, right: 16, bottom: 6),
                       child: InkWell(
                         onTap: () {
                           NavigationHelper().navigatePush(
@@ -441,39 +456,39 @@ class _HomeState extends State<Home> {
                               ),
                               Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '${item.notesTitle}',
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      const SizedBox(
-                                        height: 2,
-                                      ),
-                                      SizedBox(
-                                        key: const Key('showMoreNotes'),
-                                        child: ReadMoreText(
-                                          '${item.notesDescription}',
-                                          trimLines: 2,
-                                          preDataText: "",
-                                          preDataTextStyle: const TextStyle(
-                                              fontWeight: FontWeight.w500),
-                                          style:
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${item.notesTitle}',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(
+                                    height: 2,
+                                  ),
+                                  SizedBox(
+                                    key: const Key('showMoreNotes'),
+                                    child: ReadMoreText(
+                                      '${item.notesDescription}',
+                                      trimLines: 2,
+                                      preDataText: "",
+                                      preDataTextStyle: const TextStyle(
+                                          fontWeight: FontWeight.w500),
+                                      style:
                                           const TextStyle(color: Colors.black),
-                                          colorClickableText:
+                                      colorClickableText:
                                           AppColor.primaryOrangeColor,
-                                          trimMode: TrimMode.Line,
-                                          trimCollapsedText: ' See More',
-                                          trimExpandedText: ' show less',
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 4,
-                                      ),
-                                    ],
-                                  ))
+                                      trimMode: TrimMode.Line,
+                                      trimCollapsedText: ' See More',
+                                      trimExpandedText: ' show less',
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 4,
+                                  ),
+                                ],
+                              ))
                             ],
                           ),
                         ),
@@ -619,7 +634,6 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-
 
   Widget label({required String label, bool wantPadding = true}) {
     return Padding(

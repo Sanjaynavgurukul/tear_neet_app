@@ -19,6 +19,9 @@ class Repository {
   Stream<QuerySnapshot> getSubjectList() =>
       _provider.getSubjectList();
 
+  Stream<QuerySnapshot> getChapterList({required String chapterId}) =>
+      _provider.getChapterList(chapterId: chapterId);
+
   Stream<QuerySnapshot> fetchList({required String colId}) =>
       _provider.fetchList(colId: colId);
 

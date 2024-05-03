@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tyarineetki/helper/utils.dart';
+import 'package:tyarineetki/model/chapter_model.dart';
 
 List<Map<String, dynamic>> questionList = [
   {
@@ -4177,7 +4178,7 @@ Map<String, dynamic> bannerData() {
   ///label = type appbar title
   ///bannerList
   return {
-    "paperId":"LpqUQH0FDbG1aMaWeYWb",//This is is paper id
+    "paperId": "LpqUQH0FDbG1aMaWeYWb", //This is is paper id
     "image":
         "https://www.requestadobe.com/assets/_resources/Social_assets/Adobe_Education_Black_Banner_1200x670.jpg",
     "type": "",
@@ -4196,41 +4197,89 @@ Map<String, dynamic> noteModel() {
   };
 }
 
-void addSubect(){
-  List<Map<String,dynamic>> data = [
+void addSubect() {
+  List<Map<String, dynamic>> data = [
     {
-      "icon":'https://cdn-icons-png.flaticon.com/512/188/188802.png',
-      "type":"physics",
-      "label":"Physics"
+      "icon": 'https://cdn-icons-png.flaticon.com/512/188/188802.png',
+      "type": "physics",
+      "label": "Physics"
     },
     {
-      "icon":'https://www.kindpng.com/picc/m/332-3321771_thumb-image-maths-icon-png-transparent-png.png',
-      "type":"math",
-      "label":"Math"
+      "icon":
+          'https://www.kindpng.com/picc/m/332-3321771_thumb-image-maths-icon-png-transparent-png.png',
+      "type": "math",
+      "label": "Math"
     },
     {
-      "icon":'https://icons.veryicon.com/png/o/education-technology/educational-icon-1/chemistry-6.png',
-      "type":"chemistry",
-      "label":"Chemistry"
+      "icon":
+          'https://icons.veryicon.com/png/o/education-technology/educational-icon-1/chemistry-6.png',
+      "type": "chemistry",
+      "label": "Chemistry"
     },
     {
-      "icon":'https://cdn-icons-png.flaticon.com/512/10310/10310245.png',
-      "type":"account",
-      "label":"Account"
+      "icon": 'https://cdn-icons-png.flaticon.com/512/10310/10310245.png',
+      "type": "account",
+      "label": "Account"
     },
     {
-      "icon":'https://freepngimg.com/download/icon/business/70298-management-business-icons-consultant-company-social-marketing.png',
-      "type":"business",
-      "label":"Business"
+      "icon":
+          'https://freepngimg.com/download/icon/business/70298-management-business-icons-consultant-company-social-marketing.png',
+      "type": "business",
+      "label": "Business"
     },
     {
-      "icon":'https://cdn-icons-png.flaticon.com/512/981/981272.png',
-      "type":"politics",
-      "label":"Politics"
+      "icon": 'https://cdn-icons-png.flaticon.com/512/981/981272.png',
+      "type": "politics",
+      "label": "Politics"
     },
   ];
 
-  for (var i in data){
+  for (var i in data) {
     FirebaseFirestore.instance.collection('subject').add(i);
+  }
+}
+
+void addChapterList() {
+  List<ChapterModelData> data = [
+    ChapterModelData(
+        label: 'There are a total',
+        description:
+            'There are a total of five subjects in CBSE class 12, out of which four are mandatory',
+        index: 1,
+        itemPrice: 130,
+        pdfLink:
+            'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+        totalTimeInMin: "40"),
+    ChapterModelData(
+        label: 'commerce CBSE class 12',
+        description:
+        'the students depending on their interests',
+        index: 2,
+        itemPrice: 99,
+        pdfLink:
+        'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+        totalTimeInMin: "40"),
+    ChapterModelData(
+        label: 'There are a total',
+        description:
+        'There are a total of five subjects in CBSE class 12, out of which four are mandatory',
+        index: 3,
+        itemPrice: 150,
+        pdfLink:
+        'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+        totalTimeInMin: "40"),
+    ChapterModelData(
+        label: 'There are a total',
+        description:
+        'There are a total of five subjects in CBSE class 12, out of which four are mandatory',
+        index: 4,
+        itemPrice: 200,
+        pdfLink:
+        'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+        totalTimeInMin: "40")
+  ];
+
+  for(var i in data){
+    FirebaseFirestore.instance.collection('subject').doc('8IETkR7PQmoOMDIuhSYZ').collection('chapters').add(i.toJson());
   }
 }
