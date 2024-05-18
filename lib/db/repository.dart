@@ -34,6 +34,7 @@ class Repository {
       _provider.addNewMessage(body: body, groupType: groupType);
 
   Stream<DocumentSnapshot> fetchBannerImage() => _provider.fetchBannerImage();
+  Stream<DocumentSnapshot> getSplashImage() => _provider.getSplashImage();
 
   void newUser({required Map<String, dynamic> body, required String userId}) {
     _provider.newUser(body: body, userId: userId);
