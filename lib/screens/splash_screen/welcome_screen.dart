@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tyarineetki/db/share_pref.dart';
 import 'package:tyarineetki/helper/navigation_helper.dart';
 import 'package:tyarineetki/screens/landing_screen/landing_screen.dart';
+import 'package:tyarineetki/screens/landing_screen/view_model/landing_view_model.dart';
 import 'package:tyarineetki/theme/app_color.dart';
 import 'package:tyarineetki/widget/feature_label.dart';
 
@@ -21,8 +22,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             backgroundColor: AppColor.primaryOrangeColor,
             onPressed: () {
               pref.setWelcomeDisplayed(value: true);
-              NavigationHelper().normalNavigatePushReplacement(
-                  context: context, screen: const LandingScreen());
+              NavigationHelper().navigatePushReplacement(
+                  context: context,viewModel: LandingViewModel(), screen: const LandingScreen());
             },
             label: const Text('Continue')),
         body: SafeArea(

@@ -4246,6 +4246,7 @@ void addChapterList() {
         description:
             'There are a total of five subjects in CBSE class 12, out of which four are mandatory',
         index: 1,
+        isPaid: true,
         itemPrice: 130,
         pdfLink:
             'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
@@ -4256,6 +4257,7 @@ void addChapterList() {
         'the students depending on their interests',
         index: 2,
         itemPrice: 99,
+        isPaid: true,
         pdfLink:
         'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
         totalTimeInMin: "40"),
@@ -4265,6 +4267,7 @@ void addChapterList() {
         'There are a total of five subjects in CBSE class 12, out of which four are mandatory',
         index: 3,
         itemPrice: 150,
+        isPaid: true,
         pdfLink:
         'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
         totalTimeInMin: "40"),
@@ -4273,6 +4276,7 @@ void addChapterList() {
         description:
         'There are a total of five subjects in CBSE class 12, out of which four are mandatory',
         index: 4,
+        isPaid: true,
         itemPrice: 200,
         pdfLink:
         'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',

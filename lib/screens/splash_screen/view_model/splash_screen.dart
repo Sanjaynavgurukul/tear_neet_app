@@ -10,6 +10,7 @@ import 'package:tyarineetki/helper/utils.dart';
 import 'package:tyarineetki/main.dart';
 import 'package:tyarineetki/model/User.dart';
 import 'package:tyarineetki/screens/landing_screen/landing_screen.dart';
+import 'package:tyarineetki/screens/landing_screen/view_model/landing_view_model.dart';
 import 'package:tyarineetki/screens/login/login_screen.dart';
 import 'package:tyarineetki/screens/login/view_model/login_view_model.dart';
 import 'package:tyarineetki/screens/splash_screen/welcome_screen.dart';
@@ -96,7 +97,7 @@ class SplashViewModel extends BaseViewModel {
   void navigateToLanding({required BuildContext context}) {
     Future.delayed(const Duration(seconds: 3), (() {
       NavigationHelper()
-          .normalNavigatePushReplacementUntil(context: context, screen: const LandingScreen());
+          .navigatePushReplacementUntil(context: context, viewModel:LandingViewModel(),screen: const LandingScreen());
     }));
   }
 }

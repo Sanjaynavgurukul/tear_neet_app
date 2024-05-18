@@ -21,6 +21,10 @@ class HomeViewModel extends BaseViewModel {
     return repository.fetchBannerImage();
   }
 
+  Stream<DocumentSnapshot> fetchUpcomingFeature() {
+    return repository.fetchUpcomingFeature();
+  }
+
   Stream<QuerySnapshot> getSubjectList() {
     return repository.getSubjectList();
   }

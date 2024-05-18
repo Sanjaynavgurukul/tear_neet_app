@@ -14,7 +14,7 @@ class ChapterModel {
                   ? []
                   : List<ChapterModelData>.from(docs.map((e) =>
                       ChapterModelData.fromJson(
-                          e.data() as Map<String, dynamic>))));
+                          e.data() as Map<String, dynamic>,e.id))));
 }
 
 class ChapterModelData {
@@ -24,17 +24,24 @@ class ChapterModelData {
   num? itemPrice;
   String? pdfLink;
   num? index;
+  bool? isPaid;
+  String? id;
+  String? type;
 
   ChapterModelData(
       {this.label,
       this.description,
       this.itemPrice,
+      this.isPaid,
+      this.id,
+      this.type,
       this.pdfLink,
       this.totalTimeInMin,
       this.index});
 
-  factory ChapterModelData.fromJson(Map<String, dynamic> json) =>
+  factory ChapterModelData.fromJson(Map<String, dynamic> json,String docId) =>
       ChapterModelData(
+        id: docId,
         label: VariableConverter.convertVariable(
             data: json['label'], variableType: 'String'),
         description: VariableConverter.convertVariable(
@@ -43,10 +50,13 @@ class ChapterModelData {
             data: json['itemPrice'], variableType: 'int'),
         pdfLink: VariableConverter.convertVariable(
             data: json['pdfLink'], variableType: 'String'),
+        type: VariableConverter.convertVariable(
+            data: json['type'], variableType: 'String'),
         totalTimeInMin: VariableConverter.convertVariable(
             data: json['totalTimeInMin'], variableType: 'String'),
         index: VariableConverter.convertVariable(
-            data: json['index'], variableType: 'int'),
+            data: json['index'], variableType: 'int'), isPaid: VariableConverter.convertVariable(
+            data: json['isPaid'], variableType: 'bool'),
       );
 
   Map<String, dynamic> toJson() {
@@ -56,7 +66,9 @@ class ChapterModelData {
       "itemPrice": itemPrice,
       "pdfLink": pdfLink,
       "totalTimeInMin": totalTimeInMin,
+      "type": type,
       "index": index,
+      "isPaid": isPaid,
     };
   }
 }

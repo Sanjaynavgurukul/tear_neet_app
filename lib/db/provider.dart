@@ -54,6 +54,18 @@ class Provider {
         .doc('banner')
         .snapshots();
   }
+  Stream<DocumentSnapshot> fetchUpcomingFeature() {
+    return FirebaseFirestore.instance
+        .collection('innerContent')
+        .doc('upcomingFeature')
+        .snapshots();
+  }
+
+  Stream<QuerySnapshot> fetchSubjectSubscription() {
+    return FirebaseFirestore.instance
+        .collection('subject_subscription').where('userId',isEqualTo: util.userId)
+        .snapshots();
+  }
 
   Stream<DocumentSnapshot> getSplashImage() {
     return FirebaseFirestore.instance

@@ -1,14 +1,19 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tyarineetki/helper/navigation_helper.dart';
+import 'package:tyarineetki/helper/utils.dart';
 import 'package:tyarineetki/main.dart';
+import 'package:tyarineetki/model/subject_subscription_model.dart';
 import 'package:tyarineetki/screens/chat_group_list/chat_group_list.dart';
 import 'package:tyarineetki/screens/home/home.dart';
 import 'package:tyarineetki/screens/landing_screen/jsonFiles.dart';
+import 'package:tyarineetki/screens/landing_screen/view_model/landing_view_model.dart';
 import 'package:tyarineetki/screens/profile/profile_page.dart';
 import 'package:tyarineetki/screens/profile/view_model/profile_view_model.dart';
 import 'package:tyarineetki/screens/stats_screen/stats_screen.dart';
@@ -23,11 +28,26 @@ class LandingScreen extends StatefulWidget {
 }
 
 class _LandingScreenState extends State<LandingScreen> {
+  late StreamSubscription streamSubscription;
+  late LandingViewModel viewModel;
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    viewModel = context.watch<LandingViewModel>();
+  }
+
   @override
   void initState() {
     // TODO: implement initState
 
     super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      getSubjectSubscription();
+    });
+
     FirebaseMessaging.instance.getInitialMessage().then(
           (value) {},
         );
@@ -37,7 +57,13 @@ class _LandingScreenState extends State<LandingScreen> {
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {});
   }
 
+  void getSubjectSubscription(){
+    streamSubscription = viewModel.fetchSubjectSubscription().listen((event) {
+      log('chec data ssss ----- ${event.docs.length}');
+      util.subjectSubscription = SubjectSubscription.fromJson(event.docs);
 
+    });
+  }
 
   int selectedIndex = 0;
   List<Widget> pages = [

@@ -7,6 +7,7 @@ import 'package:tyarineetki/model/chapter_model.dart';
 import 'package:tyarineetki/model/subject_model.dart';
 import 'package:tyarineetki/screens/subject_chapter/chapter_pdf_view/view_model/chapter_pdf_view_model.dart';
 import 'package:tyarineetki/screens/subject_chapter/view_model/subject_chapter_view_model.dart';
+import 'package:tyarineetki/theme/app_color.dart';
 import 'package:tyarineetki/widget/custom_text.dart';
 
 import 'chapter_pdf_view/chapter_pdf_view_screen.dart';
@@ -91,6 +92,7 @@ class _SubjectChapterState extends State<SubjectChapter> {
   }
 
   Widget itemCard(ChapterModelData item) {
+    bool isPurchased = item.isPaid!?viewModel.isPurchased(itemId: item.id??''):false;
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: InkWell(
@@ -122,6 +124,9 @@ class _SubjectChapterState extends State<SubjectChapter> {
                     ),
                     child: Text('Chapter ${item.index}'),
                   ),
+                  const SizedBox(
+                    width: 6,
+                  ),
                   const Spacer(),
                   const Icon(
                     Icons.watch_later_outlined,
@@ -140,6 +145,7 @@ class _SubjectChapterState extends State<SubjectChapter> {
               const SizedBox(
                 height: 6,
               ),
+
               Text(
                 '${item.label}',
                 style: const TextStyle(
@@ -168,7 +174,7 @@ class _SubjectChapterState extends State<SubjectChapter> {
                     height: 20,
                   ),
                   const Spacer(),
-                  Container(
+                  item.isPaid!?Container(
                       constraints: const BoxConstraints(minWidth: 40),
                       padding: const EdgeInsets.only(
                           left: 4, right: 4, top: 2, bottom: 2),
@@ -177,10 +183,10 @@ class _SubjectChapterState extends State<SubjectChapter> {
                           borderRadius: BorderRadius.circular(4)),
                       child: Text(
                         textAlign: TextAlign.center,
-                        '\u{20B9}${item.itemPrice}',
+                        isPurchased?'PURCHASED':'PAID : \u{20B9}${item.itemPrice}',
                         style: const TextStyle(
                             color: Colors.green, fontWeight: FontWeight.bold),
-                      ))
+                      )):SizedBox()
                 ],
               )
             ],

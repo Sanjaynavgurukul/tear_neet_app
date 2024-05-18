@@ -1,7 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:tyarineetki/helper/navigation_helper.dart';
 import 'package:tyarineetki/main.dart';
@@ -9,6 +8,7 @@ import 'package:tyarineetki/model/banner_model.dart';
 import 'package:tyarineetki/model/notes_model.dart';
 import 'package:tyarineetki/model/paper_model.dart';
 import 'package:tyarineetki/model/subject_model.dart';
+import 'package:tyarineetki/model/upcoming_feature_model.dart';
 import 'package:tyarineetki/screens/exam_paper/exam_detail_screen.dart';
 import 'package:tyarineetki/screens/exam_paper/view_model/exam_view_model.dart';
 import 'package:tyarineetki/screens/home/view_model/home_view_model.dart';
@@ -95,7 +95,13 @@ class _HomeState extends State<Home> {
         padding: const EdgeInsets.only(bottom: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [slider(), subjectSection(), paperSection(), noteSection()],
+          children: [
+            slider(),
+            subjectSection(),
+            paperSection(),
+            noteSection(),
+            upcomingFeature()
+          ],
         ),
       ),
     );
@@ -181,6 +187,7 @@ class _HomeState extends State<Home> {
   }
 
   Widget paperSection() {
+    return const SizedBox();
     return StreamBuilder(
         stream: viewModel.fetchPaperList(),
         builder: (context, snapshot) {
@@ -351,6 +358,57 @@ class _HomeState extends State<Home> {
         });
   }
 
+  Widget upcomingFeature() {
+    return StreamBuilder(
+        stream: viewModel.fetchUpcomingFeature(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.none ||
+              snapshot.connectionState == ConnectionState.waiting) {
+            return const SizedBox();
+          }
+          if (snapshot.hasError) {
+            return const SizedBox();
+          }
+
+          if (!snapshot.hasData) {
+            return const SizedBox();
+          }
+
+          UpcomingFeatureModel item = UpcomingFeatureModel.fromJson(
+              snapshot.data!.data() as Map<String, dynamic>);
+          if (item.list == null || item.list!.isEmpty) {
+            return const SizedBox();
+          }
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 16,),
+              label(label: 'Upcoming Feature'),
+              const SizedBox(height: 12,),
+              Column(
+                children: List.generate(item.list!.length, (index) {
+                  UpcomingFeatureModelData d = item.list![index];
+                  return upcomingFeatureItem(item: d);
+                }),
+              )
+            ],
+          );
+        });
+  }
+
+  Widget upcomingFeatureItem({required UpcomingFeatureModelData item}) {
+    return Container(
+      padding: EdgeInsets.only(left: 16,right: 16,bottom: 12),
+      child: CustomCacheImage(
+        height: 200,
+        width: double.infinity,
+        imageUrl: item.imageUrl,
+        borderRadius: BorderRadius.circular(12),
+      ),
+    );
+  }
+
   Widget noteSection() {
     return StreamBuilder(
         stream: viewModel.fetchNoteList(),
@@ -400,7 +458,7 @@ class _HomeState extends State<Home> {
               const SizedBox(
                 height: 20,
               ),
-              label(label: 'Best Notes Ever'),
+              label(label: 'Notes'),
               const SizedBox(
                 height: 12,
               ),
