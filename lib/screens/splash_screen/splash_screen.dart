@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:tyarineetki/screens/splash_screen/view_model/splash_screen.dart';
 import 'package:tyarineetki/theme/app_color.dart';
@@ -45,6 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+
               Image.asset(
                 'assets/logo.png',
                 width: 130,

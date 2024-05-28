@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:tyarineetki/helper/navigation_helper.dart';
 import 'package:tyarineetki/helper/utils.dart';
 import 'package:tyarineetki/model/subscription_model.dart';
+import 'package:tyarineetki/screens/payment_gateway/payment_gateway.dart';
 import 'package:tyarineetki/screens/purchase/purchase.dart';
 import 'package:tyarineetki/screens/subscription/view_model/subscription_view_model.dart';
 import 'package:tyarineetki/theme/app_color.dart';
@@ -160,15 +161,10 @@ class _SubscriptionState extends State<Subscription> {
                           padding: const EdgeInsets.only(top: 40),
                           child: InkWell(
                             onTap: () {
-                              Map<String, dynamic> body = {
-                                'userName': util.user!.name,
-                                'userEmail': util.user!.email,
-                                'userPhone': util.user!.phone,
-                                'amount':item.amount
-                              };
+
                               NavigationHelper().normalNavigatePush(
                                   context: context,
-                                  screen: PurchasePage(paramData: body));
+                                  screen: PaymentGateway());
                             },
                             child: Container(
                               alignment: Alignment.center,
