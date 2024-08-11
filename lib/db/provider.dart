@@ -55,6 +55,13 @@ class Provider {
         .snapshots();
   }
 
+  Stream<DocumentSnapshot> getSplashImage() {
+    return FirebaseFirestore.instance
+        .collection('innerContent')
+        .doc('splashImage')
+        .snapshots();
+  }
+
   Stream<DocumentSnapshot> getSubDetail() {
     return FirebaseFirestore.instance
         .collection('innerContent')

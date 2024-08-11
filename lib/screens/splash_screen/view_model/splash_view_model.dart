@@ -28,6 +28,7 @@ class SplashViewModel extends BaseViewModel {
   }
 
   void initiate({required BuildContext context}) async {
+
     FirebaseAuth fAuth = FirebaseAuth.instance;
     if (fAuth.currentUser == null) {
       navigateToLogin(context: context);
@@ -46,7 +47,7 @@ class SplashViewModel extends BaseViewModel {
         util.userId = id;
         Map<String, dynamic> json = data.data() as Map<String, dynamic>;
         util.user = CurrentUser.fromJson(json);
-        checkPhoneNumber(context: context);
+        navigateToLanding(context: context);
       } else {
         navigateToLogin(context: context);
       }

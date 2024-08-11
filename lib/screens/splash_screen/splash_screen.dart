@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tyarineetki/screens/splash_screen/view_model/splash_screen.dart';
+import 'package:tyarineetki/screens/splash_screen/view_model/splash_view_model.dart';
 import 'package:tyarineetki/theme/app_color.dart';
 
 class SplashScreen extends StatefulWidget {

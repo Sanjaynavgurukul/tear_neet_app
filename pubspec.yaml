@@ -38,43 +38,43 @@ dependencies:
   #provider for state management
   provider: ^6.0.5
 
-  firebase_auth: ^4.19.4
-  firebase_core: ^2.30.1
-  firebase_messaging: ^14.9.1
-  flutter_facebook_auth: ^6.0.0
-  flutter_signin_button: ^2.0.0
-  google_sign_in: ^6.1.0
-  google_sign_in_dartio: ^0.3.0
-  intl: ^0.18.1
-  lottie: ^2.6.0
-  flutter_svg: ^2.0.7
-  gap: ^3.0.1
-  shared_preferences: ^2.2.2
+  firebase_auth: any
+  firebase_core: any
+  firebase_messaging: any
+  flutter_facebook_auth: any
+  flutter_signin_button: any
+  google_sign_in: any
+  google_sign_in_dartio: any
+  intl: any
+  lottie: any
+  flutter_svg: any
+  gap: any
+  shared_preferences: any
   #firebae librar
-  cached_network_image: ^3.3.0
-  cloud_firestore: ^4.13.1
-  firebase_analytics: ^10.7.0
-  firebase_ui_firestore: ^1.5.14
-  fluentui_system_icons: ^1.1.222
-  auto_size_text: ^3.0.0
-  stop_watch_timer: ^3.0.2
+  cached_network_image: any
+  cloud_firestore: any
+  firebase_analytics: any
+  firebase_ui_firestore: any
+  fluentui_system_icons: any
+  auto_size_text: any
+  stop_watch_timer: any
   #chat Library :D
-  flutter_chat_ui: ^1.6.10
-  file_picker: ^5.3.2
-  flutter_chat_types: ^3.6.2
-  http: '>=0.13.6 <2.0.0'
-  mime: ^1.0.4
-  open_filex: ^4.3.2
-  path_provider: ^2.0.15
-  carousel_slider: ^4.2.1
-  smooth_page_indicator: ^1.1.0
-  image_picker: ^1.0.4
-  firebase_storage: ^11.5.3
-  introduction_screen: ^3.1.12
+  flutter_chat_ui: any
+  file_picker: any
+  flutter_chat_types: any
+  http: any
+  mime: any
+  open_filex: any
+  path_provider: any
+  carousel_slider: any
+  smooth_page_indicator: any
+  image_picker: any
+  firebase_storage: any
+  introduction_screen: any
   uuid: any
-  syncfusion_flutter_pdfviewer: ^23.2.7
+  syncfusion_flutter_pdfviewer: any
   flutter_html: any
-  flutter_local_notifications: ^16.3.2
+  flutter_local_notifications: any
 
 
 

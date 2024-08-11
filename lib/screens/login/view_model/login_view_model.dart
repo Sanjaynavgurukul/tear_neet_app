@@ -97,4 +97,8 @@ class LoginViewModel extends BaseViewModel {
     NavigationHelper()
         .normalNavigatePush(context: context, screen: const WelcomeScreen());
   }
+
+  Stream<DocumentSnapshot> getSplashImage() {
+    return repository.getSplashImage();
+  }
 }
