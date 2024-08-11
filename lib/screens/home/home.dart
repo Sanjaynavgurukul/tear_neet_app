@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -95,7 +97,8 @@ class _HomeState extends State<Home> {
         padding: const EdgeInsets.only(bottom: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [slider(), subjectSection(), paperSection(), noteSection()],
+          // children: [slider(), subjectSection(), paperSection(), noteSection()],
+          children: [slider(), subjectSection()],
         ),
       ),
     );
@@ -129,46 +132,99 @@ class _HomeState extends State<Home> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 FeatureLabel(label: 'Subjects'),
-                SingleChildScrollView(
-                  padding: const EdgeInsets.only(
-                      left: 16, right: 6, top: 12, bottom: 12),
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
+                const SizedBox(
+                  height: 12,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 16, right: 16),
+                  child: Column(
                     children: List.generate(data.data!.length, (index) {
                       SubjectModelData item = data.data![index];
-                      return InkWell(
-                        onTap: () {
-                          NavigationHelper().navigatePush(
-                              context: context,
-                              viewModel: SubjectChapterViewModel(),
-                              screen: SubjectChapter(
-                                data: item,
-                              ));
-                        },
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CustomCacheImage(
-                              shadow: [
-                                BoxShadow(
-                                    color: Colors.grey.shade300,
-                                    blurRadius: 4.0,
-                                    spreadRadius: 1),
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: 8),
+                        child: InkWell(
+                          onTap: () {
+                            if (item.subject_type!.length <= 0) {
+                              viewModel.showToast(
+                                  message: 'No Subject Available',
+                                  context: context);
+                              return;
+                            }
+                            NavigationHelper().navigatePush(
+                                context: context,
+                                viewModel: SubjectChapterViewModel(),
+                                screen: SubjectChapter(
+                                  data: item,
+                                ));
+                          },
+                          child: Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: AppColor.primaryOrangeColor),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                CustomCacheImage(
+                                  shadow: [
+                                    BoxShadow(
+                                        color: Colors.grey.shade300,
+                                        blurRadius: 4.0,
+                                        spreadRadius: 1),
+                                  ],
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: Colors.white,
+                                  imageUrl: item.icon,
+                                  width: 60,
+                                  height: 60,
+                                  padding: const EdgeInsets.all(6),
+                                  margin: const EdgeInsets.only(right: 8),
+                                ),
+                                const SizedBox(
+                                  width: 12,
+                                ),
+                                Expanded(
+                                    child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '${item.label}',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(
+                                      height: 4,
+                                    ),
+                                    Text(
+                                      'Total Subjects : ${item.subject_type!.length}',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(
+                                      height: 4,
+                                    ),
+                                    Text(
+                                      'PREMIUM',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                )),
+                                const SizedBox(
+                                  width: 12,
+                                ),
+                                Icon(Icons.arrow_right_alt)
                               ],
-                              borderRadius: BorderRadius.circular(100),
-                              color: Colors.white,
-                              imageUrl: item.icon,
-                              width: 60,
-                              height: 60,
-                              padding: const EdgeInsets.all(6),
-                              margin: const EdgeInsets.only(right: 8),
                             ),
-                            const SizedBox(
-                              height: 4,
-                            ),
-                            Text('${item.label}')
-                          ],
+                          ),
                         ),
                       );
                     }),

@@ -1,12 +1,17 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:tyarineetki/helper/navigation_helper.dart';
+import 'package:tyarineetki/helper/utils.dart';
 import 'package:tyarineetki/model/chapter_model.dart';
 import 'package:tyarineetki/model/subject_model.dart';
 import 'package:tyarineetki/screens/subject_chapter/chapter_pdf_view/view_model/chapter_pdf_view_model.dart';
 import 'package:tyarineetki/screens/subject_chapter/view_model/subject_chapter_view_model.dart';
+import 'package:tyarineetki/screens/subscription/subscription.dart';
+import 'package:tyarineetki/screens/subscription/view_model/subscription_view_model.dart';
 import 'package:tyarineetki/widget/custom_text.dart';
 
 import 'chapter_pdf_view/chapter_pdf_view_screen.dart';
@@ -20,8 +25,17 @@ class SubjectChapter extends StatefulWidget {
   State<SubjectChapter> createState() => _SubjectChapterState();
 }
 
-class _SubjectChapterState extends State<SubjectChapter> {
+class _SubjectChapterState extends State<SubjectChapter>
+    with SingleTickerProviderStateMixin {
   late SubjectChapterViewModel viewModel;
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController =
+        TabController(length: widget.data.subject_type!.length, vsync: this);
+  }
 
   @override
   void didChangeDependencies() {
@@ -48,6 +62,26 @@ class _SubjectChapterState extends State<SubjectChapter> {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
+        bottom: TabBar(
+          indicatorSize: TabBarIndicatorSize.label,
+          isScrollable: true,
+          padding: EdgeInsets.zero,
+          indicatorPadding: EdgeInsets.zero,
+          // labelPadding: EdgeInsets.zero,
+          indicatorWeight: 2,
+          onTap: (int index) {
+            log('check inded ---- $index');
+            viewModel.updateIndex(index);
+          },
+          labelColor: Colors.black,
+          controller: _tabController,
+          tabs: List.generate(widget.data.subject_type!.length, (index) {
+            SubjectTypes item = widget.data.subject_type![index];
+            return Tab(
+              child: Text('${item.label}'),
+            );
+          }),
+        ),
       ),
       body: mainView(),
     );
@@ -56,7 +90,9 @@ class _SubjectChapterState extends State<SubjectChapter> {
   Widget mainView() {
     return Container(
       child: StreamBuilder(
-          stream: viewModel.getChapterList(chapterId: widget.data.id!),
+          stream: viewModel.getChapterList(
+              chapterId: widget.data.id!,
+              type: widget.data.subject_type![viewModel.selectedIndex].type!),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.none ||
                 snapshot.connectionState == ConnectionState.waiting) {
@@ -94,7 +130,11 @@ class _SubjectChapterState extends State<SubjectChapter> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: InkWell(
-        onTap: () {
+        onTap: () async{
+          if(!await util.hasSubscription()){
+            NavigationHelper().navigatePush(context: context, viewModel: SubscriptionViewModel(), screen: Subscription());
+            return;
+          }
           NavigationHelper().navigatePush(
               context: context,
               viewModel: ChapterPdfViewModel.argument(data: item),
@@ -177,7 +217,7 @@ class _SubjectChapterState extends State<SubjectChapter> {
                           borderRadius: BorderRadius.circular(4)),
                       child: Text(
                         textAlign: TextAlign.center,
-                        '\u{20B9}${item.itemPrice}',
+                        item.isPaid!?"PREMIUM":"FREE",
                         style: const TextStyle(
                             color: Colors.green, fontWeight: FontWeight.bold),
                       ))

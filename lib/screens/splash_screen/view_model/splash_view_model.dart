@@ -28,7 +28,6 @@ class SplashViewModel extends BaseViewModel {
   }
 
   void initiate({required BuildContext context}) async {
-
     FirebaseAuth fAuth = FirebaseAuth.instance;
     if (fAuth.currentUser == null) {
       navigateToLogin(context: context);
@@ -96,8 +95,8 @@ class SplashViewModel extends BaseViewModel {
 
   void navigateToLanding({required BuildContext context}) {
     Future.delayed(const Duration(seconds: 3), (() {
-      NavigationHelper()
-          .normalNavigatePushReplacementUntil(context: context, screen: const LandingScreen());
+      NavigationHelper().normalNavigatePushReplacementUntil(
+          context: context, screen: const LandingScreen());
     }));
   }
 }

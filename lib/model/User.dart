@@ -7,6 +7,7 @@ class CurrentUser {
   String? profile;
   String? bio;
 
+
   CurrentUser({this.email, this.name, this.phone, this.profile, this.bio});
 
   factory CurrentUser.fromJson(Map<String, dynamic> json) => CurrentUser(

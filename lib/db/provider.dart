@@ -28,8 +28,16 @@ class Provider {
     return _db.collection('subject').snapshots();
   }
 
-  Stream<QuerySnapshot> getChapterList({required String chapterId}) {
-    return _db.collection('subject').doc(chapterId).collection('chapters').snapshots();
+  Stream<QuerySnapshot> getChapterList(
+      {required String chapterId, required num type}) {
+    log('fetch lsiik --- $type');
+    return _db
+        .collection('subject')
+        .doc(chapterId)
+        .collection('chapters')
+        .where('type', isEqualTo: type)
+        .orderBy('index', descending: false)
+        .snapshots();
   }
 
   Stream<QuerySnapshot> fetchList({required String colId}) {

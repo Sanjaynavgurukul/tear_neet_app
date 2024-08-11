@@ -68,49 +68,50 @@ class _LandingScreenState extends State<LandingScreen> {
       //   },
       //   child: const Icon(Icons.add),
       // ),
-      bottomNavigationBar: BottomAppBar(
-        child: Row(
-          children: [
-            IconButton(
-                icon: Icon(
-                  CupertinoIcons.house,
-                  color: getColor(0),
-                ),
-                onPressed: () {
-                  setState(() {
-                    selectedIndex = 0;
-                  });
-                }),
-            IconButton(
-                icon: Icon(CupertinoIcons.chat_bubble_2, color: getColor(1)),
-                onPressed: () {
-                  setState(() {
-                    selectedIndex = 1;
-                  });
-                }),
-            IconButton(
-                icon: Icon(CupertinoIcons.graph_circle, color: getColor(2)),
-                onPressed: () {
-                  setState(() {
-                    selectedIndex = 2;
-                  });
-                }),
-            const Spacer(),
-            IconButton(
-                icon: const Icon(CupertinoIcons.profile_circled),
-                onPressed: () {
-                  NavigationHelper().navigatePush(
-                      context: context,
-                      viewModel: ProfileViewModel(),
-                      screen: ProfilePage());
-                }),
-          ],
-        ),
-      ),
-      body: IndexedStack(
-        index: selectedIndex,
-        children: pages,
-      ),
+      // bottomNavigationBar: BottomAppBar(
+      //   child: Row(
+      //     children: [
+      //       IconButton(
+      //           icon: Icon(
+      //             CupertinoIcons.house,
+      //             color: getColor(0),
+      //           ),
+      //           onPressed: () {
+      //             setState(() {
+      //               selectedIndex = 0;
+      //             });
+      //           }),
+      //       IconButton(
+      //           icon: Icon(CupertinoIcons.chat_bubble_2, color: getColor(1)),
+      //           onPressed: () {
+      //             setState(() {
+      //               selectedIndex = 1;
+      //             });
+      //           }),
+      //       IconButton(
+      //           icon: Icon(CupertinoIcons.graph_circle, color: getColor(2)),
+      //           onPressed: () {
+      //             setState(() {
+      //               selectedIndex = 2;
+      //             });
+      //           }),
+      //       const Spacer(),
+      //       IconButton(
+      //           icon: const Icon(CupertinoIcons.profile_circled),
+      //           onPressed: () {
+      //             NavigationHelper().navigatePush(
+      //                 context: context,
+      //                 viewModel: ProfileViewModel(),
+      //                 screen: ProfilePage());
+      //           }),
+      //     ],
+      //   ),
+      // ),
+      // body: IndexedStack(
+      //   index: selectedIndex,
+      //   children: pages,
+      // ),
+      body: Home(),
     );
   }
 }
