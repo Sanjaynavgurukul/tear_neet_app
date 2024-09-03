@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:tyarineetki/helper/dialog_helper.dart';
@@ -38,6 +39,7 @@ class _ChapterPdfViewScreenState extends State<ChapterPdfViewScreen> {
   }
 
   Widget mainView() {
+
     if (viewModel.data == null) {
       return const Material(
         color: Colors.white,

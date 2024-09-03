@@ -14,6 +14,7 @@ import 'package:tyarineetki/model/subject_model.dart';
 import 'package:tyarineetki/screens/exam_paper/exam_detail_screen.dart';
 import 'package:tyarineetki/screens/exam_paper/view_model/exam_view_model.dart';
 import 'package:tyarineetki/screens/home/view_model/home_view_model.dart';
+import 'package:tyarineetki/screens/landing_screen/jsonFiles.dart';
 import 'package:tyarineetki/screens/pdf_view/pdf_view_screen.dart';
 import 'package:tyarineetki/screens/pdf_view/view_model/pdf_view_model.dart';
 import 'package:tyarineetki/screens/subject_chapter/subject_chatper.dart';
@@ -50,6 +51,12 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: (){
+      //       // addNewSubjectJson();
+      //     addNewSubSubjectJson();
+      //   },
+      // ),
       appBar: AppBar(
         leadingWidth: 0,
         titleSpacing: 0,
@@ -210,7 +217,7 @@ class _HomeState extends State<Home> {
                                       height: 4,
                                     ),
                                     Text(
-                                      'PREMIUM',
+                                      (item.is_paid??false)?'PREMIUM':"FREE",
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 12,

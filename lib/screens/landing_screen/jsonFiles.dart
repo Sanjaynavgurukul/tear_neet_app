@@ -4252,34 +4252,85 @@ void addChapterList() {
         totalTimeInMin: "40"),
     ChapterModelData(
         label: 'commerce CBSE class 12',
-        description:
-        'the students depending on their interests',
+        description: 'the students depending on their interests',
         index: 2,
         itemPrice: 99,
         pdfLink:
-        'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+            'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
         totalTimeInMin: "40"),
     ChapterModelData(
         label: 'There are a total',
         description:
-        'There are a total of five subjects in CBSE class 12, out of which four are mandatory',
+            'There are a total of five subjects in CBSE class 12, out of which four are mandatory',
         index: 3,
         itemPrice: 150,
         pdfLink:
-        'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+            'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
         totalTimeInMin: "40"),
     ChapterModelData(
         label: 'There are a total',
         description:
-        'There are a total of five subjects in CBSE class 12, out of which four are mandatory',
+            'There are a total of five subjects in CBSE class 12, out of which four are mandatory',
         index: 4,
         itemPrice: 200,
         pdfLink:
-        'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+            'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
         totalTimeInMin: "40")
   ];
 
-  for(var i in data){
-    FirebaseFirestore.instance.collection('subject').doc('8IETkR7PQmoOMDIuhSYZ').collection('chapters').add(i.toJson());
+  for (var i in data) {
+    FirebaseFirestore.instance
+        .collection('subject')
+        .doc('8IETkR7PQmoOMDIuhSYZ')
+        .collection('chapters')
+        .add(i.toJson());
   }
+}
+
+void addNewSubjectJson() {
+  Map<String, dynamic> body = {
+    "label": 'Easy Start',
+    "icon": "https://cdn-icons-png.flaticon.com/512/188/188802.png",
+    'type': 'Easy Start',
+    "subject_type": [
+      {
+        "label": 'Zoology',
+        "type": '1',
+      },
+      {
+        "label": 'Botany',
+        "type": '2',
+      },
+      {
+        "label": 'Chemestry',
+        "type": '3',
+      },
+      {
+        "label": 'Physics',
+        "type": '4',
+      }
+    ]
+  };
+
+  FirebaseFirestore.instance.collection('subject').add(body);
+}
+
+void addNewSubSubjectJson() {
+  Map<String, dynamic> body = {
+    'label': 'Inductive Effect',
+    'description':
+        'Inductive effect ko pdhne se pehle hum seekhte hai ki Covalent bond kya hai aur atoms covalent bond kaise banate hai aur kyu banate hai , aur kisi molecule ya atom ko dekhkar ye kaise pta lagae ki ye covalent bond se jude hai ?',
+    'index': 1,
+    'is_paid': false,
+    'totalTimeInMin': '120',
+    'type': 3,
+    'pdfLink':
+        'https://firebasestorage.googleapis.com/v0/b/tyarineetki.appspot.com/o/subject%2Feasy_start%2FCovalent%20bond%20kya%20hai%20aur%20atoms%20covalent%20bond%20kaise%20banate%20hai%20aur%20kyu%20banate%20hai%20.pdf?alt=media&token=f7caf617-ccf3-429e-ad10-ad940cbf108c',
+  };
+
+  FirebaseFirestore.instance
+      .collection('subject')
+      .doc('u9Qxruajn4T6ff652XOo')
+      .collection('chapters')
+      .add(body);
 }
