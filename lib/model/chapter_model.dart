@@ -42,7 +42,7 @@ class ChapterModelData {
         label: VariableConverter.convertVariable(
             data: json['label'], variableType: 'String'),
         isPaid: VariableConverter.convertVariable(
-            data: json['isPaid'], variableType: 'bool'),
+            data: json['is_paid'], variableType: 'bool'),
         description: VariableConverter.convertVariable(
             data: json['description'], variableType: 'String'),
         itemPrice: VariableConverter.convertVariable(

@@ -293,8 +293,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   const SizedBox(height: 6),
                   InkWell(
-                    onTap: () {
-                      Navigator.pop(context, true);
+                    onTap: () async{
+                      DialogHelper().showLoadingDialog(context: context);
+                      await FirebaseAuth.instance.signOut();
+                      NavigationHelper().navigateLogout(context: context, viewModel: LoginViewModel(), screen: LoginScreen());
                     },
                     child: Container(
                         constraints: const BoxConstraints(minWidth: 200),

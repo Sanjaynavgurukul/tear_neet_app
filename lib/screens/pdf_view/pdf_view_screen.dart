@@ -11,7 +11,8 @@ import 'package:tyarineetki/theme/app_color.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class PdfViewScreen extends StatefulWidget {
-  const PdfViewScreen({super.key});
+  const PdfViewScreen({super.key,required this.pdfLink});
+  final String pdfLink;
 
   @override
   State<PdfViewScreen> createState() => _PdfViewScreenState();
@@ -57,7 +58,7 @@ class _PdfViewScreenState extends State<PdfViewScreen> {
           ),
         )
         ..loadRequest(Uri.parse(
-            'https://www.canva.com/design/DAGKbSP19eQ/NB3mX6SOAnQ6cie5lrEQrA/view?embed'));
+            widget.pdfLink));
     });
   }
 

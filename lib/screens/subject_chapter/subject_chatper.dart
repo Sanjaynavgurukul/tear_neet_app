@@ -8,6 +8,8 @@ import 'package:tyarineetki/helper/navigation_helper.dart';
 import 'package:tyarineetki/helper/utils.dart';
 import 'package:tyarineetki/model/chapter_model.dart';
 import 'package:tyarineetki/model/subject_model.dart';
+import 'package:tyarineetki/screens/pdf_view/pdf_view_screen.dart';
+import 'package:tyarineetki/screens/pdf_view/view_model/pdf_view_model.dart';
 import 'package:tyarineetki/screens/subject_chapter/chapter_pdf_view/view_model/chapter_pdf_view_model.dart';
 import 'package:tyarineetki/screens/subject_chapter/view_model/subject_chapter_view_model.dart';
 import 'package:tyarineetki/screens/subscription/subscription.dart';
@@ -135,10 +137,11 @@ class _SubjectChapterState extends State<SubjectChapter>
             NavigationHelper().navigatePush(context: context, viewModel: SubscriptionViewModel(), screen: Subscription());
             return;
           }
+          // NavigationHelper().normalNavigatePush(context: context, screen: PdfViewScreen(pdfLink: item.pdfLink!,));
           NavigationHelper().navigatePush(
               context: context,
-              viewModel: ChapterPdfViewModel.argument(data: item),
-              screen: const ChapterPdfViewScreen());
+              viewModel: PdfViewModel(),
+              screen: PdfViewScreen(pdfLink: item.pdfLink!,));
         },
         child: Container(
           padding: const EdgeInsets.all(12),

@@ -95,12 +95,12 @@ class LoginViewModel extends BaseViewModel {
 
     if (util.user!.phone == null || util.user!.phone!.isEmpty) {
       NavigationHelper()
-          .normalNavigatePush(context: context, screen: const WelcomeScreen());
+          .normalNavigatePushReplacement(context: context, screen: const WelcomeScreen());
       return;
     }
 
     NavigationHelper()
-        .normalNavigatePush(context: context, screen: const WelcomeScreen());
+        .normalNavigatePushReplacement(context: context, screen: const WelcomeScreen());
   }
 
   Stream<DocumentSnapshot> getSplashImage() {

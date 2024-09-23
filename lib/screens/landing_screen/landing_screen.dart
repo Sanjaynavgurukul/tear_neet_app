@@ -66,11 +66,11 @@ class _LandingScreenState extends State<LandingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          SubjectJson().addData();
-        },
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: (){
+      //     SubjectJson().addData();
+      //   },
+      // ),
       body: Home(),
     );
   }

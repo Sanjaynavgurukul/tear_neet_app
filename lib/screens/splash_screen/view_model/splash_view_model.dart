@@ -95,7 +95,7 @@ class SplashViewModel extends BaseViewModel {
 
   void navigateToLanding({required BuildContext context}) {
     Future.delayed(const Duration(seconds: 3), (() {
-      NavigationHelper().normalNavigatePushReplacementUntil(
+      NavigationHelper().normalNavigatePushReplacement(
           context: context, screen: const LandingScreen());
     }));
   }

@@ -488,10 +488,10 @@ class _HomeState extends State<Home> {
                           const EdgeInsets.only(left: 16, right: 16, bottom: 6),
                       child: InkWell(
                         onTap: () {
-                          NavigationHelper().navigatePush(
-                              context: context,
-                              viewModel: PdfViewModel.argument(data: item),
-                              screen: const PdfViewScreen());
+                          // NavigationHelper().navigatePush(
+                          //     context: context,
+                          //     viewModel: PdfViewModel.argument(data: item),
+                          //     screen: const PdfViewScreen());
                         },
                         child: Container(
                           padding: const EdgeInsets.all(6),
@@ -616,28 +616,28 @@ class _HomeState extends State<Home> {
                     onTap: jso.ctaType == null || jso.ctaType!.isEmpty
                         ? null
                         : () {
-                            if (jso.ctaType == "note") {
-                              NoteModel noteModel = NoteModel(
-                                  notesTitle: jso.label, noteUrl: jso.pdfLink);
-
-                              NavigationHelper().navigatePush(
-                                  context: context,
-                                  viewModel:
-                                      PdfViewModel.argument(data: noteModel),
-                                  screen: const PdfViewScreen());
-                              return;
-                            }
-
-                            if (jso.ctaType == 'paper') {
-                              // ExamDetailPage
-                              NavigationHelper().navigatePush(
-                                  context: context,
-                                  viewModel: ExamViewModel.dynamic(
-                                      paperId: jso.paperId),
-                                  screen: const ExamDetailPage(
-                                    fromDynamic: true,
-                                  ));
-                            }
+                            // if (jso.ctaType == "note") {
+                            //   NoteModel noteModel = NoteModel(
+                            //       notesTitle: jso.label, noteUrl: jso.pdfLink);
+                            //
+                            //   NavigationHelper().navigatePush(
+                            //       context: context,
+                            //       viewModel:
+                            //           PdfViewModel.argument(data: noteModel),
+                            //       screen: const PdfViewScreen());
+                            //   return;
+                            // }
+                            //
+                            // if (jso.ctaType == 'paper') {
+                            //   // ExamDetailPage
+                            //   NavigationHelper().navigatePush(
+                            //       context: context,
+                            //       viewModel: ExamViewModel.dynamic(
+                            //           paperId: jso.paperId),
+                            //       screen: const ExamDetailPage(
+                            //         fromDynamic: true,
+                            //       ));
+                            // }
                           },
                     child: CustomCacheImage(
                       borderRadius: BorderRadius.circular(0),
