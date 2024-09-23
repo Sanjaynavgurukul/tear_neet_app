@@ -10,6 +10,7 @@ import 'package:tyarineetki/main.dart';
 import 'package:tyarineetki/screens/chat_group_list/chat_group_list.dart';
 import 'package:tyarineetki/screens/home/home.dart';
 import 'package:tyarineetki/screens/landing_screen/jsonFiles.dart';
+import 'package:tyarineetki/screens/landing_screen/subject_json.dart';
 import 'package:tyarineetki/screens/pdf_view/pdf_view_screen.dart';
 import 'package:tyarineetki/screens/pdf_view/view_model/pdf_view_model.dart';
 import 'package:tyarineetki/screens/profile/profile_page.dart';
@@ -65,6 +66,11 @@ class _LandingScreenState extends State<LandingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          SubjectJson().addData();
+        },
+      ),
       body: Home(),
     );
   }
