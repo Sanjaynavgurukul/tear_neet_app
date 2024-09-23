@@ -14,6 +14,50 @@
       },
       "oauth_client": [
         {
+          "client_id": "417746687100-8otlp08f4t5m9ffr648bn4g22iu2tcdb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tyari.tyarineetki",
+            "certificate_hash": "4ec6ba7482a27f3ac519ed598df5402cba732456"
+          }
+        },
+        {
+          "client_id": "417746687100-v42smmeictq5peuvj8ji97g1lpupif41.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmZP7nu66uqraE42EhuDn3hpFmQa2_xNI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "417746687100-gkc1v03amhna27dtfrtun7m55m88mhli.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "417746687100-2ef7u05bnselq1f1ninbffg66vi89e6g.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.tayari"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:417746687100:android:6d693f0de4c36d8aebe5f9",
+        "android_client_info": {
+          "package_name": "com.vsp.flutter_notification"
+        }
+      },
+      "oauth_client": [
+        {
           "client_id": "417746687100-v42smmeictq5peuvj8ji97g1lpupif41.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tyarineetki/helper/dialog_helper.dart';
@@ -150,6 +151,54 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   const SizedBox(height: 24),
                   buildName(user.name!, '${user.email}'),
+                  const SizedBox(height: 24),
+                  Padding(
+                    padding: EdgeInsets.only(left: 20,right: 20),
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        children: <InlineSpan>[
+                          TextSpan(
+                            text: 'By singing up, you agree agree to our ',
+                            style: textStyle(),
+                          ),
+                          TextSpan(
+                            text: 'Terms & Conditions',
+                            style: const TextStyle(
+                                fontSize: 14,
+                                color: AppColor.primaryOrangeColor,
+                                fontStyle: FontStyle.italic),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+
+                              },
+                          ),
+                          TextSpan(
+                            text: ' and ',
+                            style: textStyle(),
+                          ),
+                          TextSpan(
+                            text: 'Privacy Policy',
+                            style: const TextStyle(
+                                fontSize: 14,
+                                color: AppColor.primaryOrangeColor,
+                                fontStyle: FontStyle.italic),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                // NavigationHelper().normalNavigatePush(
+                                //     context: context, screen: Setting(fromLogin: true,));
+                                // // showDialog(
+                                // //   context: context,
+                                // //   builder: (context) {
+                                // //     return showWebViewPopUp(context,'terms');
+                                // //   },
+                                // // );
+                              },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                   const SizedBox(height: 24),
                   Center(child: buildUpgradeButton()),
                   const SizedBox(height: 48),
@@ -337,4 +386,8 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
       );
+
+  TextStyle textStyle() {
+    return const TextStyle(fontSize: 12, color: Colors.black);
+  }
 }

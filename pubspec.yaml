@@ -43,7 +43,7 @@ dependencies:
   firebase_messaging: any
   flutter_facebook_auth: any
   flutter_signin_button: any
-  google_sign_in: any
+  google_sign_in: ^6.2.1
   google_sign_in_dartio: any
   intl: any
   lottie: any

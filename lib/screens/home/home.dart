@@ -17,6 +17,8 @@ import 'package:tyarineetki/screens/home/view_model/home_view_model.dart';
 import 'package:tyarineetki/screens/landing_screen/jsonFiles.dart';
 import 'package:tyarineetki/screens/pdf_view/pdf_view_screen.dart';
 import 'package:tyarineetki/screens/pdf_view/view_model/pdf_view_model.dart';
+import 'package:tyarineetki/screens/profile/profile_page.dart';
+import 'package:tyarineetki/screens/profile/view_model/profile_view_model.dart';
 import 'package:tyarineetki/screens/subject_chapter/subject_chatper.dart';
 import 'package:tyarineetki/screens/subject_chapter/view_model/subject_chapter_view_model.dart';
 import 'package:tyarineetki/theme/app_color.dart';
@@ -88,12 +90,17 @@ class _HomeState extends State<Home> {
                   ],
                 ),
               ),
-              CustomCacheImage(
-                  width: 40,
-                  height: 40,
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(100),
-                  imageUrl: auth.currentUser!.photoURL)
+              InkWell(
+                onTap: (){
+                  NavigationHelper().navigatePush(context: context, viewModel: ProfileViewModel(), screen: ProfilePage());
+                },
+                child: CustomCacheImage(
+                    width: 40,
+                    height: 40,
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(100),
+                    imageUrl: auth.currentUser!.photoURL),
+              )
             ],
           ),
         ),

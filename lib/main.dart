@@ -117,7 +117,15 @@ late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  app = await Firebase.initializeApp();
+  app = await Firebase.initializeApp(
+      options: FirebaseOptions(
+        apiKey: 'AIzaSyAmZP7nu66uqraE42EhuDn3hpFmQa2_xNI',
+        appId: '1:417746687100:android:d96951607eb29e53ebe5f9',
+        messagingSenderId: '',
+        projectId: 'tyarineetki',
+        storageBucket: 'tyarineetki.appspot.com',
+      )
+  );
   // Set the background messaging handler early on, as a named top-level function
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 

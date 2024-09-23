@@ -33,7 +33,12 @@ class LoginViewModel extends BaseViewModel {
     }
 
     // Obtain the auth details from the request
-    final googleAuth = await googleUser.authentication;
+    final googleAuth =
+    await (await GoogleSignIn(
+      scopes: ["profile", "email"],
+    ).signIn())
+        ?.authentication;
+    // final googleAuth = await googleUser.authentication;
 
     if (googleAuth != null) {
       // Create a new credential
